@@ -197,19 +197,19 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @return: raise warning depending on the validation
         """
+        folio_line = self.env['hotel.folio.line']
         for rec in self:
-            for room_no in rec.room_line_ids.mapped("product_id"):
-                for line in rec.room_line_ids:
-                    record = line.search(
-                        [
-                            ("product_id", "=", room_no.id),
-                            ("folio_id", "=", rec.id),
-                            ("id", "!=", line.id),
-                            ("checkin_date", ">=", line.checkin_date),
-                            ("checkout_date", "<=", line.checkout_date),
-                            ("product_id", "=", room_no.id),
-                        ]
-                    )
+            # ~ for room_no in rec.room_line_ids.mapped("product_id"):
+            for line in rec.room_line_ids:
+                record = line.search(
+                    [
+                        ("product_id", "=", line.product_id.id),
+                        ("folio_id", "=", rec.id),
+                        ("id", "!=", line.id),
+                        ("checkin_date", ">=", line.checkin_date),
+                        ("checkout_date", "<=", line.checkout_date),
+                    ]
+                )
 
                 if record:
                     raise ValidationError(
@@ -420,7 +420,7 @@ class HotelFolio(models.Model):
         sale_line_obj = self.env["sale.order.line"].browse(line_ids)
         sale_line_obj.write(
             {
-                "invoiced": False,
+                # ~ "invoiced": False,
                 "state": "draft",
                 "invoice_lines": [(6, 0, [])],
             }
