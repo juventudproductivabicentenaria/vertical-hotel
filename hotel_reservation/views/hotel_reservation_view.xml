@@ -233,18 +233,20 @@
         <field name="res_model">hotel.reservation</field>
         <field name="view_mode">tree,form,calendar</field>
     </record>
+<!--
     <menuitem
-        id="menu_hotel_reservation"
+        id="menu_hotel_reservation1"
         name="Reservations"
         parent="hotel.hotel_management_menu"
-        sequence="1"
+        sequence="2"
     />
+-->
     <menuitem
-        name="Reservations"
-        id="menu_action_hotel_reservation_tree_all"
+        name="Reservaciones"
+        id="menu_action_hotel_reservation_tree_all2"
         action="action_hotel_reservation_tree_all"
-        parent="menu_hotel_reservation"
-        sequence="3"
+        parent="hotel.hotel_management_menu"
+        sequence="2"
     />
     <record id="view_hotel_room_form_inherited" model="ir.ui.view">
         <field name="name">view.hotel.room.form.inherited</field>
@@ -389,11 +391,12 @@
         <field name="res_model">room.reservation.summary</field>
         <field name="view_mode">form</field>
     </record>
+    
     <menuitem
-        id="menu_action_hotel_reservation_summary"
-        name="Reservation Summary"
+        id="menu_action_hotel_reservation_summary1"
+        name="Resumen de reserva"
         action="action_hotel_reservation_summary"
-        parent="menu_hotel_reservation"
-        sequence="3"
+        parent="hotel.hotel_management_menu"
+        sequence="1"
     />
 </odoo>
