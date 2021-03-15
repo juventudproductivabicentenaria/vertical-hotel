@@ -73,6 +73,8 @@ class HotelRestaurantReservation(models.Model):
                     }
                 )
 
+        return []
+
     def action_set_to_draft(self):
         """
         This method is used to change the state
@@ -153,7 +155,7 @@ class HotelRestaurantReservation(models.Model):
     )
     end_date = fields.Datetime("End Time", required=True)
     customer_id = fields.Many2one(
-        "res.partner", "Customer Name", required=True
+        "res.partner", "Customer Name", required=True,
     )
     partner_address_id = fields.Many2one("res.partner", "Address")
     table_nos_ids = fields.Many2many(
@@ -178,6 +180,54 @@ class HotelRestaurantReservation(models.Model):
         default="draft",
     )
     is_folio = fields.Boolean("Is a Hotel Guest??")
+
+    @api.onchange('folio_id')
+    def _onchage_room_id(self):
+        product = self.mapped('folio_id.room_line_ids.product_id.id')
+
+        action = self.env.ref('hotel.open_hotel_folio1_form_tree_all').read()[0]
+        action['domain'] = [('id', 'in', product)]
+        domain = action['domain']
+
+        return {
+            'domain': {'room_id': domain}
+        }
+
+    @api.onchange('folio_id', 'is_folio')
+    def _onchage_partner(self):
+        partner = self.mapped('folio_id.partner_id.id')
+
+        action = self.env.ref('hotel.open_hotel_folio1_form_tree_all').read()[0]
+        action['domain'] = [('id', 'in', partner)]
+        domain = action['domain']
+
+        if self.folio_id and self.is_folio:
+            return {
+                'domain': {'customer_id': domain}
+            }
+
+    @api.constrains('room_id')
+    def _validate_room_id(self):
+
+        product = self.mapped('folio_id.room_line_ids.product_id.id')
+
+        if self.folio_id:
+            if self.room_id.id in product:
+                pass
+            else:
+                raise ValidationError(_('This room is not registered on the folio %s, check again' % self.folio_id.name))
+
+    @api.constrains('customer_id')
+    def _validate_partner_id(self):
+
+        partner = self.mapped('folio_id.partner_id.id')
+
+        if self.folio_id:
+            if self.customer_id.id in partner:
+                pass
+            else:
+                raise ValidationError(_("The customer's name is not registered on the folio %s, please check again" %
+                                        self.folio_id.name))
 
     @api.model
     def create(self, vals):

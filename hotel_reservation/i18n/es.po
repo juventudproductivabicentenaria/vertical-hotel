@@ -7,13 +7,15 @@ msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-04 21:04+0000\n"
-"PO-Revision-Date: 2021-03-04 21:04+0000\n"
+"PO-Revision-Date: 2021-03-15 12:21-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
+"Language: es\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #. module: hotel_reservation
 #: model:mail.template,body_html:hotel_reservation.mail_template_reservation_reminder_24hrs
@@ -146,8 +148,8 @@ msgstr ""
 "                        % endif\n"
 "                        Su registro ha sido confirmado el día <strong>\n"
 "                            ${object.date_order}</strong>.\n"
-"                        Encuentre todos los detalles relacionados con la reserva \n "
-"                       como se indica a continuación:\n"
+"                        Encuentre todos los detalles relacionados con la reserva \n"
+"                        como se indica a continuación:\n"
 "                    </p>\n"
 "                    <br/>\n"
 "                    <strong>Detalles :</strong>\n"
@@ -189,13 +191,11 @@ msgstr ""
 "                        %endfor\n"
 "                    </table>\n"
 "                    <br/>\n"
-"                    <p>Le agradeceríamos que nos avisara en caso \ n "
-"hay cambios en su horario o programa. \ n"
-"Por favor infórmenos de inmediato para que podamos reembolsar su \ n"
-"dinero de acuerdo con las políticas del hotel. \ n"
-"Estamos seguros que encontrará nuestros servicios \ n"
-"satisfactorio. Esperamos poder ofrecerle calidad \ n"
-"servicios en nuestro hotel.\n"
+"                    <p>Le agradeceríamos que nos avisara en caso \\ n hay cambios en su "
+"horario o programa. \\ nPor favor infórmenos de inmediato para que podamos reembolsar su \\ "
+"ndinero de acuerdo con las políticas del hotel. \\ nEstamos seguros que encontrará nuestros "
+"servicios \\ nsatisfactorio. Esperamos poder ofrecerle calidad \\ nservicios en nuestro "
+"hotel.\n"
 "                    </p>\n"
 "                    <br/>\n"
 "                    <strong>Atentamente</strong>,\n"
@@ -249,7 +249,8 @@ msgid ""
 "                        gratitude to you for choosing our services.\n"
 "                        Please find all the details regarding the confirmation\n"
 "                        of the reservation on Date <strong>\n"
-"                            ${format_datetime(object.date_order,tz=user.tz,dt_format='%Y-%m-%d %H:%M:%S')}\n"
+"                            ${format_datetime(object.date_order,tz=user.tz,dt_format='%Y-%m-"
+"%d %H:%M:%S')}\n"
 "                        </strong> are listed below:\n"
 "                    </p>\n"
 "                    <strong>Details :</strong>\n"
@@ -260,12 +261,14 @@ msgid ""
 "                        <br/>\n"
 "                        Date Of Arrival :\n"
 "                        <strong>\n"
-"                            ${format_datetime(object.checkin,tz=user.tz, dt_format='%Y-%m-%d %H:%M:%S')}\n"
+"                            ${format_datetime(object.checkin,tz=user.tz, dt_format='%Y-%m-%d "
+"%H:%M:%S')}\n"
 "                        </strong>\n"
 "                        <br/>\n"
 "                        Date Of Departure :\n"
 "                        <strong>\n"
-"                            ${format_datetime(object.checkout,tz=user.tz, dt_format='%Y-%m-%d %H:%M:%S')}\n"
+"                            ${format_datetime(object.checkout,tz=user.tz, dt_format='%Y-%m-%d "
+"%H:%M:%S')}\n"
 "                        </strong>\n"
 "                        <br/>\n"
 "                        Reservation Number :\n"
@@ -348,11 +351,12 @@ msgstr ""
 "                            ${object.warehouse_id.partner_id.country_id.name}</strong>\n"
 "                        .\n"
 "                        % endif\n"
-"                        En nombre del hotel, nos gustaría expresar nuestro \n "
-"Gracias por elegir nuestros servicios. \n"
+"                        En nombre del hotel, nos gustaría expresar nuestro \n"
+" Gracias por elegir nuestros servicios. \n"
 "Encuentre todos los detalles sobre la confirmación \n"
 "de la reserva en la fecha <strong> \n"
-"                            ${format_datetime(object.date_order,tz=user.tz,dt_format='%Y-%m-%d %H:%M:%S')}\n"
+"                            ${format_datetime(object.date_order,tz=user.tz,dt_format='%Y-%m-"
+"%d %H:%M:%S')}\n"
 "                        </strong> están enlistados debajo:\n"
 "                    </p>\n"
 "                    <strong>Detalles :</strong>\n"
@@ -363,12 +367,14 @@ msgstr ""
 "                        <br/>\n"
 "                        Fecha de llegada :\n"
 "                        <strong>\n"
-"                            ${format_datetime(object.checkin,tz=user.tz, dt_format='%Y-%m-%d %H:%M:%S')}\n"
+"                            ${format_datetime(object.checkin,tz=user.tz, dt_format='%Y-%m-%d "
+"%H:%M:%S')}\n"
 "                        </strong>\n"
 "                        <br/>\n"
 "                        Fecha de salida :\n"
 "                        <strong>\n"
-"                            ${format_datetime(object.checkout,tz=user.tz, dt_format='%Y-%m-%d %H:%M:%S')}\n"
+"                            ${format_datetime(object.checkout,tz=user.tz, dt_format='%Y-%m-%d "
+"%H:%M:%S')}\n"
 "                        </strong>\n"
 "                        <br/>\n"
 "                        Número de reserva :\n"
@@ -396,16 +402,13 @@ msgstr ""
 "                        %endfor\n"
 "                    </table>\n"
 "                    <br/>\n"
-"                    <p>Le agradeceríamos que nos avisara en caso \ n "
-"hay cambios en su horario o programa. \ n"
-"En caso de que necesite instalaciones para el check-in antes \ n"
-"tiempo debido a cambios de vuelo o cualquier otro motivo, \ n"
-"por favor infórmenos. Estamos seguros de que encontrará nuestro \ n"
-"servicios satisfactorios. En caso de que necesite cancelar \ n"
-"su reserva, por favor responda o llámenos dentro de las 24 \ n"
-"horas antes del día del check-in. Esperamos \ n"
-"para brindarle servicios de calidad en nuestro hotel. \ n"
-"                    </p>\n"
+"                    <p>Le agradeceríamos que nos avisara en caso \\ n hay cambios en su "
+"horario o programa. \\ nEn caso de que necesite instalaciones para el check-in antes \\ "
+"ntiempo debido a cambios de vuelo o cualquier otro motivo, \\ npor favor infórmenos. Estamos "
+"seguros de que encontrará nuestro \\ nservicios satisfactorios. En caso de que necesite "
+"cancelar \\ nsu reserva, por favor responda o llámenos dentro de las 24 \\ nhoras antes del "
+"día del check-in. Esperamos \\ npara brindarle servicios de calidad en nuestro hotel. \\ "
+"n                    </p>\n"
 "                    <br/>\n"
 "                    <strong>Saludos cordiales</strong>,\n"
 "                    <br/>\n"
@@ -500,7 +503,7 @@ msgstr "<strong>Tipo de Habitación</strong>"
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.report_maxroom_qweb
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.report_room_reservation_qweb
 msgid "<strong>To:</strong>"
-msgstr "Hasta:"
+msgstr "<strong>Hasta:</strong>"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.report_checkin_qweb
@@ -601,7 +604,7 @@ msgstr "Cancelar"
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.view_hotel_reservation_form
 msgid "Cancel Reservation"
-msgstr "Todas las reservas"
+msgstr "Cancelar Reservación"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_quick_room_reservation__check_in
@@ -741,7 +744,7 @@ msgstr "Dirección de factura"
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__partner_shipping_id
 msgid "Delivery addressfor current reservation. "
-msgstr "Dirección de entrega de la reserva actual."
+msgstr "Dirección de entrega de la reserva actual. "
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__display_name
@@ -814,7 +817,7 @@ msgstr "Seguidores (Socios)"
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.view_hotel_reservation_search
 msgid "Group By"
-msgstr "Agrupar por..."
+msgstr "Agrupar por"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_wizard_make_folio__grouped
@@ -872,7 +875,7 @@ msgstr "Informe de reserva de hotel"
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__reservation_line_ids
 msgid "Hotel room reservation details."
-msgstr "Informe de reserva de hotel"
+msgstr "Informe de reserva de hotel."
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__id
@@ -918,7 +921,9 @@ msgstr "Si está marcado, algunos mensajes tienen un error de entrega."
 msgid ""
 "Inform Guest About Reservation Before 24 Hours\n"
 "        "
-msgstr "Informar al huésped sobre la reserva antes de las 24 horas"
+msgstr ""
+"Informar al huésped sobre la reserva antes de las 24 horas\n"
+"        "
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__partner_invoice_id
@@ -1047,7 +1052,7 @@ msgstr "El número de adultos debe ser un valor positivo."
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__adults
 msgid "Number of adults there in the guest list. "
-msgstr "Número de adultos que hay en la lista de invitados."
+msgstr "Número de adultos que hay en la lista de invitados. "
 
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__children
@@ -1089,28 +1094,28 @@ msgstr "Contacto"
 #: code:addons/hotel_reservation/models/hotel_room.py:0
 #, python-format
 msgid "Please Check Rooms Status for %s."
-msgstr "Informe de reserva de hotel"
+msgstr "Informe de reserva de hotel %s."
 
 #. module: hotel_reservation
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 #, python-format
 msgid "Please Select Rooms For Reservation."
-msgstr "Informe de reserva de hotel"
+msgstr "Informe de reserva de hotel."
 
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__pricelist_id
 msgid "Pricelist for current reservation."
-msgstr "Reserva actual"
+msgstr "Reserva actual."
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.quick_room_reservation_form_view
 msgid "Quick Reservation"
-msgstr " Reserva"
+msgstr "Reserva"
 
 #. module: hotel_reservation
 #: model:ir.model,name:hotel_reservation.model_quick_room_reservation
 msgid "Quick Room Reservation"
-msgstr " Reserva"
+msgstr "Reserva"
 
 #. module: hotel_reservation
 #: code:addons/hotel_reservation/models/hotel_room.py:0
@@ -1201,7 +1206,7 @@ msgstr "Habitación No"
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.view_hotel_room_form_inherited
 msgid "Room Reservation"
-msgstr " Reserva"
+msgstr "Reserva"
 
 #. module: hotel_reservation
 #: model:ir.actions.report,name:hotel_reservation.hotel_roomres_details
@@ -1216,7 +1221,7 @@ msgstr "Línea de reserva"
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.room_reservation_summary_form_view
 msgid "Room Reservation Summary"
-msgstr " Reserva"
+msgstr "Reserva"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_room__room_reservation_line_ids
@@ -1258,7 +1263,7 @@ msgstr "Tipo de habitación"
 #. module: hotel_reservation
 #: model:ir.model,name:hotel_reservation.model_room_reservation_summary
 msgid "Room reservation summary"
-msgstr " Reserva"
+msgstr "Reserva"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.view_hotel_reservation_form
@@ -1283,7 +1288,7 @@ msgstr "Esquema"
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.view_hotel_reservation_form
 msgid "Select Room"
-msgstr "Seleccionar habitación "
+msgstr "Seleccionar habitación"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.view_hotel_reservation_form
@@ -1319,8 +1324,8 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"Estado basado en actividades \n "
-"Vencido: la fecha de vencimiento ya pasó \n"
+"Estado basado en actividades \n"
+" Vencido: la fecha de vencimiento ya pasó \n"
 "Hoy: la fecha de actividad es hoy \n"
 "Planificado: actividades futuras."
 
@@ -1336,9 +1341,8 @@ msgstr "Periodo resumido"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__partner_order_id
-msgid ""
-"The name and address of the contact that requested the order or quotation."
-msgstr "El nombre y dirección del contacto que solicitó el pedido o la cita"
+msgid "The name and address of the contact that requested the order or quotation."
+msgstr "El nombre y dirección del contacto que solicitó el pedido o la cita."
 
 #. module: hotel_reservation
 #: model:ir.model.fields,help:hotel_reservation.field_hotel_reservation__activity_exception_decoration
@@ -1363,11 +1367,9 @@ msgstr "Contador de mensajes no leídos"
 #. module: hotel_reservation
 #: code:addons/hotel_reservation/models/hotel_room.py:0
 #, python-format
-msgid ""
-"User is not able to delete the room after the room in %s state in "
-"reservation"
-msgstr "El usuario no puede eliminar la habitación después de la habitación en el estado %s en "
-"reserva"
+msgid "User is not able to delete the room after the room in %s state in reservation"
+msgstr ""
+"El usuario no puede eliminar la habitación después de la habitación en el estado %s en reserva"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__website_message_ids
@@ -1383,27 +1385,28 @@ msgstr "Historial de comunicación del sitio web"
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 #, python-format
 msgid ""
-"You tried to Confirm Reservation with room those already reserved in this "
-"Reservation Period. Overlap Dates are %s"
-msgstr "Intentaste confirmar la reserva con las habitaciones ya reservadas en este "
-"Período de reserva. Las fechas de superposición son %s"
+"You tried to Confirm Reservation with room those already reserved in this Reservation Period. "
+"Overlap Dates are %s"
+msgstr ""
+"Intentaste confirmar la reserva con las habitaciones ya reservadas en este Período de "
+"reserva. Las fechas de superposición son %s"
 
 #. module: hotel_reservation
 #: model:ir.model,name:hotel_reservation.model_hotel_folio
 msgid "hotel folio new"
-msgstr "Nueva hoja de detalles de los servicios ofrecidos por el hotel"
+msgstr "nueva hoja de detalles de los servicios ofrecidos por el hotel"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_quick_room_reservation__pricelist_id
 msgid "pricelist"
-msgstr "Lista de precios"
+msgstr "lista de precios"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_room_reservation_line__status
 msgid "state"
-msgstr "Estado"
+msgstr "estado"
 
 #. module: hotel_reservation
 #: model_terms:ir.ui.view,arch_db:hotel_reservation.room_reservation_summary_form_view
 msgid "to"
-msgstr "Para"
+msgstr "para"
