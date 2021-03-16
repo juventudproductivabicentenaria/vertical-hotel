@@ -552,6 +552,14 @@ class HotelReservationLine(models.Model):
                     """ date in the reservation form."""
                 )
             )
+        elif not self.line_id.checkout:
+            raise ValidationError(
+                _(
+                    """Before choosing a room, \n You have to """
+                    """select a departure date """
+                    """date on the reservation form."""
+                )
+            )
         hotel_room_ids = self.env["hotel.room"].search(
             [("room_categ_id", "=", self.categ_id.id)]
         )
