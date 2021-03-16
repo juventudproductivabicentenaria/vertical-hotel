@@ -18,6 +18,8 @@ class HotelRestaurantReservation(models.Model):
     _name = "hotel.restaurant.reservation"
     _description = "Includes Hotel Restaurant Reservation"
     _rec_name = "reservation_id"
+    _order = "reservation_id desc"
+
 
     def create_order(self):
         """
@@ -302,6 +304,7 @@ class HotelRestaurantOrder(models.Model):
     _name = "hotel.restaurant.order"
     _description = "Includes Hotel Restaurant Order"
     _rec_name = "order_no"
+    _order = 'order_no desc'
 
     @api.depends("order_list_ids")
     def _compute_amount_all_total(self):
@@ -534,6 +537,7 @@ class HotelReservationOrder(models.Model):
     _name = "hotel.reservation.order"
     _description = "Reservation Order"
     _rec_name = "order_number"
+    _order = 'order_number desc'
 
     @api.depends("order_list_ids")
     def _compute_amount_all_total(self):

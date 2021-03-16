@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 13.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-03-04 15:45+0000\n"
-"PO-Revision-Date: 2021-03-15 14:33-0400\n"
+"PO-Revision-Date: 2021-03-16 12:05-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -317,7 +317,7 @@ msgstr "Cancelar"
 #. module: hotel
 #: model_terms:ir.ui.view,arch_db:hotel.view_hotel_folio_form
 msgid "Cancel Folio"
-msgstr "Hotel Folio"
+msgstr "Cancelar Folio"
 
 #. module: hotel
 #: model:ir.model.fields,field_description:hotel.field_hotel_room__capacity

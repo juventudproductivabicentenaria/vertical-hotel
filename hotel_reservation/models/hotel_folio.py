@@ -6,7 +6,7 @@ from odoo import api, fields, models
 class HotelFolio(models.Model):
 
     _inherit = "hotel.folio"
-    _order = "reservation_id desc"
+    _order = "reservation_id asc"
 
     reservation_id = fields.Many2one(
         "hotel.reservation", "Reservation", ondelete="restrict"
