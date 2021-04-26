@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="res_currency_rate_provider_bcv" model="res.currency.rate.provider">
+            <field name="service">BCV</field>
+            <field name="currency_ids" eval="[(6,0,[ref('base.USD'), ref('base.ARS'),
+            ref('base.BRL'), ref('base.BOB'), ref('base.CAD'), ref('base.COP'), ref('base.CLP'),
+            ref('base.MXN'), ref('base.NIO'), ref('base.PEN'), ref('base.DOP'), ref('base.TTD'),
+            ref('base.UYU'), ref('base.ANG'), ref('base.CZK'), ref('base.DKK'), ref('base.NOK'),
+            ref('base.GBP'), ref('base.SEK'), ref('base.CHF'), ref('base.RUB'), ref('base.KRW'),
+            ref('base.CNY'), ref('base.TWD'), ref('base.INR'), ref('base.ILS'), ref('base.JPY'),
+            ref('base.HKD'), ref('base.JOD'), ref('base.AUD'), ref('base.EUR'), ref('base.TRY')
+            ])]"/>
+        </record>
+    </data>
+</odoo>
