@@ -8,6 +8,7 @@
     "depends": [
         "base",
         "account",
+        
     ],
     'data': [
         'views/product_views.xml'
