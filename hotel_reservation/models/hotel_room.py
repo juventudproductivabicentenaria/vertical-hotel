@@ -103,6 +103,16 @@ class RoomReservationSummary(models.Model):
     summary_header = fields.Text("Summary Header")
     room_summary = fields.Text("Room Summary")
 
+    def reserve_room(self):
+        return {
+            'name': _('Reserve room'),
+            'res_model': 'reserve.room',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'target': 'new'
+        }
+
     def room_reservation(self):
         """
         @param self: object pointer

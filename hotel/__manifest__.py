@@ -28,6 +28,7 @@
         "views/actions.xml",
         "views/menus.xml",
         "wizard/hotel_wizard.xml",
+        "wizard/reserve_room.xml",
     ],
     "css": ["static/src/css/room_kanban.css"],
     "external_dependencies": {"python": ["dateutil"]},
