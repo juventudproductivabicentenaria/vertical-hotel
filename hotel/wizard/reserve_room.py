@@ -27,38 +27,39 @@ class ReserveRoom(models.TransientModel):
     adults = fields.Integer('Adultos')
     boys = fields.Integer('Niños')
 
-    def reservation_room(self):
+    def reservation_room(self, date_from, date_until, adults, ninos):
+
         room_obj = self.env['hotel.room']
         room_ids = room_obj.search([])
         reservation_line_obj = self.env['hotel.room.reservation.line']
         date_range_list = []
         today = datetime.today()
-        capacity = self.adults + self.boys
+        capacity = adults + ninos
+        domain = []
 
-        print('capacyti')
-        print(capacity)
-        print(capacity)
-
-        if self.date_from and self.date_to:
-            if self.date_from > self.date_to:
-                raise UserError(
-                    _('The departure date must be greater than the arrival date.')
-                )
-            if self.date_from < today:
-                raise UserError(
-                    _('La fecha de inicio debe ser mayor o igual a la del dia de hoy')
-                )
+        if date_from and date_until:
+            date_until = datetime.strptime(date_until, '%Y-%m-%d')
+        #     if self.date_from > self.date_to:
+        #         raise UserError(
+        #             _('The departure date must be greater than the arrival date.')
+        #         )
+        #     if self.date_from < today:
+        #         raise UserError(
+        #             _('La fecha de inicio debe ser mayor o igual a la del dia de hoy')
+        #         )
             if self._context.get("tz", False):
                 timezone = pytz.timezone(self._context.get("tz", False))
             else:
                 timezone = pytz.timezone("UTC")
-            d_frm_obj = (
-                self.date_from
-                .replace(tzinfo=pytz.timezone("UTC"))
-                .astimezone(timezone) - relativedelta(days=1)
-            )
+            # d_frm_obj = (
+            #     date_from
+            #     .replace(tzinfo=pytz.timezone("UTC"))
+            #     .astimezone(timezone) - relativedelta(days=1)
+            # )
+        #     print('d_frm_obj')
+        #     print(d_frm_obj)
             d_to_obj = (
-                self.date_to
+                date_until
                     .replace(tzinfo=pytz.timezone("UTC"))
                     .astimezone(timezone)
             )
@@ -72,11 +73,6 @@ class ReserveRoom(models.TransientModel):
                 )
                 chk_date_to = c_to.strftime(dt)  # self.date_to
                 for room in room_ids:
-                    date_from = self.date_from - relativedelta(days=1)
-                    date_to = self.date_to
-                    print('date_from')
-                    print(date_from)
-                    print(chk_date_to)
                     reserline_ids = room.room_reservation_line_ids.ids  # Linea de reserva
 
                     # Linea que verifica si ya esta reservacion
@@ -84,22 +80,21 @@ class ReserveRoom(models.TransientModel):
                         ('id', 'in', reserline_ids),
                         ('check_in', '<=', chk_date_to),
                         ('check_out', '>=', date_from),
-                        ('room_id.status', '=', 'occupied'),
+                        # ('room_id.status', '=', 'occupied'),
                         # ('room_id.capacity', '=', capacity)
                     ])
                     print(reservline_ids)
 
                     if reservline_ids:
-                        room_reserv = room.search([
-                            ('id', '!=', reservline_ids.room_id.id),
-                            ('status', '!=', 'occupied')
-                        ])
+                        id = reservline_ids.room_id.id
+                        domain.append(id)
                         print('1')
-                        print(room_reserv)
-                        return room_reserv
-                    else:
-                        room_reserv = room.search([])
-                        print('2')
-                        print(room_reserv)
-                        return room_reserv
-        return True
+                print(domain)
+
+                room_reserv = room_obj.search([
+                        ('id', 'not in', domain),
+                        # ('status', '!=', 'occupied')
+                    ])
+
+                room_ids = room_reserv
+        return room_ids

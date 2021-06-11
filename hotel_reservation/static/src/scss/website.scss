@@ -1,11 +1,35 @@
-.register{
+.customers{
+	text-align: center;
+	width: 200%;
+	
+}
+
+.search_reserva{
 
 	width: auto;
 	padding: 10px;
 	margin: auto;
 	margin-top: 100px;
-	margin-bottom: 100px;
+	margin-bottom: 20px;
+	justify-content:center;
 	border-radius: 4px;
+	font-family: 'calibri';
+	font-size: 1.2em;
+}
+.room-icon{
+	height: auto;
+	max-width:200px;
+	width: 150%;
+	flex-basis: 0;
+}
+
+.rooms_available{
+
+	width: 100%;
+	margin: 0px;
+	padding: 5px;
+	margin-bottom: 100px;
+	justify-content:center;
 	font-family: 'calibri';
 	font-size: 1.2em;
 }

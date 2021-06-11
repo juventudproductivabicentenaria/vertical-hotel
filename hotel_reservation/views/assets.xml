@@ -18,17 +18,17 @@
     </template>
 
     <template id="assets_frontend" inherit_id="website.assets_frontend" name="Website Reservation">
+        <xpath expr="." position="inside">
+            <script
+                type="text/javascript"
+                src="/hotel_reservation/static/src/js/hotel_reservation.js"
+            />
+        </xpath>
         <xpath expr="link[last()]" position="after">
             <link
                 rel="stylesheet"
                 type="text/scss"
                 href="/hotel_reservation/static/src/scss/website.scss"
-            />
-        </xpath>
-        <xpath expr="." position="inside">
-            <script
-                type="text/javascript"
-                src="/hotel_reservation/static/src/js/hotel_reservation.js"
             />
         </xpath>
     </template>

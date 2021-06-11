@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template_rooms_available" xml:space="preserve">
+
+    <!-- Room available -->
+    <div t-name="hotel_reservation.rooms_available">
+        <div class="row">
+            <table class="table table-hover customers">
+                <thead>
+                <tr style="font-size: 16px;">
+                    <th>Habitación</th>
+                    <th></th>
+                    <th>Característica</th>
+                </tr>
+                </thead>
+                <tbody>
+                <t t-set="iterador" t-value="0"/>
+                <tr t-foreach="room" t-as="rooms">
+                    <td><span t-esc="rooms.name"/></td>
+                    <td><img t-if="rooms.image_1920" class="room-icon" t-attf-src="data:image/png;base64,#{rooms.image_1920}"/></td>
+                    <td><span t-if="rooms.room_amenities" t-esc="rooms.room_amenities"/></td>
+                    <t t-set="iterador" t-value="iterador+1"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</templates>
