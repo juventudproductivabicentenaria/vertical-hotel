@@ -14,15 +14,17 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 		selector: '#reservation', //id
 		xmlDependencies: ['/hotel_reservation/static/src/xml/search_reservation.xml',
-			'/hotel_reservation/static/src/xml/rooms_available.xml'
+			'/hotel_reservation/static/src/xml/rooms_available.xml',
 		],
 
 		events: {
 			'click #busqueda': '_onNextBlogClick',
+			'click #button_reserva': '_onNextReservar',
 			'click #incremento_adults': '_sumar_adults',
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
+			'click .checkbox': '_mostrarBoton',
 			'click .dropdown-menu': '_stop_boton',
     	},
 
@@ -69,7 +71,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			if (roomHtml) {
 				console.log('Si se cumple');
 				this.$('.rooms_available').html(roomHtml)
-			}
+			};
         },
 
 		_stop_boton: function(event) {
@@ -143,6 +145,20 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 		},
 
+		_mostrarBoton: function (ev){
+			var button_reserva = document.getElementById('button_reserva');
+			var al_menos_uno = false;
+			var checkedo = $(".checkbox:checked").length
+
+			if (checkedo >= 1) {
+				console.log('Es mayor')
+				button_reserva.style.display = 'inline';
+			} else {
+				console.log('No es mayor')
+				button_reserva.style.display = 'none';
+			}
+		},
+
 	    _onNextBlogClick: function (ev) {
 			console.log('Paso 2')
 
@@ -166,25 +182,62 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}).then(data => {
 				self._render_onNextBlogClick(data);
 			});
-			// $.get("/reservation/search_reservation", {
-            //     date_from: date_from,
-            //     date_until: date_until,
-            //     adults: adults,
-            //     ninos: ninos,
-
-            // }).then(function (data) {
-			// 	console.log(data);
-	    	// 	console.log('Si funciona el server');
-			// 	return data;
-            // });
 	    },
 		_render_onNextBlogClick: function (data) {
 			var room = data.rooms_list;
+			console.log(room)
 			this.rooms_available =  $(qweb._render('hotel_reservation.rooms_available', {
 				room: room,
 			}));
 			this._addEstructureCategories();
 		},
+
+
+	    _onNextReservar: function (ev) {
+			console.log('ButtonReserva')
+
+			var checkbox = $('[name="reserva"]:checked').map(function(){
+				return this.value;
+			  }).get();
+			var date_from = $('#dateFrom').val();
+			var date_until = $('#date_until').val();
+			var adults = $('#evaluar_adults').val();
+			var ninos = $('#evaluar_ninos').val();
+			var self = this;
+
+			console.log(checkbox)
+			this._rpc({
+				route: '/reservation/reserved_rooms',
+				params: {
+					'ids': checkbox,
+					'date_from': date_from,
+					'date_until': date_until,
+					'adults': adults,
+					'ninos': ninos,
+				},
+			}).then(data => {
+				console.log(data)
+				window.location = '/reserved/' + `${data.reservation_no}`
+			});
+	    },
+
+		// _render_onNextReservar: function (data) {
+		// 	console.log('Habitacion reservada')
+		// 	var reservation_id = data.reservation_no;
+		// 	var  url = '/reserved/' + reservation_id
+		// 	var self = this;
+		// 	this._rpc({
+		// 		route: url,
+		// 		params: {
+		// 			reservation_id: reservation_id,
+		// 		},
+		// 	}).then(
+		// 		window.location = '/',
+		// 	);
+		// 	// prueba.replaceWith(qweb.render("hotel_reservation.room_reserved", {
+		// 	// 	reservation_no: reservation_no,
+		// 	// }));
+		// },
 
 	});
 });

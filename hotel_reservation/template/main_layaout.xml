@@ -8,10 +8,50 @@
                     <div class="container pt-3">
                         <h1>Reservation</h1>
                         <div class="search_reserva row"/>
-                        <div class="rooms_available row"/>
+                        <div id="rooms_available" class="rooms_available row"/>
                     </div>
                 </div>
             </t>
         </template>
+
+        <template id="room_reserved" name="reserved">
+            <t t-call="website.layout">
+                <div id="reserved">
+                    <div class="wrapper wrapper--w960 pt-3">
+                        <t t-foreach="reservations" t-as="reservation">
+                            <div class="card-heading">
+                                <t t-attf-src="data:image/png;base64,#{reservation.image_1920}" />
+                            </div>
+                            <div class="container">
+                                <h2>Su reservación fue exitosa</h2>
+                                <table class="table table-hover">
+                                  <thead>
+                                    <tr>
+                                      <th>Número de reserva</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td><span t-esc="reservation.reservation_no"/></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <table class="table table-hover">
+                                    <thead>
+                                      <tr>
+                                        <th>Fecha de pedido: </th>
+                                        <th>
+                                            <span  style="text-align:left" t-esc="reservation.date_order"/>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
     </data>
 </odoo>

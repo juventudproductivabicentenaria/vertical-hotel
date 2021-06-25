@@ -39,14 +39,14 @@ class ReserveRoom(models.TransientModel):
 
         if date_from and date_until:
             date_until = datetime.strptime(date_until, '%Y-%m-%d')
-        #     if self.date_from > self.date_to:
-        #         raise UserError(
-        #             _('The departure date must be greater than the arrival date.')
-        #         )
-        #     if self.date_from < today:
-        #         raise UserError(
-        #             _('La fecha de inicio debe ser mayor o igual a la del dia de hoy')
-        #         )
+            #     if self.date_from > self.date_to:
+            #         raise UserError(
+            #             _('The departure date must be greater than the arrival date.')
+            #         )
+            #     if self.date_from < today:
+            #         raise UserError(
+            #             _('La fecha de inicio debe ser mayor o igual a la del dia de hoy')
+            #         )
             if self._context.get("tz", False):
                 timezone = pytz.timezone(self._context.get("tz", False))
             else:
@@ -56,8 +56,8 @@ class ReserveRoom(models.TransientModel):
             #     .replace(tzinfo=pytz.timezone("UTC"))
             #     .astimezone(timezone) - relativedelta(days=1)
             # )
-        #     print('d_frm_obj')
-        #     print(d_frm_obj)
+            #     print('d_frm_obj')
+            #     print(d_frm_obj)
             d_to_obj = (
                 date_until
                     .replace(tzinfo=pytz.timezone("UTC"))
@@ -92,9 +92,9 @@ class ReserveRoom(models.TransientModel):
                 print(domain)
 
                 room_reserv = room_obj.search([
-                        ('id', 'not in', domain),
-                        # ('status', '!=', 'occupied')
-                    ])
+                    ('id', 'not in', domain),
+                    ('is_published', '=', True)
+                ])
 
                 room_ids = room_reserv
         return room_ids

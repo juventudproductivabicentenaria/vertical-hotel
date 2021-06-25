@@ -17,6 +17,7 @@ class HotelFloor(models.Model):
 class HotelRoom(models.Model):
 
     _name = "hotel.room"
+    _inherit = ['website.published.mixin']
     _description = "Hotel Room"
 
     product_id = fields.Many2one(

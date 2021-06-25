@@ -27,6 +27,7 @@
         "report/report_view.xml",
         "views/hotel_reservation_view.xml",
         "views/assets.xml",
+        "views/res_config_settings.xml",
     ],
     "demo": ["demo/hotel_reservation_data.xml"],
     "qweb": ["static/src/xml/hotel_room_summary.xml"],

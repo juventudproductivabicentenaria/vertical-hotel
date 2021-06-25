@@ -48,7 +48,8 @@
                         </span>
                     </div>
                 </div>
-                <button id="busqueda" type="button" class="btn btn-primary mb-2" href="#">Search</button>
+                <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Search</button>
+                <button id="button_reserva" type="button" class="btn btn-primary mb-2" href="#">Reservar</button>
             </div>
             <div class="col-md-12 col-12">
                 <input type="hidden" id="evaluar_adults" value="0"/>

@@ -1,9 +1,11 @@
+#button_reserva{
+	display: none;
+}
 .customers{
 	text-align: center;
 	width: 200%;
 	
 }
-
 .search_reserva{
 
 	width: auto;
@@ -19,7 +21,7 @@
 .room-icon{
 	height: auto;
 	max-width:200px;
-	width: 150%;
+	width: 120%;
 	flex-basis: 0;
 }
 
@@ -32,6 +34,7 @@
 	justify-content:center;
 	font-family: 'calibri';
 	font-size: 1.2em;
+	// display: inline-block;
 }
 
 .border{
@@ -72,7 +75,16 @@
 	padding:10px;
 }
 
-
+/* ==========================================================================
+#WRAPPER
+========================================================================== */
+.wrapper {
+	margin: 0 auto;
+}
+  
+.wrapper--w960 {
+	max-width: 960px;
+}  
 
 // #reservation{
 // background-color:$white;
