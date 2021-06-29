@@ -89,12 +89,18 @@ class Website(http.Controller):
         hotel_reservation = request.env['hotel.reservation']
         ids = kwargs['ids']
         id_room = 0
+        list_ids = []
         ninos = int(kwargs['ninos'])
         user_id = request.env.user
         partner_id = user_id.partner_id
         pricelist_id = request.env['product.pricelist'].sudo().search([])
-        reservation_no = ''
+        reservation_id = 0
         room = request.env['hotel.room']
+        room_name = []
+        rooms_id = []
+        d_from = ''
+        d_today = ''
+        today = datetime.datetime.today()
         warehouse_id = user_id.company_id.warehouse_id
         tz = pytz.timezone(warehouse_id.tz)
 
@@ -103,11 +109,34 @@ class Website(http.Controller):
             date_to = datetime.datetime.strptime(date_to, dt)
             date_from = tz.normalize(tz.localize(date_from)).astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
             date_to = tz.normalize(tz.localize(date_to)).astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
+            today = today.strftime("%Y-%m-%d %H:%M:%S")
+
+        for date in date_from:
+            d_from += date
+        for date in today:
+            d_today += date
+        
+        if d_from[8:10] == d_today[8:10]:
+            data = {'error_validation': 'La fecha de inicio debe ser mayor al dia de hoy.',
+            }
+            return data
 
         for id in ids:
             id_room = int(id)
+            list_ids.append(id_room)
 
-        rooms = room.browse(id_room)
+        # rooms = room.browse(id_room)
+        rooms = room.sudo().search([('id', 'in', list_ids)])
+
+        if rooms:
+            for room in rooms:
+                id = room.id
+                name = room.name
+                room_name.append(name)
+                rooms_id.append(id)
+        print('rooms')
+        print(rooms_id)
+        # print(oooooo)
 
         values = {
             "partner_id": partner_id.id,
@@ -125,31 +154,35 @@ class Website(http.Controller):
                             0,
                             0,
                             {
-                                "reserve": [(6, 0, [rooms.id])],
+                                "reserve": [(6, 0, rooms_id)],
                                 "name": (
-                                    rooms and rooms.name or ""
+                                    rooms and room_name or ""
                                 ),
                             },
                         )
             ],
         }
 
-        print(values)
+        print(values['reservation_line_ids'])
         # print (ooooo)
 
         if not adults:
             print("La cantidad de adultos debe ser mayor a 0")
-            return
+            data = {'error_validation': 'La cantidad de adultos debe ser mayor a 0.',
+            }
+            return data
 
-        # reservation = hotel_reservation.create(values)
+        reservation = hotel_reservation.create(values)
 
-        # if reservation:
-        #     reservation_no = reservation.reservation_no
+        if reservation:
+            reservation_id = reservation.id
 
         # data = {'reservation_no': reservation_no}
-        data = {'reservation_no': [98]}
+        data = {'reservation_id': reservation_id,
+            }
 
         print('data')
+        # print(ooooo)
         
         return data
 

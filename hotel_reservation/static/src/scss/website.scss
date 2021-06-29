@@ -1,6 +1,27 @@
 #button_reserva{
 	display: none;
 }
+
+.row {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap;
+}
+
+.row-space {
+	-webkit-box-pack: justify;
+	-webkit-justify-content: space-between;
+	-moz-box-pack: justify;
+	-ms-flex-pack: justify;
+	justify-content: space-between;
+	padding: 10px;
+  }
+
 .customers{
 	text-align: center;
 	width: 200%;
@@ -23,6 +44,15 @@
 	max-width:200px;
 	width: 120%;
 	flex-basis: 0;
+}
+
+.error{
+	width: 50%;
+	height: max-content;
+	font-family: 'calibri';
+	font-size: 1.2em;
+	transform: translateX(50%);
+
 }
 
 .rooms_available{
@@ -50,12 +80,106 @@
 	font-family: 'calibri';
 
 }
+/* ==========================================================================
+   #TITLE
+   ========================================================================== */
+
+.title {
+	text-transform: uppercase;
+	font-weight: 700;
+	margin-bottom: 37px;
+}
+/* ==========================================================================
+   #CARD
+   ========================================================================== */
+.card {
+	overflow: hidden;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background: #fff;
+}
+.card-2 .card-body {
+	display: table-cell;
+	padding: 80px 90px;
+	padding-bottom: 88px;
+  }
+.card-2 {
+	-webkit-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	width: 100%;
+	display: table;
+}
+
+.card-2 .card-heading {
+	background-image: url(../img/fondo.jpeg);
+	width: 29.1%;
+	display: table-cell;
+}
+.card-2 .card-heading i{
+	transform: translateY(150%);
+}
+.check-circle{
+	color: $primary;
+}
+
+@media (max-width: 767px) {
+	.card-2 {
+	  display: block;
+	}
+	.card-2 .card-heading {
+	  width: 100%;
+	  display: block;
+	  padding-top: 300px;
+	  background-position: left center;
+	}
+	.card-2 .card-body {
+	  display: block;
+	  padding: 60px 50px;
+	}
+  }
+
+/* ==========================================================================
+#FONT
+========================================================================== */
+.font-robo {
+	font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+}
 
 .button_cantidad{
 	display: block;
 	width: 40px;
 	height: 40px;
 	border: none;
+}
+.img_reservation:hover{
+	transform: scaleX(-1);
+}
+
+.p-b-100 {
+	padding-bottom: 100px;
+}
+
+.p-t-180 {
+	padding-top: 100px;
+}
+.pp-10{
+	padding: 10px;
+}
+/* ==========================================================================
+#PAGE WRAPPER
+========================================================================== */
+.page-wrapper {
+	min-height: 100vh;
+}
+
+.table_room_reserved{
+	border: none;
+	font-size: 1.2em;
 }
 
 .text_adult{
@@ -84,16 +208,4 @@
   
 .wrapper--w960 {
 	max-width: 960px;
-}  
-
-// #reservation{
-// background-color:$white;
-// }
-
-//.row{
-//clases
-
-//}
-
-//*
-//todo documento
+}

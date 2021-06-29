@@ -204,8 +204,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var adults = $('#evaluar_adults').val();
 			var ninos = $('#evaluar_ninos').val();
 			var self = this;
+			var fecha =  new Date();
+			var fecha_datefrom =  new Date(date_from);
+			var dia_datefrom = fecha_datefrom.getDate() + 1;
+			var today = fecha.getDate();
 
-			console.log(checkbox)
 			this._rpc({
 				route: '/reservation/reserved_rooms',
 				params: {
@@ -217,27 +220,23 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				},
 			}).then(data => {
 				console.log(data)
-				window.location = '/reserved/' + `${data.reservation_no}`
+				if (dia_datefrom === today || Number(adults) === 0) {
+					self.showerror(data.error_validation);
+				}else{
+					window.location = '/reserved/' + `${data.reservation_id}`
+
+				}
 			});
 	    },
 
-		// _render_onNextReservar: function (data) {
-		// 	console.log('Habitacion reservada')
-		// 	var reservation_id = data.reservation_no;
-		// 	var  url = '/reserved/' + reservation_id
-		// 	var self = this;
-		// 	this._rpc({
-		// 		route: url,
-		// 		params: {
-		// 			reservation_id: reservation_id,
-		// 		},
-		// 	}).then(
-		// 		window.location = '/',
-		// 	);
-		// 	// prueba.replaceWith(qweb.render("hotel_reservation.room_reserved", {
-		// 	// 	reservation_no: reservation_no,
-		// 	// }));
-		// },
+		showerror: function (responseText) {
+			console.log('showerror')
+            var self = this;
+            var $result = this.$('#o_website_form_result');
+			$result.replaceWith(qweb.render("hotel_reservation.status_error_show_msg", {
+				responseText : responseText
+			}));
+        },
 
 	});
 });
