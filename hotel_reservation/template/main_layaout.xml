@@ -6,7 +6,7 @@
             <t t-call="website.layout">
                 <div id="reservation">
                     <div class="container pt-3">
-                        <h1>Reservation</h1>
+                        <h1>Reservación</h1>
                         <div class="search_reserva row"/>
                         <div class="row" id="o_website_form_result"></div>
                         <div id="rooms_available" class="rooms_available row"/>
@@ -20,15 +20,29 @@
                 <div class="page-wrapper p-t-180 p-b-100" id="reserved">
                     <div class="wrapper wrapper--w960 font-robo">
                         <t t-foreach="reservations" t-as="reservation">
+                            <div class="row row-space">
+                                <div class="banner  col-sm-4 col-md-8" style="height: 20px; transform: translateY(-20%);">
+                                    <strong style="font-family:sans-serif; font-size: 1.7em; color:rgba(253, 0, 0, 0.452);;">Recordatorio:</strong>
+                                    <div style="font-family: 'Quicksand', sans-serif; font-size: 1.7em;">
+                                        EL horario de entrada es de 04:00 pm hasta las 12:00 pm
+                                    </div>
+                                </div>
+                                <div style="transform: translateX(5%);">
+                                    <a href="/reservation">
+                                        <button class="btn btn-primary" style="border-radius: 12px;">
+                                            <i class="fa fa-arrow-circle-left fa-2x"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
                             <div class="card card-2">
-                                <div class="card-heading">
-                                    <!-- <img class="img_reservation" t-attf-src="data:image/png;base64,#{reservation.reservation_line_ids.reserve.image_1920}"/> -->
+                                <div class="card-heading text-center">
                                     <i class="fa fa-check-circle-o check-circle fa-10x"></i>
                                 </div>
                                 <div class="card-body">
                                     <h2 class="title">Su reservación fue exitosa</h2>
                                     <div class="row row-space">
-                                        <table class="table_room_reserved">
+                                        <table class="table_room_reserved text-center">
                                         <thead>
                                             <tr>
                                             <th>Número de reserva</th>
@@ -40,7 +54,7 @@
                                             </tr>
                                         </tbody>
                                         </table>
-                                        <table class="table_room_reserved">
+                                        <table class="table_room_reserved text-center">
                                             <thead>
                                             <tr>
                                                 <th>Fecha de pedido: </th>
@@ -54,7 +68,7 @@
                                         </table>
                                     </div>
                                     <div class="row row-space">
-                                        <table class="table_room_reserved">
+                                        <table class="table_room_reserved text-center">
                                             <thead>
                                                 <tr>
                                                 <th>Fecha-Llegada-Prevista</th>
@@ -62,11 +76,11 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                <td><span t-esc="reservation.checkin"/></td>
+                                                <td><span t-esc="reservation.checkin.strftime('%d-%m-%Y')"/></td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <table class="table_room_reserved">
+                                        <table class="table_room_reserved text-center">
                                             <thead>
                                                 <tr>
                                                 <th>Fecha-Salida-Prevista</th>
@@ -74,17 +88,17 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                <td><span t-esc="reservation.checkout"/></td>
+                                                <td><span t-esc="reservation.checkout.strftime('%d-%m-%Y')"/></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="pp-10">
                                         <h3 class="title">Habitaciones reservadas</h3>
-                                        <table class="table table-dark table-hover">
+                                        <table class="table table-dark table-hover customers">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="5">Nombre</th>
+                                                    <th colspan="5">Habitación</th>
                                                     <th colspan="5">Capacidad</th>
                                                 </tr>
                                             </thead>

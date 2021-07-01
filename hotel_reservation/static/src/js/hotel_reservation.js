@@ -204,10 +204,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var adults = $('#evaluar_adults').val();
 			var ninos = $('#evaluar_ninos').val();
 			var self = this;
-			var fecha =  new Date();
-			var fecha_datefrom =  new Date(date_from);
-			var dia_datefrom = fecha_datefrom.getDate() + 1;
-			var today = fecha.getDate();
+			// var fecha =  new Date();
+			// var fecha_datefrom =  new Date(date_from);
+			// var dia_datefrom = fecha_datefrom.getDate() + 1;
+			// var today = fecha.getDate();
 
 			this._rpc({
 				route: '/reservation/reserved_rooms',
@@ -220,7 +220,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				},
 			}).then(data => {
 				console.log(data)
-				if (dia_datefrom === today || Number(adults) === 0) {
+				// if (dia_datefrom === today || Number(adults) === 0) {
+				if (data.error_validation) {
 					self.showerror(data.error_validation);
 				}else{
 					window.location = '/reserved/' + `${data.reservation_id}`

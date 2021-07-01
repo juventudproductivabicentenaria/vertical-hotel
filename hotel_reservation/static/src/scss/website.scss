@@ -2,6 +2,29 @@
 	display: none;
 }
 
+.bd-css{
+	height: 500px;
+	-webkit-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	display: table;
+}
+
+.banner{
+	height: 500px;
+	-webkit-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color: rgba(253, 0, 0, 0.158);
+	display: table;
+}
+
 .row {
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -24,7 +47,7 @@
 
 .customers{
 	text-align: center;
-	width: 200%;
+	// width: 200%;
 	
 }
 .search_reserva{
@@ -66,6 +89,11 @@
 	font-size: 1.2em;
 	// display: inline-block;
 }
+.text{
+	font-family: 'Quicksand', sans-serif;
+	font-size: 1.7em;
+	transform: translateY(30%);
+}
 
 .border{
 	border: groove;
@@ -88,6 +116,7 @@
 	text-transform: uppercase;
 	font-weight: 700;
 	margin-bottom: 37px;
+	text-align: center;
 }
 /* ==========================================================================
    #CARD

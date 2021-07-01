@@ -326,6 +326,7 @@
                     <button string="Reserve a room"
                             name="reserve_room"
                             type="object"
+                            invisible="1"
                             class="btn btn-primary">
                     </button>
                 </header>

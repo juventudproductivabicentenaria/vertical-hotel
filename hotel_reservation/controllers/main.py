@@ -24,17 +24,11 @@ class Website(http.Controller):
 
     @http.route(['/reservation'], type="http", auth="public", website=True,)
     def reservation(self, **post):
-        print('reservation')
-        print('reservation')
-        print('reservation')
-        print(post)
         hotel_reservation = request.env['hotel.reservation'].sudo().search([])
         values = {
             'reservation_id': hotel_reservation
         }
-        print(values)
         return request.render('hotel_reservation.hotel_search_reservation', values)
-        # return values
 
     @http.route('/reservation/date_updated', type='json', auth='public', website=True)
     def date_updated(self, **kwargs):
@@ -62,9 +56,6 @@ class Website(http.Controller):
         hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos)
 
         room = hotel_reservation.read(['name', 'image_1920', 'room_amenities'])
-        # print(room)
-
-        # res =  {'rooms_list': room}
 
         for room in hotel_reservation:
             rooms.append({
@@ -76,14 +67,13 @@ class Website(http.Controller):
             })
 
         data = {'rooms_list': rooms}
-        print(data)
-        # return request.make_response(res)
         return data
 
     @http.route('/reservation/reserved_rooms', type='json', auth="public", website=True, sitemap=False)
     def reserved_rooms(self, access_token=None, revive='', **kwargs):
 
         adults = int(kwargs['adults'])
+        capacity = 0
         date_from = kwargs['date_from'] + ' 14:00:00'
         date_to = kwargs['date_until'] + ' 12:00:00'
         hotel_reservation = request.env['hotel.reservation']
@@ -115,7 +105,7 @@ class Website(http.Controller):
             d_from += date
         for date in today:
             d_today += date
-        
+
         if d_from[8:10] == d_today[8:10]:
             data = {'error_validation': 'La fecha de inicio debe ser mayor al dia de hoy.',
             }
@@ -131,12 +121,10 @@ class Website(http.Controller):
         if rooms:
             for room in rooms:
                 id = room.id
+                capacity += room.capacity
                 name = room.name
                 room_name.append(name)
                 rooms_id.append(id)
-        print('rooms')
-        print(rooms_id)
-        # print(oooooo)
 
         values = {
             "partner_id": partner_id.id,
@@ -163,12 +151,14 @@ class Website(http.Controller):
             ],
         }
 
-        print(values['reservation_line_ids'])
-        # print (ooooo)
-
         if not adults:
-            print("La cantidad de adultos debe ser mayor a 0")
             data = {'error_validation': 'La cantidad de adultos debe ser mayor a 0.',
+            }
+            return data
+
+        if adults > capacity:
+            data = {'error_validation': 'La capacidad de la habitacion es muy baja para la cantidad de personas, \n'
+             ' por favor reserve una habitacion adicional o de mayor capacidad'
             }
             return data
 
@@ -176,25 +166,22 @@ class Website(http.Controller):
 
         if reservation:
             reservation_id = reservation.id
-
-        # data = {'reservation_no': reservation_no}
-        data = {'reservation_id': reservation_id,
-            }
-
-        print('data')
-        # print(ooooo)
-        
+            data = {'reservation_id': reservation_id}
+            return data
+        else:
+            return {}
         return data
 
-    # @http.route(['/reserved/<int:reservation_id>'], type='http', auth="public", website=True,)
     @http.route(['/reserved/<model("hotel.reservation"):reservation>'], type='http', auth="public", website=True)
     def reservado(self,  reservation):
         print('reservation_no')
         print('reservation_no')
         print(reservation.reservation_no)
 
+        if reservation.state != 'confirm':
+            reservation.confirm_reservation()
+
         try:
-            # return json.dumps({"result":True})
             return request.render("hotel_reservation.room_reserved", {'reservations': reservation})
         except:
             pass
