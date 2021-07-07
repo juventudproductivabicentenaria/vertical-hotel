@@ -173,15 +173,39 @@ class Website(http.Controller):
         return data
 
     @http.route(['/reserved/<model("hotel.reservation"):reservation>'], type='http', auth="public", website=True)
-    def reservado(self,  reservation):
-        print('reservation_no')
-        print('reservation_no')
-        print(reservation.reservation_no)
+    def reservado(self,  reservation, **kwargs):
 
-        if reservation.state != 'confirm':
+        if reservation.state == 'draft':
             reservation.confirm_reservation()
 
+        values ={
+            'reservations': reservation,
+            'reserve': kwargs.get('reserve')
+        }
+
         try:
-            return request.render("hotel_reservation.room_reserved", {'reservations': reservation})
+            return request.render("hotel_reservation.room_reserved", values)
         except:
             pass
+
+    @http.route(['/reserve/list'], type="http", auth="public", website=True,)
+    def reserve_list(self, **post):
+
+        user_id = request.env.user
+        partner_id = user_id.partner_id
+        hotel_reservation = request.env['hotel.reservation'].sudo().search([('partner_id', '=', partner_id.id)])
+
+        values = {
+            'reservation_id': hotel_reservation,
+        }
+
+        return request.render('hotel_reservation.reserve_list', values)
+
+    @http.route(['/reserve/list/<int:reserve_id>'], type="http", auth="public", website=True,)
+    def cancel_reservation(self, reserve_id):
+        hotel_reservation = request.env['hotel.reservation']
+
+        if reserve_id:
+            hotel_reservation.sudo().browse(reserve_id).cancel_reservation()
+        
+        return self.reserve_list()

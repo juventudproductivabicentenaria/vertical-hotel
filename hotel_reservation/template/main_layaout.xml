@@ -40,7 +40,7 @@
                                     <i class="fa fa-check-circle-o check-circle fa-10x"></i>
                                 </div>
                                 <div class="card-body">
-                                    <h2 class="title">Su reservación fue exitosa</h2>
+                                    <h2 t-if="reserve" class="title">Su reservación fue exitosa</h2>
                                     <div class="row row-space">
                                         <table class="table_room_reserved text-center">
                                         <thead>
@@ -111,10 +111,51 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <a t-attf-href="/reserve/list/#{reservation.id}">
+                                            <button t-if="reservation.state != 'cancel'" class="btn btn-primary" style="border-radius: 12px; font-size: 1.2em;">
+                                                <span>Cancelar reservación</span>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="reserve_list" name="reserve_list">
+            <t t-call="website.layout">
+                <div class="p-b-100" id="reserve_list">
+                    <div class="container pt-3">
+                        <h1>Reservaciones</h1>
+                        <div class="card-2 pp-10" style="font-size:1.2em;">
+                            <table class="table table-hover text-center">
+                                <thead class="thead-dark">
+                                  <tr>
+                                    <th>Número de reserva</th>
+                                    <th>Nombre del huesped</th>
+                                    <th>Fecha-Llegada-Prevista</th>
+                                    <th>Fecha-Salida-Prevista</th>
+                                    <th>Estado</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr t-foreach="reservation_id" t-as="reservation">
+                                    <td>
+                                        <a t-attf-href="/reserved/#{reservation.id}">
+                                            <span t-esc="reservation.reservation_no"/>
+                                        </a>
+                                    </td>
+                                    <td><span t-esc="reservation.partner_id.name"/></td>
+                                    <td><span t-esc="reservation.checkin.strftime('%d-%m-%Y')"/></td>
+                                    <td><span t-esc="reservation.checkout.strftime('%d-%m-%Y')"/></td>
+                                    <td><span t-field="reservation.state"/></td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </t>
