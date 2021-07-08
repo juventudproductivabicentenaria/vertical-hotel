@@ -224,8 +224,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				if (data.error_validation) {
 					self.showerror(data.error_validation);
 				}else{
-					window.location = '/reserved/' + `${data.reservation_id}`+ '?reserve=True'
-
+					window.location = '/reserved/' + `${data.reservation_id}`+ '?reserve=True'+'&token='+`${data.token}`
 				}
 			});
 	    },

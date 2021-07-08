@@ -6,9 +6,11 @@ from odoo import http
 from odoo.http import request
 from odoo import _, api, fields, models
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT as dt
+from odoo.exceptions import ValidationError,UserError
 import datetime
 from datetime import date, timedelta, time
 from dateutil.relativedelta import relativedelta
+from ..models import tools
 
 
 _logger = logging.getLogger(__name__)
@@ -64,6 +66,7 @@ class Website(http.Controller):
                 'image_1920': room.image_1920,
                 'capacity': room.capacity,
                 'room_amenities': [' '+ amenities.name for amenities in room.room_amenities],
+                'token': room.token
             })
 
         data = {'rooms_list': rooms}
@@ -93,6 +96,7 @@ class Website(http.Controller):
         today = datetime.datetime.today()
         warehouse_id = user_id.company_id.warehouse_id
         tz = pytz.timezone(warehouse_id.tz)
+        values = {}
 
         if date_from and date_to:
             date_from = datetime.datetime.strptime(date_from, dt)
@@ -111,12 +115,12 @@ class Website(http.Controller):
             }
             return data
 
-        for id in ids:
-            id_room = int(id)
-            list_ids.append(id_room)
+        # for id in ids:
+        #     id_room = int(id)
+        #     list_ids.append(id_room)
 
-        # rooms = room.browse(id_room)
-        rooms = room.sudo().search([('id', 'in', list_ids)])
+        # rooms = room.sudo().search([('id', 'in', list_ids)])
+        rooms = room.sudo().search([('token', 'in', ids)])
 
         if rooms:
             for room in rooms:
@@ -126,7 +130,7 @@ class Website(http.Controller):
                 room_name.append(name)
                 rooms_id.append(id)
 
-        values = {
+        values.update({
             "partner_id": partner_id.id,
             "partner_invoice_id": partner_id.id,
             "partner_order_id": partner_id.id,
@@ -137,6 +141,7 @@ class Website(http.Controller):
             "pricelist_id": pricelist_id.id,
             "adults": adults,
             "children": ninos,
+            "token": tools.default_hash(),
             "reservation_line_ids": [
                         (
                             0,
@@ -149,7 +154,7 @@ class Website(http.Controller):
                             },
                         )
             ],
-        }
+        })
 
         if not adults:
             data = {'error_validation': 'La cantidad de adultos debe ser mayor a 0.',
@@ -163,10 +168,16 @@ class Website(http.Controller):
             return data
 
         reservation = hotel_reservation.create(values)
+        # data = {'reservation_id': 13,
+        #         'token': '59d861919bc0477807dd462dcaacba74fd0a81dd13',
+        #         }
+
 
         if reservation:
             reservation_id = reservation.id
-            data = {'reservation_id': reservation_id}
+            data = {'reservation_id': reservation_id,
+                    'token':reservation.token,
+                    }
             return data
         else:
             return {}
@@ -175,12 +186,17 @@ class Website(http.Controller):
     @http.route(['/reserved/<model("hotel.reservation"):reservation>'], type='http', auth="public", website=True)
     def reservado(self,  reservation, **kwargs):
 
+        token_hash = kwargs['token']
+
+        if reservation.token != token_hash:
+            raise ValidationError(_('No puedes ver el registro'))
+
         if reservation.state == 'draft':
             reservation.confirm_reservation()
 
         values ={
             'reservations': reservation,
-            'reserve': kwargs.get('reserve')
+            'reserve': kwargs.get('reserve'),
         }
 
         try:
@@ -202,10 +218,18 @@ class Website(http.Controller):
         return request.render('hotel_reservation.reserve_list', values)
 
     @http.route(['/reserve/list/<int:reserve_id>'], type="http", auth="public", website=True,)
-    def cancel_reservation(self, reserve_id):
+    def cancel_reservation(self, reserve_id, **kwargs):
         hotel_reservation = request.env['hotel.reservation']
 
         if reserve_id:
-            hotel_reservation.sudo().browse(reserve_id).cancel_reservation()
-        
+            token_hash = kwargs['token']
+            reservation =hotel_reservation.browse(reserve_id)
+
+            for reserva in reservation:
+                if reserva.token == token_hash:
+                    reservation.cancel_reservation()
+                    continue
+                else:
+                    raise ValidationError(_('No puedes cancelar la Reservación'))
+
         return self.reserve_list()

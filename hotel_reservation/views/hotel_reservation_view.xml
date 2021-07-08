@@ -69,6 +69,7 @@
                         <group colspan="4" col="4">
                             <field name="date_order" />
                             <field name="warehouse_id" />
+                            <field name="token" invisible="1"/>
                         </group>
                         <separator />
                         <group colspan="4" col="4">

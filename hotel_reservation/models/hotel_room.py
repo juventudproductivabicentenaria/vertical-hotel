@@ -3,6 +3,7 @@ import logging
 from datetime import datetime, timedelta
 
 from dateutil.relativedelta import relativedelta
+from . import tools
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
@@ -23,6 +24,7 @@ class HotelRoom(models.Model):
     room_reservation_line_ids = fields.One2many(
         "hotel.room.reservation.line", "room_id", string="Room Reserve Line"
     )
+    token = fields.Char(string="token", default=tools.default_hash(), required=True)
 
     def unlink(self):
         """

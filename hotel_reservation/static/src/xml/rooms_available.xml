@@ -32,7 +32,7 @@
                                 <td><span t-if="rooms.room_amenities" t-esc="rooms.room_amenities"/></td>
                                 <td><span t-esc="rooms.capacity"/></td>
                                 <td></td>
-                                <td align="right"><input type="checkbox" class="form-check-input checkbox" name="reserva" t-att-value="rooms.id"/></td>
+                                <td align="right"><input type="checkbox" class="form-check-input checkbox" name="reserva" t-att-value="rooms.token"/></td>
                                 <t t-set="iterador" t-value="iterador+1"/>
                             </tr>
                             </tbody>

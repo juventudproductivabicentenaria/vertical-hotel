@@ -111,7 +111,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <a t-attf-href="/reserve/list/#{reservation.id}">
+                                        <a t-attf-href="/reserve/list/#{reservation.id}?token=#{reservation.token}">
                                             <button t-if="reservation.state != 'cancel'" class="btn btn-primary" style="border-radius: 12px; font-size: 1.2em;">
                                                 <span>Cancelar reservación</span>
                                             </button>
@@ -144,7 +144,7 @@
                                 <tbody>
                                   <tr t-foreach="reservation_id" t-as="reservation">
                                     <td>
-                                        <a t-attf-href="/reserved/#{reservation.id}">
+                                        <a t-attf-href="/reserved/#{reservation.id}?token=#{reservation.token}">
                                             <span t-esc="reservation.reservation_no"/>
                                         </a>
                                     </td>

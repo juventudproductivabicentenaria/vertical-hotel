@@ -5,6 +5,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
+from . import tools
 from odoo.exceptions import ValidationError
 
 
@@ -125,6 +126,7 @@ class HotelReservation(models.Model):
         string="Folio",
     )
     no_of_folio = fields.Integer("No. Folio", compute="_compute_folio_id")
+    token = fields.Char(string="token", default=tools.default_hash(), required=True)
 
     def unlink(self):
         """
