@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template_reservation" xml:space="preserve">
+
+    <!-- Reservation search element -->
+    <div t-name="hotel_reservation.search_reservation">
+        <form
+            class="form-inline register"
+                action="/reservation"
+                method="post"
+                enctype="multipart/form-data"
+                data-model_name="">
+            <div class="row mb-2">
+                <!-- <h1 t-esc="date_from">Diomedes</h1> -->
+                <label class="col-form-label mb-2 mr-sm-2" for="request_date_from">Desde</label>
+                <input type="date" class="form-control mb-2 mr-sm-2 border"
+                        id="dateFrom" name="request_date_from" required="1" t-att-value="date_from"/>
+                <label class="col-form-label mb-2 mr-sm-2" for="request_date_to">Hasta</label>
+                <input type="date" class="form-control mb-2 mr-sm-2 border"
+                        id="date_until" name="request_date_until" required="1" t-att-value="date_until"/>
+                <div class="controls btn-group mb-2 mr-sm-2">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fa fa-user"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown" href="#">
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <span class="cantidad dropdown-item btn-group" href="#">
+                            <a class="text_adult mb-2 mr-sm-2" href="#">Adultos</a>
+                            <button id="incremento_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
+                                <i class="fa fa-plus-circle fa-2x"></i>
+                            </button>
+                            <p class="mr-sm-2" id="resultado_adults">0</p>
+                            <button id="desminuir_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
+                                <i class="fa fa-minus-circle fa-2x"></i>
+                            </button>
+                        </span>
+                        <span class="cantidad dropdown-item btn-group" href="#">
+                            <a class="text_adult mb-2 mr-sm-4"  href="#">Niños</a>
+                            <button id="incremento_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
+                                <i class="fa fa-plus-circle fa-2x"></i>
+                            </button>
+                            <p id="resultado_ninos" class="mr-sm-2">0</p>
+                            <button id="desminuir_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
+                                <i class="fa fa-minus-circle fa-2x"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Search</button>
+                <button id="button_reserva" type="button" class="btn btn-primary mb-2" href="#">Reservar</button>
+            </div>
+            <div class="col-md-12 col-12">
+                <input type="hidden" id="evaluar_adults" value="0"/>
+                <input type="hidden" id="evaluar_ninos" value="0"/>
+            </div>
+        </form>
+    </div>
+
+</templates>

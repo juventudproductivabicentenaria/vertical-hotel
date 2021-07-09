@@ -69,6 +69,7 @@
                         <group colspan="4" col="4">
                             <field name="date_order" />
                             <field name="warehouse_id" />
+                            <field name="token" invisible="1"/>
                         </group>
                         <separator />
                         <group colspan="4" col="4">
@@ -323,6 +324,12 @@
             <form string="Reservation Summary">
                 <header>
                     <separator string="Room Reservation Summary" colspan="4" />
+                    <button string="Reserve a room"
+                            name="reserve_room"
+                            type="object"
+                            invisible="1"
+                            class="btn btn-primary">
+                    </button>
                 </header>
                 <sheet>
                     <group colspan="4" col="4">
@@ -391,7 +398,7 @@
         <field name="res_model">room.reservation.summary</field>
         <field name="view_mode">form</field>
     </record>
-    
+
     <menuitem
         id="menu_action_hotel_reservation_summary1"
         name="Resumen de reserva"

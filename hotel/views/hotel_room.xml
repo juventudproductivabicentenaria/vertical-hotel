@@ -35,6 +35,11 @@
         <field name="arch" type="xml">
             <form string="Hotel Room">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                         <button name="website_publish_button" type="object" class="oe_stat_button" icon="fa-check-circle-o">
+                            <field name="is_published" widget="website_publish_button"/>
+                         </button>
+                    </div>
                     <field
                         name="image_1920"
                         widget="image"

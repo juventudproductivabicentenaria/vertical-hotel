@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="hotel_room_form_inherit" model="ir.ui.view">
+            <field name="name">hotel_room_form_inherit</field>
+            <field name="model">hotel.room</field>
+            <field name="inherit_id" ref="hotel.view_hotel_room_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='isroom']" position="after">
+                    <field name="token" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
