@@ -21,10 +21,13 @@ class HotelRoom(models.Model):
     _inherit = "hotel.room"
     _description = "Hotel Room"
 
+    def _has_default(self):
+        return tools.default_hash()
+
     room_reservation_line_ids = fields.One2many(
         "hotel.room.reservation.line", "room_id", string="Room Reserve Line"
     )
-    token = fields.Char(string="token", default=tools.default_hash(), required=True)
+    token = fields.Char(string="token", default=lambda self: self._has_default(), required=True)
 
     def unlink(self):
         """

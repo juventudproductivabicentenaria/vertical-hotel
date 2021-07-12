@@ -21,6 +21,9 @@ class HotelReservation(models.Model):
         for res in self:
             res.update({"no_of_folio": len(res.folios_ids.ids)})
 
+    def _has_default(self):
+        return tools.default_hash()
+
     reservation_no = fields.Char("Reservation No", readonly=True, copy=False)
     date_order = fields.Datetime(
         "Date Ordered",
@@ -126,7 +129,7 @@ class HotelReservation(models.Model):
         string="Folio",
     )
     no_of_folio = fields.Integer("No. Folio", compute="_compute_folio_id")
-    token = fields.Char(string="token", default=tools.default_hash(), required=True)
+    token = fields.Char(string="token", default=lambda self: self._has_default(), required=True)
 
     def unlink(self):
         """
