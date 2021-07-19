@@ -24,6 +24,10 @@ DEFAULT_TIME_FORMAT = '%H:%M:%S'
 
 class Website(http.Controller):
 
+    @http.route(['/'], type="http", auth="public", website=True,)
+    def home_reservation(self, **post):
+        return request.render('hotel_reservation.home_reservation')
+
     @http.route(['/reservation'], type="http", auth="public", website=True,)
     def reservation(self, **post):
         hotel_reservation = request.env['hotel.reservation'].sudo().search([])
