@@ -19,6 +19,8 @@
         "data/email_template_view.xml",
         #template
         "template/main_layaout.xml",
+        "template/home_reservation.xml",
+        #Wizards
         "wizards/hotel_reservation_wizard.xml",
         "report/checkin_report_template.xml",
         "report/checkout_report_template.xml",

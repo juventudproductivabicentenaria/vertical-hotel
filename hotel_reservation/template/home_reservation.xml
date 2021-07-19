@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <template id="home_reservation" name="home">
+            <t t-call="website.layout">
+                <div id="body">
+                    <div class="tm-container">
+                        <div>
+                            <div class="tm-row pt-4">
+                                <div class="tm-col-left">
+                                    <div class="tm-site-header media">
+                                        <i class="fa fa-building-o fa-4x mt-1 tm-logo"></i>
+                                        <div class="media-body">
+                                            <h1 class="tm-sitename text-uppercase">Hotel Alcaravan</h1>
+                                            <p class="tm-slogon p">vive una hermosa experiencia con nosotros</p>
+                                        </div>        
+                                    </div>
+
+                                    <div class="tm-col-right"></div>
+                                </div>
+                            </div>
+
+                            <div class="tm-row">
+                                <div class="tm-col-left"></div>
+                                <main class="tm-col-right">
+                                    <section class="tm-content">
+                                        <h2 class="mb-5 tm-content-title">Hotel Alcaravan</h2>
+                                        <p class="mb-5 p">Hotel Caravan ofrece un reconfortamiento en sus habitaciones y cuenta con una vista hermosa.</p>
+                                        <hr class="mb-5"/>
+                                        <p class="mb-5 p">Este hotel tiene amplios espacios sociales, y áreas verdes. Descubre una nueva experiencia con nosotros</p>                        
+                                        <a href="/contactus" class="btn btn-primary">Contáctenos</a>
+                                    </section>
+                                </main>
+                            </div>
+
+                        </div>
+
+                        <div class="tm-row">
+                            <div class="tm-col-left text-center">            
+                                <ul class="tm-bg-controls-wrapper ul">
+                                    <li class="tm-bg-control active" data-id="0"></li>
+                                    <li class="tm-bg-control" data-id="1"></li>
+                                    <li class="tm-bg-control" data-id="2"></li>
+                                </ul>            
+                            </div>
+                        </div>
+
+                        <!-- Diagonal background design -->
+                        <div class="tm-bg">
+                            <div class="tm-bg-left"></div>
+                            <div class="tm-bg-right"></div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+
+</odoo>

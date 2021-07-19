@@ -116,6 +116,11 @@
                                                 <span>Cancelar reservación</span>
                                             </button>
                                         </a>
+                                        <a t-attf-href="/reserve/list">
+                                            <button class="btn btn-primary" style="border-radius: 12px; font-size: 1.2em;">
+                                                <span>Mis reservaciones</span>
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -130,8 +135,9 @@
                 <div class="p-b-100" id="reserve_list">
                     <div class="container pt-3">
                         <h1>Reservaciones</h1>
+                        <h1 t-if="message" class="title">Su cancelación fue exitosa</h1>
                         <div class="card-2 pp-10" style="font-size:1.2em;">
-                            <table class="table table-hover text-center">
+                            <table t-if="reservation_id" class="table table-hover text-center">
                                 <thead class="thead-dark">
                                   <tr>
                                     <th>Número de reserva</th>
@@ -155,6 +161,9 @@
                                   </tr>
                                 </tbody>
                             </table>
+                            <t t-else="">
+                                <h1 class="text-center">No hay reservaciones disponibles</h1>
+                            </t>
                         </div>
                     </div>
                 </div>

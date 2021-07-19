@@ -24,6 +24,10 @@ DEFAULT_TIME_FORMAT = '%H:%M:%S'
 
 class Website(http.Controller):
 
+    @http.route(['/'], type="http", auth="public", website=True,)
+    def home_reservation(self, **post):
+        return request.render('hotel_reservation.home_reservation')
+
     @http.route(['/reservation'], type="http", auth="public", website=True,)
     def reservation(self, **post):
         hotel_reservation = request.env['hotel.reservation'].sudo().search([])
@@ -210,16 +214,22 @@ class Website(http.Controller):
         user_id = request.env.user
         partner_id = user_id.partner_id
         hotel_reservation = request.env['hotel.reservation'].sudo().search([('partner_id', '=', partner_id.id)])
+        values = {}
 
-        values = {
+        
+        if post:
+            values.update({'message': post['message']})
+        
+        values.update({
             'reservation_id': hotel_reservation,
-        }
+        })
 
         return request.render('hotel_reservation.reserve_list', values)
 
     @http.route(['/reserve/list/<int:reserve_id>'], type="http", auth="public", website=True,)
     def cancel_reservation(self, reserve_id, **kwargs):
         hotel_reservation = request.env['hotel.reservation']
+        today = datetime.datetime.today()
 
         if reserve_id:
             token_hash = kwargs['token']
@@ -227,9 +237,11 @@ class Website(http.Controller):
 
             for reserva in reservation:
                 if reserva.token == token_hash:
+                    if today > reservation.checkout:
+                        raise ValidationError(_('No puedes cancelar la Reservación'))
                     reservation.cancel_reservation()
                     continue
                 else:
                     raise ValidationError(_('No puedes cancelar la Reservación'))
 
-        return self.reserve_list()
+        return self.reserve_list(message="Su cancelacion fue exitosa")
