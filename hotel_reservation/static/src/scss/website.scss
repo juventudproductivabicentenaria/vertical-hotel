@@ -245,13 +245,16 @@
 #body {
     font-family: 'Open Sans', Arial, sans-serif;
     font-size: 17px;
-    font-weight: 300;
+    font-weight: 400;
     // overflow-x: hidden;
     color: white;
     background-color: #3136365d;
 }
 hr { border-top: 1px solid white; }
-.p { line-height: 1.9;}
+.p {
+	line-height: 1.9;
+	font-size: 1.5rem;
+}
 .ul { padding: 0;}
 
 /* Page Background */
@@ -287,8 +290,8 @@ hr { border-top: 1px solid white; }
 	height: 100%;
 }
 .tm-bg-left {
-    border-right: 230px solid rgba(0,0,0,0.5);
-    border-top: 100vh solid transparent;
+    border-right: 250px solid rgba(0,0,0,0.5);
+    border-top: 135vh solid transparent;
 }
 
 .tm-bg-right { background-color: rgba(0,0,0,0.5); }
@@ -337,7 +340,7 @@ hr { border-top: 1px solid white; }
     }
 	.tm-bg-left {
         height: 200px;        
-        border-bottom: 50px solid rgba(0,0,0,0.5);
+        border-bottom: 400px solid rgba(0,0,0,0.5);
         border-right: 0;
         border-top: 0;
     }

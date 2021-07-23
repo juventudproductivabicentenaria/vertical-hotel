@@ -14,7 +14,7 @@
                                         <i class="fa fa-building-o fa-4x mt-1 tm-logo"></i>
                                         <div class="media-body">
                                             <h1 class="tm-sitename text-uppercase">Hotel Alcaravan</h1>
-                                            <p class="tm-slogon p">vive una hermosa experiencia con nosotros</p>
+                                            <p class="tm-slogon p" style="font-size: 1.2rem">vive una hermosa experiencia con nosotros</p>
                                         </div>        
                                     </div>
 
