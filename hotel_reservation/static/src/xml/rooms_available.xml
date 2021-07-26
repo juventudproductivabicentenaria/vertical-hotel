@@ -46,10 +46,10 @@
         </div>
     </div>
 
-    <div class="error" t-name="hotel_reservation.status_error_show_msg">
-        <span id="o_website_form_result" class="text-danger ml8">
+    <div class="error" id="o_website_form_result" t-name="hotel_reservation.status_error_show_msg">
+        <span class="text-danger ml8">
             <i class="fa fa-close mr4" role="img" aria-label="Error" title="Error"/>An error has occured, the form has not been sent.<br/>
-            <div class="row mb-4 alert alert-danger">
+            <div class="row mb-4 alert alert-danger" style="background-color: rgba(233, 233, 233, 0.726);">
                 <p><strong>Error message:</strong></p>
                 <pre><t t-raw="responseText"/></pre>
             </div>

@@ -62,7 +62,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                <td><span t-esc="reservation.date_order"/></td>
+                                                <td><span t-esc="reservation.date_order.strftime('%d-%m-%Y')"/></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -157,7 +157,10 @@
                                     <td><span t-esc="reservation.partner_id.name"/></td>
                                     <td><span t-esc="reservation.checkin.strftime('%d-%m-%Y')"/></td>
                                     <td><span t-esc="reservation.checkout.strftime('%d-%m-%Y')"/></td>
-                                    <td><span t-field="reservation.state"/></td>
+                                    <td t-if="reservation.state == 'draft'"><p>Borrador</p></td>
+                                    <td t-if="reservation.state == 'cancel'"><p>Cancelado</p></td>
+                                    <td t-if="reservation.state == 'confirm'"><p>Confirmado</p></td>
+                                    <td t-if="reservation.state == 'done'"><p>Realizado</p></td>
                                   </tr>
                                 </tbody>
                             </table>

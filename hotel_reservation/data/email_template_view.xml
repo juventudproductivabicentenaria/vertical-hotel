@@ -15,8 +15,8 @@
                 <p style="margin: 0px; padding: 0px; font-size: 13px;">
                     <p>Hello <strong>${object.partner_id.name}</strong>,
                     </p>
-                    <p>This is to confirm your booking for a room at
-                        the <strong>${object.warehouse_id.name} Hotel</strong>,
+                    <p>The room reservation was confirmed on
+                        the <strong>${object.warehouse_id.name} Hotel</strong>.
                         % if object.warehouse_id.partner_id.city:
                         <strong>${object.warehouse_id.partner_id.city}</strong>,
                         % endif
@@ -29,7 +29,7 @@
                         gratitude to you for choosing our services.
                         Please find all the details regarding the confirmation
                         of the reservation on Date <strong>
-                            ${format_datetime(object.date_order,tz=user.tz,dt_format='%Y-%m-%d %H:%M:%S')}
+                            ${object.date_order.strftime('%d/%m/%Y')}
                         </strong> are listed below:
                     </p>
                     <strong>Details :</strong>
@@ -40,12 +40,12 @@
                         <br />
                         Date Of Arrival :
                         <strong>
-                            ${format_datetime(object.checkin,tz=user.tz, dt_format='%Y-%m-%d %H:%M:%S')}
+                            ${object.checkin.strftime('%d/%m/%Y')}
                         </strong>
                         <br />
                         Date Of Departure :
                         <strong>
-                            ${format_datetime(object.checkout,tz=user.tz, dt_format='%Y-%m-%d %H:%M:%S')}
+                            ${object.checkout.strftime('%d/%m/%Y')}
                         </strong>
                         <br />
                         Reservation Number :
