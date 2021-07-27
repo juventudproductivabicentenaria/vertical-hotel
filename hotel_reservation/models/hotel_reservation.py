@@ -294,15 +294,11 @@ class HotelReservation(models.Model):
                             if room_bool:
                                 raise ValidationError(
                                     _(
-                                        "You tried to Confirm "
-                                        "Reservation with room"
-                                        " those already "
-                                        "reserved in this "
-                                        "Reservation Period. "
-                                        "Overlap Dates are "
-                                        "%s"
+                                        "This room is already " 
+                                        "reserved in this period "
+                                        # "%s"
                                     )
-                                    % overlap_dates
+                                    # % overlap_dates
                                 )
                             else:
                                 self.state = "confirm"
