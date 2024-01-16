@@ -581,14 +581,14 @@ class HotelReservationLine(models.Model):
         required=True,
         related='line_id.checkin',
         store=True,
-        readonly=True,
+        # readonly=True,
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     checkout = fields.Datetime(
         "Expected-Date-Departure",
         required=True,
-        readonly=True,
+        # readonly=True,
         related='line_id.checkout',
         store=True,
         track_visibility='always',
