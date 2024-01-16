@@ -14,3 +14,9 @@ access_product_product_user_portal,product.product.user.portal,product.model_pro
 access_product_template_user_portal,product.template.user.portal,product.model_product_template,base.group_portal,1,1,0,0
 access_uom_uom_user_portal,uom.uom.user.portal,uom.model_uom_uom,base.group_portal,1,1,0,0
 access_ir_sequence_user_portal,ir.sequence.user.portal,base.model_ir_sequence,base.group_portal,1,0,0,0
+
+
+access_hotel_foods_admin,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_user,1,1,1,1
+access_hotel_foods_usuers,hotel.foods.admin,model_hotel_foods,base.group_portal,1,0,0,0
+access_hotel_institucion_usuers,model_hotel_institution,model_hotel_institution,,1,1,1,1
+

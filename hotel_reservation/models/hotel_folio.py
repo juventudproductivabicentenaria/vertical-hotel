@@ -21,7 +21,8 @@ class HotelFolio(models.Model):
             )
             if len(reservations) == 1:
                 for line in folio.reservation_id.reservation_line_ids:
-                    for room in line.reserve:
+                    room = line.hotel_room_id
+                    if room :
                         vals = {
                             "room_id": room.id,
                             "check_in": folio.checkin_date,

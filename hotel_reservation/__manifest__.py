@@ -17,20 +17,24 @@
         "data/hotel_scheduler.xml",
         "data/hotel_reservation_sequence.xml",
         "data/email_template_view.xml",
+        #views
+        "views/hotel_reservation_view.xml",
+        "views/assets.xml",
+        "views/res_config_settings.xml",
+        "views/hotel_room.xml",
+        "views/res_partner_view.xml",
+        "views/hotel_reservation_line_view .xml",
         #template
         "template/main_layaout.xml",
         "template/home_reservation.xml",
-        #Wizards
-        "wizards/hotel_reservation_wizard.xml",
+        #reports
         "report/checkin_report_template.xml",
         "report/checkout_report_template.xml",
         "report/room_max_report_template.xml",
         "report/hotel_reservation_report_template.xml",
         "report/report_view.xml",
-        "views/hotel_reservation_view.xml",
-        "views/assets.xml",
-        "views/res_config_settings.xml",
-        "views/hotel_room.xml",
+        #Wizards
+        "wizards/hotel_reservation_wizard.xml",
     ],
     "demo": ["demo/hotel_reservation_data.xml"],
     "qweb": ["static/src/xml/hotel_room_summary.xml"],

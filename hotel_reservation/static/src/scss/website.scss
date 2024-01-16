@@ -2,6 +2,68 @@
 	display: none;
 }
 
+#calendar {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	grid-gap: 10px;
+	text-align: center;
+}
+.evaluar_breakfast {
+	color: rgb(167, 78, 86);	
+	padding: 1px 5px;
+	// border: 1px solid #ccc;
+	border: groove;
+	margin: 2px;
+	border-radius: 0.25rem;
+	border: 1px solid rgb(167, 78, 86);
+}
+.evaluar_lunch {
+	color: blue;
+	padding: 1px 5px;
+	// border: 1px solid #ccc;
+	border: groove;
+	margin: 2px;
+	border-radius: 0.25rem;
+	border: 1px solid blue;
+}
+.evaluar_dinner {
+	color: green;
+	padding: 1px 5px;
+	// border: 1px solid #ccc;
+	margin: 2px;
+	border: groove;
+	border-radius: 0.25rem;
+	border: 1px solid green;
+}
+  
+.selectDay {
+	border: 1px solid #ccc;
+    padding: 10px 10px 0px 10px;
+}
+.past-day {
+	background-color: lightgray;
+}
+.past-last {
+	background-color: #ffffff;
+}
+.container_foods {
+	display: flex;
+}
+// .count_foods{
+// 	padding: 1px 5px;
+// 	// border: 1px solid #ccc;
+// 	border: groove;
+// 	border-radius: 0.25rem;
+// 	border: 1px solid #dee2e6;
+// }
+.body-card-item{
+	border-radius: 8px;
+	background-color: #ebeded;
+	margin: 1.5rem;
+	width: 600px;
+	border: 1px solid #c9d1da;
+}
+
 .bd-css{
 	// height: 500px;
 	-webkit-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
@@ -55,7 +117,7 @@
 	width: auto;
 	padding: 10px;
 	margin: auto;
-	margin-top: 100px;
+	// margin-top: 100px;
 	margin-bottom: 20px;
 	justify-content:center;
 	border-radius: 4px;
@@ -184,6 +246,7 @@
 	width: 40px;
 	height: 40px;
 	border: none;
+	background-color: #ffffff;
 }
 .img_reservation:hover{
 	transform: scaleX(-1);
@@ -214,19 +277,36 @@
 .text_adult{
 	display: block;
 	padding: 10px;
-	font-size: 1.2em;
 	color: #000;
+	font-size: 1.2rem;
+	font-family: "Roboto", "Odoo Unicode Support Noto", sans-serif;
+    font-weight: 500;
 }
 
-#resultado_adults{
-
-	padding:10px;
+.text_title{
+	display: block;
+	padding: 10px;
+	color: #000;
+	font-size: 1.3rem;
+	font-family: "Roboto", "Odoo Unicode Support Noto", sans-serif;
+    font-weight: 500;
+}
+.text_item{
+	display: block;
+	padding: 10px;
+	color: #000;
+	font-family: "Roboto", "Odoo Unicode Support Noto", sans-serif;
+    font-weight: 500;
 }
 
-#resultado_ninos{
+// #resultado_adults{
+// 	padding:10px;
+// }
 
-	padding:10px;
-}
+// #resultado_ninos{
+
+// 	padding:10px;
+// }
 
 /* ==========================================================================
 #WRAPPER
@@ -363,6 +443,7 @@ hr { border-top: 1px solid white; }
 	.tm-content-title {font-size: 1.5rem;}
 }
 @media (max-width: 460px) {
+
 	.tm-logo {margin-right: 15px;}
 	.tm-sitename {font-size: 1.8rem;}
 	.tm-slogon { font-size: 0.8rem; }

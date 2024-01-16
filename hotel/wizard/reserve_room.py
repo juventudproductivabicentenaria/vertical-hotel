@@ -27,37 +27,25 @@ class ReserveRoom(models.TransientModel):
     adults = fields.Integer('Adultos')
     boys = fields.Integer('Niños')
 
-    def reservation_room(self, date_from, date_until, adults, ninos):
-
+    def reservation_room(self, date_from, date_until, adults, ninos, rooms):
         room_obj = self.env['hotel.room']
         room_ids = room_obj.search([])
         reservation_line_obj = self.env['hotel.room.reservation.line']
         date_range_list = []
-        today = datetime.today()
-        capacity = adults + ninos
         domain = []
-
+        # fecha_datetime = datetime.strptime(fecha_str, "%d-%m-%Y").replace(hour=0, minute=0, second=0)
         if date_from and date_until:
             date_until = datetime.strptime(date_until, '%Y-%m-%d')
-            #     if self.date_from > self.date_to:
-            #         raise UserError(
-            #             _('The departure date must be greater than the arrival date.')
-            #         )
-            #     if self.date_from < today:
-            #         raise UserError(
-            #             _('La fecha de inicio debe ser mayor o igual a la del dia de hoy')
-            #         )
+            # date_until = datetime.strptime(date_until+' 23:59:59', '%Y-%m-%d')
+            # date_until =    date_until.replace(hour=23, minute=59, second=59)
+            # # date_until = datetime.strptime(date_until, '%Y-%m-%dT%H:%M:%S')
+            # date_from = datetime.strptime(date_until+' 00:00:01', '%Y-%m-%d').replace(hour=0, minute=0, second=0)
+            # date_from = date_from.replace(hour=0, minute=0, second=0)
             if self._context.get("tz", False):
                 timezone = pytz.timezone(self._context.get("tz", False))
             else:
                 timezone = pytz.timezone("UTC")
-            # d_frm_obj = (
-            #     date_from
-            #     .replace(tzinfo=pytz.timezone("UTC"))
-            #     .astimezone(timezone) - relativedelta(days=1)
-            # )
-            #     print('d_frm_obj')
-            #     print(d_frm_obj)
+
             d_to_obj = (
                 date_until
                     .replace(tzinfo=pytz.timezone("UTC"))

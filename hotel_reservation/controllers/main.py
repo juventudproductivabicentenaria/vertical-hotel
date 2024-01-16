@@ -1,14 +1,12 @@
 import json
 import logging
 import pytz
-
 from odoo import http
 from odoo.http import request
-from odoo import _, api, fields, models
+from odoo import _
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT as dt
 from odoo.exceptions import ValidationError,UserError
-import datetime
-from datetime import date, timedelta, time
+from datetime import date, timedelta, time, datetime
 from dateutil.relativedelta import relativedelta
 from ..models import tools
 
@@ -30,6 +28,9 @@ class Website(http.Controller):
 
     @http.route(['/reservation'], type="http", auth="public", website=True,)
     def reservation(self, **post):
+        if not request.session.uid:
+            return http.redirect_with_hash("/web/login")
+        
         hotel_reservation = request.env['hotel.reservation'].sudo().search([])
         values = {
             'reservation_id': hotel_reservation
@@ -39,13 +40,12 @@ class Website(http.Controller):
     @http.route('/reservation/date_updated', type='json', auth='public', website=True)
     def date_updated(self, **kwargs):
 
-        date_from = date.today()
+        # date_from = datetime.today() - relativedelta(hours=4) + relativedelta(days=1)
+        # date_to = date_from + relativedelta(days=1)
+        date_from = date.today() - relativedelta(hours=4) + relativedelta(days=1)
         date_to = date_from + relativedelta(days=1)
-        print('type(date_to)')
-        print(date_to)
-        print(type(date_from))
-        res = {'date_from': date_from,
-                'date_to': date_to
+        res = {'date_from': date_from.date(),
+                'date_to': date_to.date()
                 }
 
         return res
@@ -57,83 +57,81 @@ class Website(http.Controller):
         date_until = kwargs['date_until']
         adults = kwargs['adults']
         ninos = kwargs['ninos']
+        rooms_count = kwargs['rooms']
         rooms = []
-
-        hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos)
-
-        room = hotel_reservation.read(['name', 'image_1920', 'room_amenities'])
-
-        for room in hotel_reservation:
-            rooms.append({
-                'name': room.name,
-                'id': room.id,
-                'image_1920': room.image_1920,
-                'capacity': room.capacity,
-                'room_amenities': [' '+ amenities.name for amenities in room.room_amenities],
-                'token': room.token
-            })
-
-        data = {'rooms_list': rooms}
+        error_date = False
+        service = False
+        today = datetime.today() - relativedelta(hours=4)
+        if datetime.strptime(date_from, '%Y-%m-%d').date() < today.date():
+            error_date = True
+        if kwargs['showContainerRoom']:
+            hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, rooms_count)
+            room = hotel_reservation.read(['name', 'image_1920', 'room_amenities'])
+            
+            for room in hotel_reservation:
+                rooms.append({
+                    'name': room.name,
+                    'id': room.id,
+                    'image_1920': room.image_1920,
+                    'capacity': room.capacity,
+                    'room_amenities': [' '+ amenities.name for amenities in room.room_amenities],
+                    'token': room.token
+                })
+        else:
+            service = True
+        data = {'rooms_list': rooms,"error_date":error_date, 'service':service}
         return data
 
     @http.route('/reservation/reserved_rooms', type='json', auth="public", website=True, sitemap=False)
-    def reserved_rooms(self, access_token=None, revive='', **kwargs):
-
-        adults = int(kwargs['adults'])
+    def reserved_rooms(self, access_token=None, revive='', **post):
+        HotelReservation = request.env['hotel.reservation'].sudo()
+        HotelReservationOrden = request.env['hotel.reservation.order'].sudo()
+        HotelReservationLine = request.env['hotel_reservation.line'].sudo()
+        HotelMenucard = request.env['hotel.menucard'].sudo()
+        HotelRestaurantOrderList = request.env['hotel.restaurant.order.list'].sudo()
+        adults = int(post['adults'])
+        rooms_limit = int(post['rooms'])
+        foodList = post['foodList']
         capacity = 0
-        date_from = kwargs['date_from'] + ' 14:00:00'
-        date_to = kwargs['date_until'] + ' 12:00:00'
-        hotel_reservation = request.env['hotel.reservation']
-        ids = kwargs['ids']
+        print("post")
+        print("post")
+        print(post)
+        print(foodList)
+        date_from = post['date_from']
+        date_to = post['date_until']
+   
+        ids = post['ids']
         id_room = 0
         list_ids = []
-        ninos = int(kwargs['ninos'])
+        ninos = int(post['ninos'])
         user_id = request.env.user
         partner_id = user_id.partner_id
-        pricelist_id = request.env['product.pricelist'].sudo().search([])
+        # pricelist_id = request.env['product.pricelist'].sudo().search([])
         reservation_id = 0
         room = request.env['hotel.room']
         room_name = []
         rooms_id = []
+        reservation = False
+        orden_ids = []
         d_from = ''
         d_today = ''
-        today = datetime.datetime.today()
+        today = (datetime.today() - relativedelta(hours=4))
         warehouse_id = user_id.company_id.warehouse_id
         tz = pytz.timezone(warehouse_id.tz)
         values = {}
-
         if date_from and date_to:
-            date_from = datetime.datetime.strptime(date_from, dt)
-            date_to = datetime.datetime.strptime(date_to, dt)
+            date_from = datetime.strptime(date_from, '%Y-%m-%d')
+            date_to = datetime.strptime(date_to, '%Y-%m-%d')
             date_from = tz.normalize(tz.localize(date_from)).astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
             date_to = tz.normalize(tz.localize(date_to)).astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
             today = today.strftime("%Y-%m-%d %H:%M:%S")
-
         for date in date_from:
             d_from += date
         for date in today:
             d_today += date
 
-        if d_from[8:10] == d_today[8:10]:
-            data = {'error_validation': 'La fecha de inicio debe ser mayor al dia de hoy.',
-            }
-            return data
-
-        # for id in ids:
-        #     id_room = int(id)
-        #     list_ids.append(id_room)
-
-        # rooms = room.sudo().search([('id', 'in', list_ids)])
-        rooms = room.sudo().search([('token', 'in', ids)])
-
-        if rooms:
-            for room in rooms:
-                id = room.id
-                capacity += room.capacity
-                name = room.name
-                room_name.append(name)
-                rooms_id.append(id)
-
+        rooms = room.sudo().search([('token', 'in', ids)],limit=rooms_limit)
+          
         values.update({
             "partner_id": partner_id.id,
             "partner_invoice_id": partner_id.id,
@@ -142,40 +140,70 @@ class Website(http.Controller):
             "checkin": date_from,
             "checkout": date_to,
             "warehouse_id": warehouse_id.id,
-            "pricelist_id": pricelist_id.id,
+            # "pricelist_id": pricelist_id.id,
             "adults": adults,
             "children": ninos,
             "token": tools.default_hash(),
-            "reservation_line_ids": [
-                        (
-                            0,
-                            0,
-                            {
-                                "reserve": [(6, 0, rooms_id)],
-                                "name": (
-                                    rooms and room_name or ""
-                                ),
-                            },
-                        )
-            ],
         })
-
-        if not adults:
-            data = {'error_validation': 'La cantidad de adultos debe ser mayor a 0.',
-            }
-            return data
-
-        if adults > capacity:
-            data = {'error_validation': 'La capacidad de la habitacion es muy baja para la cantidad de personas, \n'
-             ' por favor reserve una habitacion adicional o de mayor capacidad'
-            }
-            return data
-
-        reservation = hotel_reservation.create(values)
-        # data = {'reservation_id': 13,
-        #         'token': '59d861919bc0477807dd462dcaacba74fd0a81dd13',
-        #         }
-
+        print("post.get('reserve_room')")
+        print(post.get('reserve_room'))
+        print("post.get('reserve_foom')")
+        print(post.get('reserve_food'))
+        if post.get('reserve_room'):
+            reservation = HotelReservation.create(values)
+        if post.get('reserve_food'):
+            print("foodList")
+            print("foodList")
+            print("foodList")
+            print(foodList)
+            for food in foodList:
+                print("food")
+                print("food")
+                print(food)
+                values_orden = {}
+                order_list_ids = []
+                formato = "%Y-%m-%d"  # Format of the date string
+                values_orden.update({
+                    "is_folio": False,
+                    "order_date": datetime.strptime(food['date'],formato),
+                })
+                if post.get('reserve_room') and reservation:
+                    values_orden['is_folio'] = True
+                    values_orden['reservation_room_id'] = reservation.id
+                orden_id = HotelReservationOrden.create(values_orden)
+                print("orden_id")
+                print("orden_id")
+                print(orden_id)
+                print(food['order'])
+                for orden in food['order']:
+                    if orden.get('quantity') and int(orden['quantity']) > 0:
+                        values_orden_line = {
+                            'reservation_order_id':orden_id.id,
+                            'menucard_id':HotelMenucard.search([('name','=',orden['code'])]).id,
+                            'item_qty':orden['quantity'],
+                        }
+                        line = HotelRestaurantOrderList.create(values_orden_line)
+                        print("line")
+                        print("line")
+                        print(line)
+                        order_list_ids.append(line.id)
+                orden_id.order_list_ids = [(6, 0, order_list_ids)]
+                print("order_list_ids")
+                print("order_list_ids")
+                print(order_list_ids)
+        if rooms:
+            for room in rooms:
+                capacity += room.capacity
+                val = {
+                    "line_id": reservation.id,
+                    "hotel_room_id": room.id,
+                    "partner_id": partner_id.id,
+                    "checkin": date_from,
+                    "checkout": date_to,
+                }
+                reservationline = HotelReservationLine.create(val)
+                rooms_id.append(reservationline.id)
+            reservation.reservation_line_ids = [(6, 0, rooms_id)]
 
         if reservation:
             reservation_id = reservation.id
@@ -229,7 +257,7 @@ class Website(http.Controller):
     @http.route(['/reserve/list/<int:reserve_id>'], type="http", auth="public", website=True,)
     def cancel_reservation(self, reserve_id, **kwargs):
         hotel_reservation = request.env['hotel.reservation']
-        today = datetime.datetime.today()
+        today = datetime.today()
 
         if reserve_id:
             token_hash = kwargs['token']

@@ -670,6 +670,9 @@ class HotelReservationOrder(models.Model):
     reservation_id = fields.Many2one(
         "hotel.restaurant.reservation", "Reservation No"
     )
+    reservation_room_id = fields.Many2one(
+        "hotel.reservation", "No de Reservacion"
+    )
     order_date = fields.Datetime(
         "Date", required=True, default=lambda self: fields.Datetime.now()
     )
@@ -706,10 +709,15 @@ class HotelReservationOrder(models.Model):
         readonly=True,
         default="draft",
     )
-    folio_id = fields.Many2one("hotel.folio", "Folio No")
+    folio_id = fields.Many2one("hotel.folio", "Folio No", domain="[('reservation_id','=',reservation_room_id)]")
     is_folio = fields.Boolean(
         "Is a Hotel Guest??", help="is customer reside in hotel or not"
     )
+    @api.onchange('reservation_room_id')
+    def _onchange_reservation_room_id(self):
+        self.folio_id = False
+        pass
+
 
     @api.model
     def create(self, vals):
@@ -719,13 +727,13 @@ class HotelReservationOrder(models.Model):
         @param vals: dictionary of fields value.
         """
         seq_obj = self.env["ir.sequence"]
+        print()
         res_oder = seq_obj.next_by_code("hotel.reservation.order") or "New"
         vals["order_number"] = res_oder
         return super(HotelReservationOrder, self).create(vals)
 
 
 class HotelRestaurantOrderList(models.Model):
-
     _name = "hotel.restaurant.order.list"
     _description = "Includes Hotel Restaurant Order"
 
@@ -751,6 +759,11 @@ class HotelRestaurantOrderList(models.Model):
     restaurant_order_id = fields.Many2one(
         "hotel.restaurant.order", "Restaurant Order"
     )
+    partner_id = fields.Many2one(
+        "res.partner",
+        "Comensal",
+        required=True
+    ) 
     reservation_order_id = fields.Many2one(
         "hotel.reservation.order", "Reservation Order"
     )

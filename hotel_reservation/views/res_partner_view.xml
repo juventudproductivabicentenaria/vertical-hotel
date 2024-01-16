@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="res_partner_form_view">
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='vat']" position="replace">
+                    <field name="is_son"/> 
+                    <field 
+                        name="vat" 
+                        attrs="{'required': [('is_son', '!=', True)]}"
+                        string="Cedula identidad" 
+                        placeholder="V-12345678 o E-12345678"/> 
+                </xpath>
+                <xpath expr="//field[@name='vat']" position="after">
+                    <field name="institution_id"/> 
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

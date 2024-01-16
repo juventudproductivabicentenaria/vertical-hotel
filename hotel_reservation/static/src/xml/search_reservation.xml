@@ -2,6 +2,26 @@
 <templates id="template_reservation" xml:space="preserve">
 
     <!-- Reservation search element -->
+    <t t-name="hotel_reservation.number_rooms">
+        <div id="number_rooms" class="row justify-content-around">
+            <div class="row align-items-center">
+                <label class="text_adult">Habitaciones</label>
+                <button id="number_rooms_counter" data-type="increase" class="button_cantidad btn-sm" type="button">
+                    <i class="fa fa-plus-circle fa-2x" ></i>
+                </button>
+                <label  class="text_adult mr-1 ml-1" id="result_rooms">0</label>
+                <button id="number_rooms_counter" data-type="decrease" class="button_cantidad btn-sm" type="button">
+                    <i class="fa fa-minus-circle fa-2x" ></i>
+                </button>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="hotel_reservation.error_data">
+        <span id="error_data" class="w-auto text-danger">
+            <t t-esc="title"/>
+        </span>
+    </t>
     <div t-name="hotel_reservation.search_reservation">
         <form
             class="form-inline register"
@@ -9,53 +29,136 @@
                 method="post"
                 enctype="multipart/form-data"
                 data-model_name="">
-            <div class="row mb-2">
-                <!-- <h1 t-esc="date_from">Diomedes</h1> -->
-                <label class="col-form-label mb-2 mr-sm-2" for="request_date_from">Desde</label>
-                <input type="date" class="form-control mb-2 mr-sm-2 border"
+            <div class="body-card-item p-3 ">
+                <div class="row justify-content-center">
+                    <label class="text_adult" for="request_date_from">Desde</label>
+                    <input type="date" class="border rounded p-2"
                         id="dateFrom" name="request_date_from" required="1" t-att-value="date_from"/>
-                <label class="col-form-label mb-2 mr-sm-2" for="request_date_to">Hasta</label>
-                <input type="date" class="form-control mb-2 mr-sm-2 border"
+                    <label class="text_adult" for="request_date_to">Hasta</label>
+                    <input type="date" class="border rounded p-2"
                         id="date_until" name="request_date_until" required="1" t-att-value="date_until"/>
-                <div class="controls btn-group mb-2 mr-sm-2">
-                    <button type="button" class="btn btn-primary">
-                        <i class="fa fa-user"></i>
+                </div>
+                <br />
+                <div class="row justify-content-around">
+                    <label class="text_adult">Adultos</label>
+                    <button id="incremento_adults" class="button_cantidad btn-sm" type="button">
+                        <i class="fa fa-plus-circle fa-2x"></i>
                     </button>
-                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown" href="#">
-                        <span class="caret"></span>
+                    <label class="text_adult" id="resultado_adults">0</label>
+                    <button id="desminuir_adults" class="button_cantidad btn-sm" type="button">
+                        <i class="fa fa-minus-circle fa-2x"></i>
                     </button>
-                    <div class="dropdown-menu">
-                        <span class="cantidad dropdown-item btn-group" href="#">
-                            <a class="text_adult mb-2 mr-sm-2" href="#">Adultos</a>
-                            <button id="incremento_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
-                                <i class="fa fa-plus-circle fa-2x"></i>
-                            </button>
-                            <p class="mr-sm-2" id="resultado_adults">0</p>
-                            <button id="desminuir_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
-                                <i class="fa fa-minus-circle fa-2x"></i>
-                            </button>
-                        </span>
-                        <span class="cantidad dropdown-item btn-group" href="#">
-                            <a class="text_adult mb-2 mr-sm-4"  href="#">Niños</a>
-                            <button id="incremento_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
-                                <i class="fa fa-plus-circle fa-2x"></i>
-                            </button>
-                            <p id="resultado_ninos" class="mr-sm-2">0</p>
-                            <button id="desminuir_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
-                                <i class="fa fa-minus-circle fa-2x"></i>
-                            </button>
-                        </span>
+                    <label class="text_adult">Niños</label>
+                    <button id="incremento_ninos" class="button_cantidad btn-sm" type="button">
+                        <i class="fa fa-plus-circle fa-2x"></i>
+                    </button>
+                    <label  class="text_adult" id="resultado_ninos">0</label>
+                    <button id="desminuir_ninos" class="button_cantidad btn-sm" type="button">
+                        <i class="fa fa-minus-circle fa-2x"></i>
+                    </button>
+                </div>
+                <br />
+                <div class="row">
+                    <input id="showContainerRoom" type="checkbox" class="border rounded p-2"/>
+                    <label class="text_title">Reservacion de habitaciones</label>
+                </div>
+                <div id="roomContainer" >
+                    <div id="number_rooms" class="row justify-content-around">
+                        <label class="text_adult">Habitaciones</label>
+                        <button id="number_rooms_counter" data-type="increase" class="button_cantidad btn-sm" type="button">
+                            <i class="fa fa-plus-circle fa-2x" ></i>
+                        </button>
+                        <label  class="text_adult" id="result_rooms">0</label>
+                        <button id="number_rooms_counter" data-type="decrease" class="button_cantidad btn-sm" type="button">
+                            <i class="fa fa-minus-circle fa-2x" ></i>
+                        </button>
                     </div>
                 </div>
-                <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Search</button>
-                <button id="button_reserva" type="button" class="btn btn-primary mb-2" href="#">Reservar</button>
-            </div>
-            <div class="col-md-12 col-12">
-                <input type="hidden" id="evaluar_adults" value="0"/>
-                <input type="hidden" id="evaluar_ninos" value="0"/>
+                <div class="row">
+                    <input  id="showContainerFood" type="checkbox" class="border rounded p-2"/>
+                    <label class="text_title">Reservacion de Comida</label>
+                </div>
+                <div id="foodContainer" >
+                    <div id="calendar"></div>
+                    <br/>
+                    <div id="number_foods" class="row justify-content-around">
+                        <label class="text_adult">Desayuno</label>
+                        <button id="" data-type="increase" data-food="breakfast" class="button_cantidad btn-sm number_foods_counter" type="button">
+                            <i class="fa fa-plus-circle fa-2x" ></i>
+                        </button>
+                        <label  class="text_adult" id="result_breakfast">0</label>
+                        <button data-type="decrease" data-food="breakfast" class="button_cantidad btn-sm number_foods_counter" type="button">
+                            <i class="fa fa-minus-circle fa-2x" ></i>
+                        </button>
+                        <label class="text_adult">Almuerzo</label>
+                        <button data-type="increase" data-food="lunch" class="button_cantidad btn-sm number_foods_counter" type="button">
+                            <i class="fa fa-plus-circle fa-2x" ></i>
+                        </button>
+                        <label  class="text_adult" id="result_lunch">0</label>
+                        <button data-type="decrease" data-food="lunch" class="button_cantidad btn-sm number_foods_counter" type="button">
+                            <i class="fa fa-minus-circle fa-2x" ></i>
+                        </button>
+                    </div>
+                    <div id="number_foods" class="row justify-content-around">
+                        <label class="text_adult">Cena</label>
+                        <button data-type="increase" data-food="dinner" class="button_cantidad btn-sm number_foods_counter" type="button">
+                            <i class="fa fa-plus-circle fa-2x" ></i>
+                        </button>
+                        <label  class="text_adult" id="result_dinner">0</label>
+                        <button data-type="decrease" data-food="dinner" class="button_cantidad btn-sm number_foods_counter" type="button">
+                            <i class="fa fa-minus-circle fa-2x" ></i>
+                        </button>
+                    </div>
+                </div>
+                <br />
+                <div class="row justify-content-center">
+                    <span id="error_data" class=""></span>
+                </div>
+                <div class="row justify-content-center">
+                    <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Search</button>
+                    <button id="button_reserva" type="button" class="btn btn-primary mb-2" href="#">Reservar</button>
+                </div>
+                <div class="col-md-12 col-12">
+                    <input type="hidden" id="evaluar_adults" value="0"/>
+                    <input type="hidden" id="evaluar_ninos" value="0"/>
+                    <input type="hidden" id="evaluar_rooms" value="0"/>
+                    <input type="hidden" id="evaluar_breakfast" value="0"/>
+                    <input type="hidden" id="evaluar_lunch" value="0"/>
+                    <input type="hidden" id="evaluar_dinner" value="0"/>
+                </div>
             </div>
         </form>
     </div>
 
+    <!-- <div class="controls btn-group mb-2 mr-sm-2">
+        <button type="button" class="btn btn-primary">
+            <i class="fa fa-user"></i>
+        </button>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" href="#">
+            <span class="caret"></span>
+        </button>
+        <div class="dropdown-menu">
+            <span class="cantidad dropdown-item btn-group" href="#">
+                <a class="text_adult mb-2 mr-sm-2" href="#">Adultos</a>
+                <button id="incremento_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
+                    <i class="fa fa-plus-circle fa-2x"></i>
+                </button>
+                <p class="mr-sm-2" id="resultado_adults">0</p>
+                <button id="desminuir_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
+                    <i class="fa fa-minus-circle fa-2x"></i>
+                </button>
+            </span>
+            <span class="cantidad dropdown-item btn-group" href="#">
+                <a class="text_adult mb-2 mr-sm-4"  href="#">Niños</a>
+                <button id="incremento_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
+                    <i class="fa fa-plus-circle fa-2x"></i>
+                </button>
+                <p id="resultado_ninos" class="mr-sm-2">0</p>
+                <button id="desminuir_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
+                    <i class="fa fa-minus-circle fa-2x"></i>
+                </button>
+            </span>
+        </div>
+    </div> -->
 </templates>

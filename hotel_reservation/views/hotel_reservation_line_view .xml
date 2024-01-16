@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- ======== Reservation ======== -->
+    <!-- Form view of hotel reservation -->
+    <record id="view_hotel_reservation_line_form" model="ir.ui.view">
+        <field name="name">hotel_reservation.line.form</field>
+        <field name="model">hotel_reservation.line</field>
+        <field name="arch" type="xml">
+            <form string="Reservation">
+                <header>
+                    <field name="state" widget="statusbar" />
+                </header>
+                <sheet>
+                    <label for='line_id' string="Reservacion" />
+                    <h1>
+                        <field name="line_id" class="oe_inline" />
+                    </h1>
+                    <group>
+                        <group colspan="4" col="4">
+                            <field name="hotel_room_id" />
+                            <field name="checkin" />
+                            <field name="is_son" />
+                            <field name="is_couple" />
+                        </group>
+                        <group colspan="4" col="4">
+                            <field name="partner_id" />
+                            <field name="checkout" />
+                            <field name="couple_id" attrs="{'invisible': [('is_couple', '!=', True)], 'required': [('is_couple', '=', True)]}" />
+                        </group>
+
+                    </group>
+                    <group>
+                        <field name="children_ids" attrs="{'invisible': [('is_son', '!=', True)], 'required': [('is_son', '=', True)]}" />
+                        <field name="name" string="Descripcion" />
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!-- Tree view of hotel reservation -->
+    <record id="view_hotel_reservation_line_tree" model="ir.ui.view">
+        <field name="name">hotel_reservation_line.tree</field>
+        <field name="model">hotel_reservation.line</field>
+        <field name="arch" type="xml">
+            <tree
+                decoration-bf="state == 'draft'"
+                decoration-info="state == 'done'"
+                decoration-muted="state=='cancel'"
+            >
+                <field name="line_id" />
+                <field name="hotel_room_id" />
+                <field name="partner_id" />
+                <field name="checkin" />
+                <field name="checkout" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search view of hotel reservation -->
+    <record id="view_hotel_reservation_line_search" model="ir.ui.view">
+        <field name="name">hotel_reservation_line.search</field>
+        <field name="model">hotel_reservation.line</field>
+        <field name="arch" type="xml">
+            <search string="Reservation">
+                <filter
+                    name='current_reservations'
+                    string="Current Reservations"
+                    domain="[('checkout','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]"
+                    help="Current Reservations"
+                />
+                <filter name='draft' domain="[('state','=','draft')]" string="Draft" />
+                <filter
+                    name='confirm'
+                    domain="[('state','=','confirm')]"
+                    string="Confirm"
+                />
+                <filter
+                    name='cancel'
+                    domain="[('state','=','cancel')]"
+                    string="Cancel"
+                />
+                <filter name='done' domain="[('state','=','done')]" string="Done" />
+                <field name="partner_id" />
+                <field name="checkin" />
+                <field name="checkout" />
+                <field name="hotel_room_id" />
+                <field name="state" />
+                <field name="line_id" />
+                <newline />
+                <group expand="0" string="Group By">
+                    <filter name="partner_id" string="Huspedes" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"
+                    />
+                    <filter name="line_id" string="Reservacion" icon="terp-personal" domain="[]" context="{'group_by':'line_id'}"
+                    />
+                    <filter name="hotel_room_id" string="Habitaciones" icon="fa-home" domain="[]" context="{'group_by':'hotel_room_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+    <!-- Action of hotel reservation -->
+    <record id="action_hotel_reservation_line" model="ir.actions.act_window">
+        <field name="name">Reservations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hotel_reservation.line</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        name="Lineas de Reservaciones"
+        id="menu_action_hotel_reservation_linet"
+        action="action_hotel_reservation_line"
+        parent="menu_hotel_reservation"
+        sequence="10"
+    />
+</odoo>

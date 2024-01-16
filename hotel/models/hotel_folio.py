@@ -308,7 +308,38 @@ class HotelFolio(models.Model):
                         }
                         folio_room_line_obj.create(vals)
         return folio_id
+    @api.onchange('reservation_id')
+    def _onchange_reservation_id(self):
+        folio_room_line_obj = self.env["folio.room.line"]
+        h_room_obj = self.env["hotel.room"]
+        folio_lines = []
+        if self.reservation_id and self.reservation_id.partner_id:
+            reservation_id = self.reservation_id
+            self.partner_id = reservation_id.partner_id.id
+            folios_ids = self.search([('reservation_id','=',reservation_id.id),('state','in',['sale','sent'])])
+            if not folios_ids:
+                for line in reservation_id.reservation_line_ids:
+                    roon = line.hotel_room_id
+                    if roon:
+                        folio_lines.append(
+                            (
+                                0,
+                                0,
+                                {
+                                    "checkin_date": reservation_id.checkin,
+                                    "checkout_date": reservation_id.checkout,
+                                    "product_id": roon.product_id and roon.product_id.id,
+                                    "name": reservation_id.reservation_no,
+                                    "price_unit": roon.list_price,
+                                    "product_uom_qty": 0.0,
+                                    "is_reserved": True,
+                                },
+                            )
+                        )
+                self.room_line_ids = folio_lines
 
+        pass
+    
     def write(self, vals):
         """
         Overrides orm write method.

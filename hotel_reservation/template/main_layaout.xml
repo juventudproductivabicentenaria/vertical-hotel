@@ -4,9 +4,25 @@
     <data>
         <template id="hotel_search_reservation" name="reservation">
             <t t-call="website.layout">
+                <section class="s_cover bg-black-50 pt96 pb96 o_colored_level s_parallax_no_overflow_hidden parallax s_parallax_is_fixed" 
+                    data-scroll-background-ratio="1" data-snippet="s_cover" 
+                    data-name="Cover" style="background-position: 0% 26.9058%; position: relative;" 
+                    data-oe-shape-data="{&quot;shape&quot;:&quot;web_editor/Wavy/11&quot;,&quot;flip&quot;:[]}">
+                    <span class="s_parallax_bg oe_img_bg" style="background-image:url('/hotel_reservation/static/src/img/san_juan1.jpeg');"
+                        data-scroll-background-ratio="0" data-original-id="749" 
+                        data-original-src="/hotel_reservation/static/src/img/san_juan1.jpeg" 
+                        data-mimetype="image/jpeg" data-resize-width="1920"></span>
+                    <div class="o_we_shape o_web_editor_Wavy_11" style=""></div>
+                    <div class="s_allow_columns container">
+                        <h1 style="text-align: center;">
+                            <span style="font-size: 62px;">Reservaciones</span>
+                        </h1>
+                        <!-- <p class="lead" style="text-align: center;"> <b></b> </p> -->
+                    </div>
+                </section>
                 <div id="reservation">
                     <div class="container pt-3">
-                        <h1>Reservación</h1>
+                        <!-- <h1>Reservación</h1> -->
                         <div class="search_reserva row"/>
                         <div class="row" id="o_website_form_result"></div>
                         <div id="rooms_available" class="rooms_available row"/>
@@ -104,9 +120,9 @@
                                             </thead>
                                             <tbody>
                                                 <t t-set="iterador" t-value="0"/>
-                                                <tr t-foreach="reservation.reservation_line_ids.reserve" t-as="reserve">
-                                                    <td colspan="5"><span t-esc="reserve.name"/></td>
-                                                    <td colspan="5"><span t-esc="reserve.capacity"/></td>
+                                                <tr t-foreach="reservation.reservation_line_ids" t-as="reserve">
+                                                    <td colspan="5"><span t-esc="reserve.partner_id.name"/></td>
+                                                    <td colspan="5"><span t-esc="reservation.adults"/></td>
                                                     <t t-set="iterador" t-value="iterador+1"/>
                                                 </tr>
                                             </tbody>

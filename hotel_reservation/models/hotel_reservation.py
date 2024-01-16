@@ -10,7 +10,6 @@ from odoo.exceptions import ValidationError
 
 
 class HotelReservation(models.Model):
-
     _name = "hotel.reservation"
     _rec_name = "reservation_no"
     _description = "Reservation"
@@ -38,35 +37,38 @@ class HotelReservation(models.Model):
         readonly=True,
         required=True,
         default=1,
-        states={"draft": [("readonly", False)]},
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     partner_id = fields.Many2one(
         "res.partner",
         "Guest Name",
         readonly=True,
         required=True,
-        states={"draft": [("readonly", False)]},
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     pricelist_id = fields.Many2one(
         "product.pricelist",
         "Scheme",
-        required=True,
+        required=False,
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="Pricelist for current reservation.",
     )
     partner_invoice_id = fields.Many2one(
         "res.partner",
         "Invoice Address",
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="Invoice address for current reservation.",
     )
     partner_order_id = fields.Many2one(
         "res.partner",
         "Ordering Contact",
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="The name and address of the "
         "contact that requested the order "
         "or quotation.",
@@ -75,31 +77,35 @@ class HotelReservation(models.Model):
         "res.partner",
         "Delivery Address",
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="Delivery address" "for current reservation. ",
     )
     checkin = fields.Datetime(
         "Expected-Date-Arrival",
         required=True,
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     checkout = fields.Datetime(
         "Expected-Date-Departure",
         required=True,
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     adults = fields.Integer(
         "Adults",
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="Number of adults there in the guest list. ",
     )
     children = fields.Integer(
         "Children",
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="Number of children there in guest list.",
     )
     reservation_line_ids = fields.One2many(
@@ -108,7 +114,7 @@ class HotelReservation(models.Model):
         "Reservation Line",
         help="Hotel room reservation details.",
         readonly=True,
-        states={"draft": [("readonly", False)]},
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     state = fields.Selection(
         [
@@ -162,21 +168,21 @@ class HotelReservation(models.Model):
         ctx = dict(self._context) or {}
         for reservation in self:
             cap = 0
-            for rec in reservation.reservation_line_ids:
-                if not rec.reserve:
-                    raise ValidationError(
-                        _("Please Select Rooms For Reservation.")
-                    )
-                cap = sum(room.capacity for room in rec.reserve)
-            if not ctx.get("duplicate"):
-                if (reservation.adults + reservation.children) > cap:
-                    raise ValidationError(
-                        _(
-                            "Room Capacity Exceeded \n"
-                            " Please Select Rooms According to"
-                            " Members Accomodation."
-                        )
-                    )
+            # for rec in reservation.reservation_line_ids:
+            #     if not rec.reserve:
+            #         raise ValidationError(
+            #             _("Please Select Rooms For Reservation.")
+            #         )
+            #     cap = sum(room.capacity for room in rec.reserve)
+            # if not ctx.get("duplicate"):
+            #     if (reservation.adults + reservation.children) > cap:
+            #         raise ValidationError(
+            #             _(
+            #                 "Room Capacity Exceeded \n"
+            #                 " Please Select Rooms According to"
+            #                 " Members Accomodation."
+            #             )
+            #         )
             if reservation.adults <= 0:
                 raise ValidationError(
                     _("Number of Adults must be Positive value.")
@@ -263,7 +269,8 @@ class HotelReservation(models.Model):
             reserv_checkout = reservation.checkout
             room_bool = False
             for line_id in reservation.reservation_line_ids:
-                for room in line_id.reserve:
+                room = line_id.hotel_room_id
+                if room:
                     if room.room_reservation_line_ids:
                         for reserv in room.room_reservation_line_ids.search(
                             [
@@ -358,7 +365,7 @@ class HotelReservation(models.Model):
             [("line_id", "in", self.ids)]
         )
         for reservation_line in reservation_lines:
-            reservation_line.reserve.write(
+            reservation_line.hotel_room_id.write(
                 {"isroom": True, "status": "available"}
             )
         return True
@@ -455,7 +462,8 @@ class HotelReservation(models.Model):
                 "reservation_id": reservation.id,
             }
             for line in reservation.reservation_line_ids:
-                for r in line.reserve:
+                roon = line.hotel_room_id
+                if roon:
                     folio_lines.append(
                         (
                             0,
@@ -463,15 +471,15 @@ class HotelReservation(models.Model):
                             {
                                 "checkin_date": checkin_date,
                                 "checkout_date": checkout_date,
-                                "product_id": r.product_id and r.product_id.id,
+                                "product_id": roon.product_id and roon.product_id.id,
                                 "name": reservation["reservation_no"],
-                                "price_unit": r.list_price,
+                                "price_unit": roon.list_price,
                                 "product_uom_qty": duration,
                                 "is_reserved": True,
                             },
                         )
                     )
-                    r.write({"status": "occupied", "isroom": False})
+                    roon.write({"status": "occupied", "isroom": False})
             folio_vals.update({"room_line_ids": folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
             for rm_line in folio.room_line_ids:
@@ -528,19 +536,71 @@ class HotelReservationLine(models.Model):
 
     _name = "hotel_reservation.line"
     _description = "Reservation Line"
+    _rec_name = "line_id"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
-    name = fields.Char("Name")
-    line_id = fields.Many2one("hotel.reservation")
-    reserve = fields.Many2many(
-        "hotel.room",
-        "hotel_reservation_line_room_rel",
-        "hotel_reservation_line_id",
-        "room_id",
-        domain="[('isroom','=',True),\
-                               ('categ_id','=',categ_id)]",
+    name = fields.Text("Descripcion")
+
+    hotel_room_id = fields.Many2one("hotel.room", "Habitacion", required=True, track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},)
+
+    line_id = fields.Many2one("hotel.reservation","Reservacion", readonly=True,track_visibility='always',)
+
+    code = fields.Char("Codigo", readonly=True)
+
+    is_son = fields.Boolean("Ninos")
+    is_couple = fields.Boolean("Pareja")
+    couple_id = fields.Many2one(
+        "res.partner",
+        "Pareja",
+        track_visibility='always', )
+    children_ids = fields.Many2many(
+        "res.partner",
+        string="Hijos (a)")
+
+    partner_id = fields.Many2one(
+        "res.partner",
+        "Huesped",
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
-    categ_id = fields.Many2one("hotel.room.type", "Room Type")
+    state = fields.Selection(
+        [
+            ("draft", "Draft"),
+            ("confirm", "Confirm"),
+            ("cancel", "Cancel"),
+            ("done", "Done"),
+        ],
+        "State",
+        readonly=True,
+        related='line_id.state', store=True
+    )
 
+    checkin = fields.Datetime(
+        "Expected-Date-Arrival",
+        required=True,
+        related='line_id.checkin',
+        store=True,
+        readonly=True,
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
+    )
+    checkout = fields.Datetime(
+        "Expected-Date-Departure",
+        required=True,
+        readonly=True,
+        related='line_id.checkout',
+        store=True,
+        track_visibility='always',
+        states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
+    )
+  
+
+    @api.model
+    def create(self, vals):
+        res = super(HotelReservationLine, self).create(vals)
+        return res
+    
     @api.onchange("categ_id")
     def _onchange_categ(self):
         """
@@ -626,7 +686,14 @@ class HotelReservationLine(models.Model):
         """
         hotel_room_reserv_line_obj = self.env["hotel.room.reservation.line"]
         for reserv_rec in self:
-            for rec in reserv_rec.reserve:
+            if not reserv_rec.state == 'draft':
+                raise ValidationError(
+                        _(
+                            "Sorry, you can only delete the reservation when it's draft!"
+                        )
+                    )
+            rec = reserv_rec.hotel_room_id
+            if rec:
                 lines = hotel_room_reserv_line_obj.search(
                     [
                         ("room_id", "=", rec.id),
