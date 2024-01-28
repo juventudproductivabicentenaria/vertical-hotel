@@ -4,6 +4,7 @@ import pytz
 from odoo import http
 from odoo.http import request
 from odoo import _
+from pytz import timezone, UTC
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT as dt
 from odoo.exceptions import ValidationError,UserError
 from datetime import date, timedelta, time, datetime
@@ -62,6 +63,7 @@ class Website(http.Controller):
         error_date = False
         service = False
         today = datetime.today() - relativedelta(hours=4)
+        self.env['res.partner'].search([('id','=')]) 
         if datetime.strptime(date_from, '%Y-%m-%d').date() < today.date():
             error_date = True
         if kwargs['showContainerRoom']:
@@ -117,7 +119,9 @@ class Website(http.Controller):
         d_today = ''
         today = (datetime.today() - relativedelta(hours=4))
         warehouse_id = user_id.company_id.warehouse_id
-        tz = pytz.timezone(warehouse_id.tz)
+        tz = pytz.timezone(user_id.tz or 'UTC')
+        # tz = timezone('UTC')
+        # user_tz = user.tz or 'UTC'
         values = {}
         if date_from and date_to:
             date_from = datetime.strptime(date_from, '%Y-%m-%d')
