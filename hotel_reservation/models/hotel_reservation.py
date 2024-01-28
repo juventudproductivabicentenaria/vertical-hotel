@@ -35,7 +35,7 @@ class HotelReservation(models.Model):
         "stock.warehouse",
         "Hotel",
         readonly=True,
-        required=True,
+        # required=True,
         default=1,
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
