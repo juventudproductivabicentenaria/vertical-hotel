@@ -63,7 +63,7 @@ class Website(http.Controller):
         error_date = False
         service = False
         today = datetime.today() - relativedelta(hours=4)
-        self.env['res.partner'].search([('id','=')]) 
+        # self.env['res.partner'].search([('id','=')]) 
         if datetime.strptime(date_from, '%Y-%m-%d').date() < today.date():
             error_date = True
         if kwargs['showContainerRoom']:
