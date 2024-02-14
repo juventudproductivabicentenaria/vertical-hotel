@@ -29,36 +29,76 @@
                 method="post"
                 enctype="multipart/form-data"
                 data-model_name="">
-            <div class="body-card-item p-3 ">
-                <div class="row justify-content-center">
-                    <label class="text_adult" for="request_date_from">Desde</label>
-                    <input type="date" class="border rounded p-2"
-                        id="dateFrom" name="request_date_from" required="1" t-att-value="date_from"/>
-                    <label class="text_adult" for="request_date_to">Hasta</label>
-                    <input type="date" class="border rounded p-2"
-                        id="date_until" name="request_date_until" required="1" t-att-value="date_until"/>
-                </div>
-                <br />
-                <div class="row justify-content-around">
-                    <label class="text_adult">Adultos</label>
-                    <button id="incremento_adults" class="button_cantidad btn-sm" type="button">
-                        <i class="fa fa-plus-circle fa-2x"></i>
-                    </button>
-                    <label class="text_adult" id="resultado_adults">0</label>
-                    <button id="desminuir_adults" class="button_cantidad btn-sm" type="button">
-                        <i class="fa fa-minus-circle fa-2x"></i>
-                    </button>
-                    <label class="text_adult">Niños</label>
-                    <button id="incremento_ninos" class="button_cantidad btn-sm" type="button">
-                        <i class="fa fa-plus-circle fa-2x"></i>
-                    </button>
-                    <label  class="text_adult" id="resultado_ninos">0</label>
-                    <button id="desminuir_ninos" class="button_cantidad btn-sm" type="button">
-                        <i class="fa fa-minus-circle fa-2x"></i>
-                    </button>
+            <div class="body-card-item p-3" style="width:1200px; height:700px;">
+                <p class="text-start text-primary h4 fw-bold mb-5">Solicitud de Reservación</p>
+                <div class="d-flex align-items-center mb-2 bg-white">
+                    <div class="ml-2">
+                        <label class="text_adult" for="request_date_from">Fecha Desde</label>
+                        <input type="date" class="border rounded p-2" id="dateFrom" name="request_date_from" required="1" t-att-value="date_from"/>
+                    </div>
+                    <div class="ml-5">
+                        <label class="text_adult" for="request_date_to">Fecha Hasta</label>
+                        <input type="date" class="border rounded p-2" id="date_until" name="request_date_until" required="1" t-att-value="date_until"/>
+                    </div>
+                    <div class="border bg-light ml-5" style="width: 100px; height: 50px;">
+                        <p id="counterPeople" class="text-center" style="font-size:30px;">0</p>
+                    </div>
+                      
+
                 </div>
                 <br />
                 <div class="row">
+                    <button type="button" id="buttonAdd" class="text-start text-primary h5 fw-bold mb-5 ml-4 mt-3">Agregar</button>
+                    <div id="container_add" class="container" style="text-align:center;">
+                        <div class="seccion-superior">
+                            <input type="text" placeholder="Cédula de Identidad" class="form-control mr-5"></input>
+                            <input type="text" placeholder="Nombre" class="form-control mr-5"></input>
+                            <input type="text" placeholder="Apellido" class="form-control"></input>
+                        </div>
+                        <div class="seccion-inferior mt-2">
+                            <input type="text" placeholder="Teléfono" class="form-control mr-5"></input>
+                            <input type="text" placeholder="Correo Electrónico" class="form-control mr-5"></input>
+                            <input type="text" placeholder="Institución donde nos visita" class="form-control"></input>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="d-flex align-items-center">
+                    <p id="includeRoom" class="text-start text-primary h5 fw-bold mb-5 ml-4 mt-3">Incluir Habitación</p>
+                    <div class="ml-5 mb-3">
+                        <p class="text_adult">Acompañante</p>
+                    </div>
+                    <div class="border bg-light ml-3 mb-4" style="width: 50px; height: 25px;">
+                    </div>
+                    <div class="ml-5 mb-3">
+                        <p class="text_adult">Niños</p>
+                    </div>
+                    <div class="border bg-light ml-3 mb-4" style="width: 50px; height: 25px;">
+                    </div>
+                    
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <p id="includeFood" class="text-start text-primary h5 fw-bold mb-5 ml-4 mt-3">Incluir Comida</p>
+                    <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
+                        Desayuno
+                    </div>
+                    <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
+                        Almuerzo
+                    </div>
+                    <div class="border bg-light ml-3 mb-4 text-center" style="width: 60px; height: 30px;">
+                        Cena
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <p id="includeFood_one" class="text-start text-primary h5 fw-bold mb-5 ml-4 mt-3">Incluir Transporte</p>
+                    <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
+                        Origen
+                    </div>
+                    <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
+                        Destino
+                    </div>
+                </div>
+                <!-- <div class="row">
                     <input id="showContainerRoom" type="checkbox" class="border rounded p-2"/>
                     <label class="text_title">Reservacion de habitaciones</label>
                 </div>
@@ -113,9 +153,9 @@
                 <br />
                 <div class="row justify-content-center">
                     <span id="error_data" class=""></span>
-                </div>
+                </div> -->
                 <div class="row justify-content-center">
-                    <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Search</button>
+                    <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Reservar</button>
                     <button id="button_reserva" type="button" class="btn btn-primary mb-2" href="#">Reservar</button>
                 </div>
                 <div class="col-md-12 col-12">

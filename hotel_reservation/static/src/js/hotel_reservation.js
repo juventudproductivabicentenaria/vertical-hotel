@@ -21,6 +21,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #busqueda': '_onNextBlogClick',
 			'click #button_reserva': '_onNextReservar',
 			'click #incremento_adults': '_sumar_adults',
+			'click #buttonAdd': '_add_person',
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
@@ -116,6 +117,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				document.getElementById("result_rooms").innerHTML = eval(number);
 				document.getElementById("evaluar_rooms").value = number;
 			};
+		},
+
+		_add_person: function (ev){
+			document.getElementById("container_add").innerHTML = ""
 		},
 		
 		_resta_adults: function(ev){
