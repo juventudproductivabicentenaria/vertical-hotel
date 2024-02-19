@@ -21,7 +21,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #busqueda': '_onNextBlogClick',
 			'click #button_reserva': '_onNextReservar',
 			'click #incremento_adults': '_sumar_adults',
-			'click #buttonAdd': '_add_person',
+			'click #searchPerson': '_search_person',
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
@@ -119,8 +119,27 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			};
 		},
 
-		_add_person: function (ev){
-			document.getElementById("container_add").innerHTML = ""
+		_search_person: function (ev){
+			let ci = document.getElementById("identification_VAT").value;
+			this._rpc({
+				route: '/search_person',
+				params: {
+					'partner_ci': ci,
+				},
+			}).then(result => {
+				let field_name = document.getElementById("first_last_name_input")
+				let field_phone = document.getElementById("phone_input")
+				let field_email = document.getElementById("email_input")
+				if (result.name == undefined || result.email == undefined || result.phone == undefined) {
+					return
+				}
+				else {
+					field_name.value = result.name
+					field_phone.value = result.phone
+					field_email.value = result.email
+
+				}
+			});
 		},
 		
 		_resta_adults: function(ev){

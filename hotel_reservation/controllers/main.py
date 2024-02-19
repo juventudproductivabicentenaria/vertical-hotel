@@ -49,7 +49,29 @@ class Website(http.Controller):
                 }
 
         return res
+    @http.route('/search_person', type='json', auth='public')
+    def search_person(self, **kwargs):
+        partner_ci = kwargs["partner_ci"]
+        if not partner_ci:
+            return json.dumps({'error': 'Falta la CI del partner'})
 
+        try:
+            partner = request.env['res.partner'].search([('vat', '=', partner_ci)])
+            if not partner:
+                return json.dumps({'error': 'No se encontró el partner'})
+
+            # Obtenemos el campo que queremos devolver
+            print(partner)
+            print("AAAAAAAAAAAAAAA")
+            return {
+                "name": partner.name,
+                "email": partner.email,
+                "phone": partner.phone
+            }
+
+        except Exception as e:
+            return json.dumps({'error': str(e)})
+        
     @http.route('/reservation/search_reservation', type='json', auth="public", website=True, sitemap=False)
     def search_reservation(self, access_token=None, revive='', **kwargs):
 
