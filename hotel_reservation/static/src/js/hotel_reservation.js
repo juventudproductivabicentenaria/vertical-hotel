@@ -22,6 +22,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #button_reserva': '_onNextReservar',
 			'click #incremento_adults': '_sumar_adults',
 			'click #searchPerson': '_search_person',
+			'click #roomMate_check': '_add_roomMate',
+			'click #children_check': '_add_children',
+			'click #add_other_children_button': "_add_other_children",
+			'click #delete_other_children_button': "_delete_other_children",
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
@@ -130,16 +134,80 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let field_name = document.getElementById("first_last_name_input")
 				let field_phone = document.getElementById("phone_input")
 				let field_email = document.getElementById("email_input")
-				if (result.name == undefined || result.email == undefined || result.phone == undefined) {
-					return
+				if (result.missing) {
+					alert("No se encontraron datos con el documento proporcionado. Por favor, introduzca los datos de la persona manualmente.")
+					field_name.value = ""
+					field_phone.value = ""
+					field_email.value = ""
+					field_name.disabled = false
+					field_phone.disabled = false
+					field_email.disabled = false
+				}
+				else if (result.no_id) {
+					console.log("No CI")
+					field_name.value = ""
+					field_phone.value = ""
+					field_email.value = ""
 				}
 				else {
+					console.log("Good")
+					field_name.disabled = true
+					field_phone.disabled = true
+					field_email.disabled = true
 					field_name.value = result.name
 					field_phone.value = result.phone
 					field_email.value = result.email
-
 				}
 			});
+		},
+		_add_roomMate: function(ev) {
+			let container = document.getElementById("container_roomMate")
+			let roomMateCheck = document.getElementById("roomMate_check")
+			if (!roomMateCheck.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `<div class="seccion-superior-roomMate mt-3 mb-3">
+			<input size="40" id="first_last_name_roomMate_input" type="text" placeholder="Nombre y Apellido" class="form-control ml-4"></input>
+			<input id="phone_input_roomMate" type="text" placeholder="Teléfono" class="form-control"></input>
+			<input size="40" id="email_input_roomMate" type="text" placeholder="Correo Electrónico" class="form-control ml-4"></input>
+		</div>`
+		},
+
+		_add_children: function(ev) {
+			let container = document.getElementById("container_children")
+			let childrenCheck = document.getElementById("children_check")
+			if (!childrenCheck.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `<div id="upper_section" class="seccion-superior-children mt-3 mb-3">
+			<input size="40" id="first_last_name_children_input" type="text" placeholder="Nombre y Apellido" class="form-control ml-4 children_input_class""></input>
+			<button type="button" id="add_other_children_button" class="ml-2 btn btn-md btn-primary">+ </button>
+		</div>`
+		},
+
+		_add_other_children: function(ev) {
+			let container = document.getElementById("container_children")
+			let first_input = document.getElementById("upper_section")
+			let deleteButt = document.getElementById("delete_other_children_button")
+			if (!deleteButt) {
+			first_input.insertAdjacentHTML("beforeend", `<button type="button" id="delete_other_children_button" class="ml-2 btn btn-md btn-primary" >- </button>`)
+			}
+			container.insertAdjacentHTML("beforeend", `<div class="another_seccion-superior-children mt-3 mb-3">
+			<input size="40" type="text" placeholder="Nombre y Apellido" class="form-control ml-4 children_input_class"></input>
+		</div>`)
+		},
+
+		_delete_other_children: function(ev) {
+			console.log("something")
+			let container = document.getElementById("container_children")
+			console.log(container.childElementCount)
+			let deleteButt = document.getElementById("delete_other_children_button")
+			if (container.childElementCount == 2) {
+				deleteButt.remove()
+			}
+			container.removeChild(container.lastChild)
 		},
 		
 		_resta_adults: function(ev){

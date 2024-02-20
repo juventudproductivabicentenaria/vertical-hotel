@@ -53,16 +53,14 @@ class Website(http.Controller):
     def search_person(self, **kwargs):
         partner_ci = kwargs["partner_ci"]
         if not partner_ci:
-            return json.dumps({'error': 'Falta la CI del partner'})
+            return {'no_id': 'Falta la CI del partner'}
 
         try:
             partner = request.env['res.partner'].search([('vat', '=', partner_ci)])
             if not partner:
-                return json.dumps({'error': 'No se encontró el partner'})
+                return {'missing': 'No se encontró el partner'}
 
             # Obtenemos el campo que queremos devolver
-            print(partner)
-            print("AAAAAAAAAAAAAAA")
             return {
                 "name": partner.name,
                 "email": partner.email,
