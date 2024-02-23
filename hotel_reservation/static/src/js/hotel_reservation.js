@@ -26,6 +26,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #children_check': '_add_children',
 			'click #add_other_children_button': "_add_other_children",
 			'click #delete_other_children_button': "_delete_other_children",
+			'click #food_check': '_add_food',
+			'click #breakfast_check': '_add_breakfast_date',
+			'click #lunch_check': '_add_lunch_date',
+			'click #dinner_check': 'add_dinner_date',
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
@@ -200,14 +204,101 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 		_delete_other_children: function(ev) {
-			console.log("something")
 			let container = document.getElementById("container_children")
-			console.log(container.childElementCount)
 			let deleteButt = document.getElementById("delete_other_children_button")
 			if (container.childElementCount == 2) {
 				deleteButt.remove()
 			}
 			container.removeChild(container.lastChild)
+		},
+
+		_add_food: function(ev) {
+			let container = document.getElementById("breakfast_container")
+			let check = document.getElementById("food_check")
+			if (!check.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `<ul class="list-group mb-3 mt-3">
+			<li class="list-group-item d-flex align-items-center">
+				<label class="form-check-label mr-2" for="breakfast_check">Desayuno</label>
+				<input value="Desayuno" class="form-check-input" type="checkbox" id="breakfast_check"> </input>
+			</li>
+			<div id="breakfast_date_container" class="d-flex align-items-center mb-5 mt-3">
+			</div>
+			<li class="list-group-item d-flex align-items-center">
+				<label class="form-check-label mr-2" for="lunch_check">Almuerzo</label>
+				<input value="Almuerzo" class="form-check-input" type="checkbox" id="lunch_check"> </input>
+			</li>
+			<div id="lunch_date_container" class="d-flex align-items-center mb-5 mt-3">
+			</div>
+			<li class="list-group-item d-flex align-items-center">
+				<label class="form-check-label mr-2" for="dinner_check">Cena</label>
+				<input value="Cena" class="form-check-input" type="checkbox" id="dinner_check"> </input>
+			</li>
+			<div id="dinner_date_container" class="d-flex align-items-center mb-5 mt-3">
+			</div>
+		</ul>`
+		},
+		_add_breakfast_date: function(ev) {
+			let container = document.getElementById("breakfast_date_container")
+			let date_since = document.getElementById("dateFrom")
+			let date_to = document.getElementById("date_until")
+			let check = document.getElementById("breakfast_check")
+			if (!check.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `
+			<div class="ml-2">
+                        <label class="text_adult" for="breakfastDateFrom">Fecha Desde</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
+                </div>
+                <div class="ml-5">
+                        <label class="text_adult" for="breakfastDateUntil">Fecha Hasta</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateUntil" name="request_breakfast_date_until" required="1"/>
+            </div>
+			`
+		},
+		_add_lunch_date: function(ev) {
+			let container = document.getElementById("lunch_date_container")
+			let date_since = document.getElementById("dateFrom")
+			let date_to = document.getElementById("date_until")
+			let check = document.getElementById("lunch_check")
+			if (!check.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `
+			<div class="ml-2">
+                        <label class="text_adult" for="lunchDateFrom">Fecha Desde</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="lunchDateFrom" max="2024-02-24" name="request_lunch_date_from" required="1"/>
+                </div>
+                <div class="ml-5">
+                        <label class="text_adult" for="lunchDateUntil">Fecha Hasta</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="lunchDateUntil" name="request_lunch_date_until" required="1"/>
+            </div>
+			`
+		},
+		_add_dinner_date: function(ev) {
+			let container = document.getElementById("breakfast_date_container")
+			let date_since = document.getElementById("dateFrom")
+			let date_to = document.getElementById("date_until")
+			let check = document.getElementById("breakfast_check")
+			if (!check.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `
+			<div class="ml-2">
+                        <label class="text_adult" for="breakfastDateFrom">Fecha Desde</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
+                </div>
+                <div class="ml-5">
+                        <label class="text_adult" for="breakfastDateUntil">Fecha Hasta</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateUntil" name="request_breakfast_date_until" required="1"/>
+            </div>
+			`
 		},
 		
 		_resta_adults: function(ev){
