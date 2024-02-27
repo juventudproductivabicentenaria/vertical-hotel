@@ -308,10 +308,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					'showContainerFood': $showContainerFood,
 				},
 			}).then(result => {
-				if (result.error_date) {
-					var data = {"title": "* La fecha de llegada debe ser mayor al la fecha actual."};
-					return $error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-				}
+				// if (result.error_date) {
+				// 	var data = {"title": "* La fecha de llegada debe ser mayor al la fecha actual."};
+				// 	return $error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
+				// }
 				self._render_onNextBlogClick(result);
 			});
 	    },
