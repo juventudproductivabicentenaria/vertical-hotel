@@ -19,7 +19,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 		events: {
 			'click #busqueda': '_onNextBlogClick',
-			'click #button_reserva': '_onNextReservar',
+			'click #reservation_button': '_onNextReservar',
 			'click #incremento_adults': '_sumar_adults',
 			'click #searchPerson': '_search_person',
 			'click #roomMate_check': '_add_roomMate',
@@ -30,6 +30,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #breakfast_check': '_add_breakfast_date',
 			'click #lunch_check': '_add_lunch_date',
 			'click #dinner_check': 'add_dinner_date',
+			'click #room_check': '_add_room',
+			'click #origen_select': '_add_origen',
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
@@ -138,6 +140,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let field_name = document.getElementById("first_last_name_input")
 				let field_phone = document.getElementById("phone_input")
 				let field_email = document.getElementById("email_input")
+				let institution = document.getElementById("institution")
 				if (result.missing) {
 					alert("No se encontraron datos con el documento proporcionado. Por favor, introduzca los datos de la persona manualmente.")
 					field_name.value = ""
@@ -146,21 +149,24 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					field_name.disabled = false
 					field_phone.disabled = false
 					field_email.disabled = false
+					institution.disabled = false
 				}
 				else if (result.no_id) {
 					console.log("No CI")
 					field_name.value = ""
 					field_phone.value = ""
 					field_email.value = ""
+					institution.value = ""
 				}
 				else {
-					console.log("Good")
 					field_name.disabled = true
 					field_phone.disabled = true
 					field_email.disabled = true
 					field_name.value = result.name
 					field_phone.value = result.phone
 					field_email.value = result.email
+					institution.disabled = false
+					institution.value = ""
 				}
 			});
 		},
@@ -300,7 +306,23 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
             </div>
 			`
 		},
-		
+
+		_add_room: function(ev) {
+			let counter = document.getElementById("counterRooms")
+			let num = parseInt(counter.textContent); 
+			let result = num + 1;
+			let before = num - 1;
+			let check = document.getElementById("room_check")
+			if (!check.checked) {
+				counter.textContent = before.toString() + " Habitaciones"
+				return
+			}
+			counter.textContent = result.toString() + " Habitaciones"
+		},
+		_add_origen: function(ev) {
+			console.log("adding origen")
+		},
+
 		_resta_adults: function(ev){
 			var number = Number(document.getElementById("evaluar_adults").value);
 			var rooms_available = $('#rooms_available');
@@ -526,67 +548,77 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 	    _onNextReservar: function (ev) {
 			console.log('ButtonReserva')
+			let first_last_name_input = document.getElementById("first_last_name_input")
+			let phone_input = document.getElementById("phone_input")
+			let email_input = document.getElementById("email_input")
+			let institution = document.getElementById("institution")
 
+			if (first_last_name_input.value == "" || phone_input.value == "" || email_input.value == "" || institution.value == "") {
+				alert("Por favor introduzca todos los datos necesarios de la persona que nos visita")
+				return
+			}
+			
 			var checkbox = $('[name="reserva"]:checked').map(function(){
 				return this.value;
 			  }).get();
+			  console.log(checkbox);
 
-			var containers = $('.selectDay').map(function(){
-				return this;
-			}).get();
-			var date_from = $('#dateFrom').val();
-			var date_until = $('#date_until').val();
-			var adults = $('#evaluar_adults').val();
-			var ninos = $('#evaluar_ninos').val();
-			var rooms = $('#evaluar_rooms').val()
-			var $showContainerRoom = $('#showContainerRoom').prop("checked")
-			var $showContainerFood = $('#showContainerFood').prop("checked")
-			var self = this;
-			// var fecha =  new Date();
-			// var fecha_datefrom =  new Date(date_from);
-			// var dia_datefrom = fecha_datefrom.getDate() + 1;
-			// var today = fecha.getDate();
-			var foodList = [];
-			$.each(containers, function(index, container) {
-				var $container = $(container);
-				var $breakfastLabel = $container.find('.evaluar_breakfast');
-				var $dinnerLabel = $container.find('.evaluar_dinner');
-				var $lunchLabel = $container.find('.evaluar_lunch');
-				var date = $container.data('date')
-				var breakfastValue = Number(parseInt($breakfastLabel.text()));
-				var dinnerValue = Number(parseInt($dinnerLabel.text()));
-				var lunchValue = Number(parseInt($lunchLabel.text()));
-				var data = {
-					date: date,
-					order: [
-						{
-						quantity: breakfastValue,'code':'DESAYUNO'
-					},
-						{
-						quantity: lunchValue,'code':'ALMUERZO'
-					},
-						{
-						quantity: dinnerValue,'code':'CENA'
-					}
-				]
+			// var containers = $('.selectDay').map(function(){
+			// 	return this;
+			// }).get();
+			// var date_from = $('#dateFrom').val();
+			// var date_until = $('#date_until').val();
+			// var adults = $('#evaluar_adults').val();
+			// var ninos = $('#evaluar_ninos').val();
+			// var rooms = $('#evaluar_rooms').val()
+			// var $showContainerRoom = $('#showContainerRoom').prop("checked")
+			// var $showContainerFood = $('#showContainerFood').prop("checked")
+			// var self = this;
+			// // var fecha =  new Date();
+			// // var fecha_datefrom =  new Date(date_from);
+			// // var dia_datefrom = fecha_datefrom.getDate() + 1;
+			// // var today = fecha.getDate();
+			// var foodList = [];
+			// $.each(containers, function(index, container) {
+			// 	var $container = $(container);
+			// 	var $breakfastLabel = $container.find('.evaluar_breakfast');
+			// 	var $dinnerLabel = $container.find('.evaluar_dinner');
+			// 	var $lunchLabel = $container.find('.evaluar_lunch');
+			// 	var date = $container.data('date')
+			// 	var breakfastValue = Number(parseInt($breakfastLabel.text()));
+			// 	var dinnerValue = Number(parseInt($dinnerLabel.text()));
+			// 	var lunchValue = Number(parseInt($lunchLabel.text()));
+			// 	var data = {
+			// 		date: date,
+			// 		order: [
+			// 			{
+			// 			quantity: breakfastValue,'code':'DESAYUNO'
+			// 		},
+			// 			{
+			// 			quantity: lunchValue,'code':'ALMUERZO'
+			// 		},
+			// 			{
+			// 			quantity: dinnerValue,'code':'CENA'
+			// 		}
+			// 	]
 					
-				};
+			// 	};
 			
-				foodList.push(data);
+			// 	foodList.push(data);
 				
-			});
+			// });
 			this._rpc({
 				route: '/reservation/reserved_rooms',
 				params: {
-					'ids': checkbox,
-					'date_from': date_from,
-					'date_until': date_until,
-					'adults': adults,
-					'ninos': ninos,
-					'rooms': rooms,
-					'foodList': foodList,
-					'reserve_food': $showContainerFood,
-					'reserve_room': $showContainerRoom,
+					// 'ids': checkbox,
+					// 'date_from': date_from,
+					// 'date_until': date_until,
+					// 'adults': adults,
+					// 'ninos': ninos,
+					// 'rooms': rooms,
+					// 'foodList': foodList,
+					// 'reserve_food': $showContainerFood,
+					// 'reserve_room': $showContainerRoom,
 				},
 			}).then(data => {
 				console.log(data)
@@ -594,7 +626,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				if (data.error_validation) {
 					self.showerror(data.error_validation);
 				}else{
-					window.location = '/reserved/' + `${data.reservation_id}`+ '?reserve=True'+'&token='+`${data.token}`
+					// window.location = '/reserved/' + `${data.reservation_id}`+ '?reserve=True'+'&token='+`${data.token}`
+					console.log("ok")
 				}
 			});
 	    },

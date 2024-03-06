@@ -104,27 +104,31 @@ class Website(http.Controller):
 
     @http.route('/reservation/reserved_rooms', type='json', auth="public", website=True, sitemap=False)
     def reserved_rooms(self, access_token=None, revive='', **post):
-        HotelReservation = request.env['hotel.reservation'].sudo()
-        HotelReservationOrden = request.env['hotel.reservation.order'].sudo()
-        HotelReservationLine = request.env['hotel_reservation.line'].sudo()
-        HotelMenucard = request.env['hotel.menucard'].sudo()
-        HotelRestaurantOrderList = request.env['hotel.restaurant.order.list'].sudo()
-        adults = int(post['adults'])
-        rooms_limit = int(post['rooms'])
-        foodList = post['foodList']
-        capacity = 0
-        print("post")
-        print("post")
-        print(post)
-        print(foodList)
-        date_from = post['date_from']
-        date_to = post['date_until']
+        print("AMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
+        # HotelReservation = request.env['hotel.reservation'].sudo()
+        # HotelReservationOrden = request.env['hotel.reservation.order'].sudo()
+        # HotelReservationLine = request.env['hotel_reservation.line'].sudo()
+        # HotelMenucard = request.env['hotel.menucard'].sudo()
+        # HotelRestaurantOrderList = request.env['hotel.restaurant.order.list'].sudo()
+        # adults = int(post['adults'])
+        # rooms_limit = int(post['rooms'])
+        # foodList = post['foodList']
+        # capacity = 0
+        # print("post")
+        # print("post")
+        # print(post)
+        # print(foodList)
+        # date_from = post['date_from']
+        # date_to = post['date_until']
    
-        ids = post['ids']
-        id_room = 0
-        list_ids = []
-        ninos = int(post['ninos'])
+        # ids = post['ids']
+        # id_room = 0
+        # list_ids = []
+        # ninos = int(post['ninos'])
         user_id = request.env.user
+        print(user_id)
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        return {"data": user_id.login}
         partner_id = user_id.partner_id
         # pricelist_id = request.env['product.pricelist'].sudo().search([])
         reservation_id = 0

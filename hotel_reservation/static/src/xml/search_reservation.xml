@@ -40,8 +40,8 @@
                         <label class="text_adult" for="request_date_to">Fecha Hasta</label>
                         <input type="date" class="border rounded p-2" id="date_until" name="request_date_until" required="1" t-att-value="date_until"/>
                     </div>
-                    <div class="border bg-light ml-5" style="width: 100px; height: 50px;">
-                        <p id="counterPeople" class="text-center" style="font-size:30px;">0</p>
+                    <div class="border bg-light ml-5" style="width: 500px; height: 50px;">
+                        <p id="counterRooms" class="text-center" style="font-size:30px;">0 Habitaciones</p>
                     </div>
                       
 
@@ -57,7 +57,7 @@
                         </div>
                         <div class="seccion-inferior mt-2">
                             <input size="40" id="email_input" type="text" placeholder="Correo Electrónico" class="form-control ml-4" disabled="true"></input>
-                            <input size="30" type="text" placeholder="Institución donde nos visita" class="form-control" disabled="true"></input>
+                            <input size="30" id="institution" type="text" placeholder="¿De qué institución nos visita?" class="form-control" disabled="true"></input>
                         </div>
                     </div>
                 </div>
@@ -65,8 +65,11 @@
                 
                 <div class="">
                     
-                    <p id="includeRoom" class="text-start text-primary h5 fw-bold ml-4 mt-3">Acerca de la Habitación</p>
                     <ul class="list-group mb-3 mt-3">
+                        <li class="list-group-item d-flex align-items-center">
+                            <label class="form-check-label mr-2" for="room_check">Incluir Habitación</label>
+                            <input value="Incluir Habitación" class="form-check-input" type="checkbox" id="room_check"> </input>
+                        </li>
                         <li class="list-group-item d-flex align-items-center">
                             <label class="form-check-label mr-2" for="roomMate_check">Acompañante</label>
                             <input value="Acompañante" class="form-check-input" type="checkbox" id="roomMate_check"> </input>
@@ -101,6 +104,8 @@
                     
                     <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
                         Origen
+                        <select id="origen-select">
+                        </select>
                     </div>
                     <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
                         Destino
@@ -162,9 +167,11 @@
                 <div class="row justify-content-center">
                     <span id="error_data" class=""></span>
                 </div> -->
+                <div class="row justify-content-center">
+                    <button id="reservation_button" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
+                </div>
                 <div class="row justify-content-end">
-                    <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Agregar Persona(s) para la reservación</button>
-                    <button id="button_reserva" type="button" class="btn btn-primary mb-2" href="#">Reservar</button>
+                    <button disabled="true" id="add_other_person" type="button" class="btn btn-secondary mb-2 mr-sm-2" href="#">Agregar otra(s) persona(s)</button>
                 </div>
                 <div class="col-md-12 col-12">
                     <input type="hidden" id="evaluar_adults" value="0"/>
