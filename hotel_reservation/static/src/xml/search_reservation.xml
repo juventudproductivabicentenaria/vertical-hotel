@@ -29,7 +29,7 @@
                 method="post"
                 enctype="multipart/form-data"
                 data-model_name="">
-            <div class="container-fluid p-3" style="background-color: #dee2e6;">
+            <div class="container-fluid p-3" style="background-color: #dee2e6;" id="main_container">
                 <p class="text-start text-primary h4 fw-bold mb-5">Solicitud de Reservación</p>
                 <div class="d-flex align-items-center mb-2 bg-white">
                     <div class="ml-2">
@@ -68,15 +68,17 @@
                     <ul class="list-group mb-3 mt-3">
                         <li class="list-group-item d-flex align-items-center">
                             <label class="form-check-label mr-2" for="room_check">Incluir Habitación</label>
-                            <input value="Incluir Habitación" class="form-check-input" type="checkbox" id="room_check"> </input>
+                            <input class="form-check-input" type="checkbox" id="room_check"> </input>
                         </li>
                         <li class="list-group-item d-flex align-items-center">
                             <label class="form-check-label mr-2" for="roomMate_check">Acompañante</label>
                             <input value="Acompañante" class="form-check-input" type="checkbox" id="roomMate_check"> </input>
                         </li>
-                        <div id="container_roomMate" class="container_roomMate_class">
+                        <div class="row" id="row_partner_div">
+                            <div id="container_roomMate" class="container_roomMate_class">
+                            </div>
                         </div>
-                        <li class="list-group-item d-flex align-items-center">
+                        <li class="list-group-item d-flex align-items-center mt-4">
                             <label class="form-check-label mr-2" for="children_check">Niños</label>
                             <input class="form-check-input" type="checkbox" id="children_check"> </input>
                         </li>
@@ -168,8 +170,11 @@
                     <span id="error_data" class=""></span>
                 </div> -->
                 <div class="row justify-content-center">
-                    <button id="reservation_button" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
+                    <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
                 </div>
+                <!-- <div class="row justify-content-center">
+                    <button id="reservation_button" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
+                </div> -->
                 <div class="row justify-content-end">
                     <button disabled="true" id="add_other_person" type="button" class="btn btn-secondary mb-2 mr-sm-2" href="#">Agregar otra(s) persona(s)</button>
                 </div>
@@ -180,6 +185,9 @@
                     <input type="hidden" id="evaluar_breakfast" value="0"/>
                     <input type="hidden" id="evaluar_lunch" value="0"/>
                     <input type="hidden" id="evaluar_dinner" value="0"/>
+                </div>
+                <div id="list_of_people">
+                    
                 </div>
             </div>
         </form>

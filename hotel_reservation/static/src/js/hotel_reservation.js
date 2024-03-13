@@ -22,6 +22,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #reservation_button': '_onNextReservar',
 			'click #incremento_adults': '_sumar_adults',
 			'click #searchPerson': '_search_person',
+			'click #searchRoommate': '_search_roommate',
 			'click #roomMate_check': '_add_roomMate',
 			'click #children_check': '_add_children',
 			'click #add_other_children_button': "_add_other_children",
@@ -167,21 +168,107 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					field_email.value = result.email
 					institution.disabled = false
 					institution.value = ""
+					const first_person = document.getElementById("first_person")
+					if (first_person == null) {
+						// const container = document.getElementById("list_of_people");
+						// const header_of_list = document.createElement("p")
+						// header_of_list.innerHTML = "<strong>Lista de personas para la reservación</strong>"
+						// container.appendChild(header_of_list)
+						// const nuevoElemento = document.createElement("p");
+						// nuevoElemento.id = "first_person"
+						// nuevoElemento.textContent = result.id + " " + field_name.value;
+						// container.appendChild(nuevoElemento);
+						// console.log(container.children.length)
+					}
+					else {
+						// first_person.textContent = "Cambió"
+					}
 				}
 			});
 		},
+
+		_search_roommate: function(ev) {
+			let ci = document.getElementById("identification_VAT_partner").value;
+			this._rpc({
+				route: '/search_person',
+				params: {
+					'partner_ci': ci,
+				},
+			}).then(result => {
+				let field_name = document.getElementById("first_last_name_roomMate_input")
+				let field_phone = document.getElementById("phone_input_roomMate")
+				let field_email = document.getElementById("email_input_roomMate")
+				if (result.missing) {
+					alert("No se encontraron datos con el documento proporcionado. Por favor, introduzca los datos de la persona manualmente.")
+					field_name.value = ""
+					field_phone.value = ""
+					field_email.value = ""
+					field_name.disabled = false
+					field_phone.disabled = false
+					field_email.disabled = false
+				}
+				else if (result.no_id) {
+					console.log("No CI")
+					field_name.value = ""
+					field_phone.value = ""
+					field_email.value = ""
+				}
+				else {
+					field_name.disabled = true
+					field_phone.disabled = true
+					field_email.disabled = true
+					field_name.value = result.name
+					field_phone.value = result.phone
+					field_email.value = result.email
+					const first_person = document.getElementById("first_person")
+					if (first_person == null) {
+						// const container = document.getElementById("list_of_people");
+						// const header_of_list = document.createElement("p")
+						// header_of_list.innerHTML = "<strong>Lista de personas para la reservación</strong>"
+						// container.appendChild(header_of_list)
+						// const nuevoElemento = document.createElement("p");
+						// nuevoElemento.id = "first_person"
+						// nuevoElemento.textContent = result.id + " " + field_name.value;
+						// container.appendChild(nuevoElemento);
+						// console.log(container.children.length)
+					}
+					else {
+						// first_person.textContent = "Cambió"
+					}
+				}
+			})
+		},
+
 		_add_roomMate: function(ev) {
 			let container = document.getElementById("container_roomMate")
+			let container_row = document.getElementById("row_partner_div")
 			let roomMateCheck = document.getElementById("roomMate_check")
 			if (!roomMateCheck.checked) {
+				document.getElementById("identification_VAT_partner").remove();
+				document.getElementById("searchRoommate").remove()
 				container.innerHTML = ""
 				return
 			}
+			const input = document.createElement("input")
+			input.id = "identification_VAT_partner"
+			input.type = "text"
+			input.placeholder = "Cédula de Identidad"
+			input.classList.add("form-control", "mt-3", "ml-5")
+
+			const button = document.createElement("button");
+			button.type = "button";
+			button.id = "searchRoommate";
+			button.classList.add("text-start", "text-primary", "h5", "fw-bold", "mb-5", "ml-4", "mt-3");
+			button.textContent = "Buscar";
+
+			
 			container.innerHTML = `<div class="seccion-superior-roomMate mt-3 mb-3">
-			<input size="40" id="first_last_name_roomMate_input" type="text" placeholder="Nombre y Apellido" class="form-control ml-4"></input>
-			<input id="phone_input_roomMate" type="text" placeholder="Teléfono" class="form-control"></input>
-			<input size="40" id="email_input_roomMate" type="text" placeholder="Correo Electrónico" class="form-control ml-4"></input>
+			<input size="40" id="first_last_name_roomMate_input" disabled="true" type="text" placeholder="Nombre y Apellido" class="form-control ml-4"></input>
+			<input id="phone_input_roomMate" type="text" disabled="true" placeholder="Teléfono" class="form-control"></input>
+			<input size="40" id="email_input_roomMate" disabled="true" type="text" placeholder="Correo Electrónico" class="form-control"></input>
 		</div>`
+			container_row.prepend(button);
+			container_row.prepend(input);
 		},
 
 		_add_children: function(ev) {
@@ -474,45 +561,46 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 
 	    _onNextBlogClick: function (ev) {
-			var date_from = $('#dateFrom').val(); //Para obtener valor de html
+			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val()
-			var adults = $('#evaluar_adults').val()
-			var ninos = $('#evaluar_ninos').val()
-			var rooms = $('#evaluar_rooms').val()
-			var $error_data = $('#error_data')
-			var $showContainerRoom = $('#showContainerRoom').prop("checked")
-			var $showContainerFood = $('#showContainerFood').prop("checked")
+			let counterRooms = document.getElementById("counterRooms")
+			let adults = 0
+			var childrens = document.getElementById("container_children").children.length
+			if (childrens == null) {
+				childrens = 0
+			}
+			let num_rooms = parseInt(counterRooms.textContent);
+			let first_last_name_input = document.getElementById("first_last_name_input")
+			let first_last_name_roomMate_input = document.getElementById("first_last_name_roomMate_input")
+			if (first_last_name_input.value != "") {
+				adults += 1
+			}
+			if (first_last_name_roomMate_input != null) {
+				adults += 1
+			}
+			
+			// let ci = document.getElementById("identification_VAT_partner").value;
+			// let field_phone = document.getElementById("phone_input_roomMate")
+			// let field_email = document.getElementById("email_input_roomMate")
+			// let room_check = document.getElementById("room_check")
 			var self = this;
-			$error_data.show();
-			if (date_from > date_until) {
-				var data = {"title": "* La fecha de salida debe ser mayor que la fecha de llegada."};
-				return $error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-			}
-			if (adults == 0){
-				var data = {"title": "* La cantidad minima de adultos debe ser  minimo 1."};
-				return $error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-			}
-			if (rooms == 0 && $showContainerRoom){
-				var data = {"title": "* La cantidad minima de habitaciones debe ser 1."};
-				return $error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-			}
-			if (! $showContainerRoom && !$showContainerFood){
-				var data = {"title": "* Debe Seleccionar por lo menos un tipo de reservacion."};
-				return $error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-			}
-			$error_data.hide();
+			console.log(num_rooms)
+			console.log(document.getElementById('room_check').checked)
 			this._rpc({
 				route: '/reservation/search_reservation',
 				params: {
 					'date_from': date_from,
 					'date_until': date_until,
 					'adults': adults,
-					'ninos': ninos,
-					'rooms': rooms,
-					'showContainerRoom': $showContainerRoom,
-					'showContainerFood': $showContainerFood,
+					'ninos': childrens,
+					'rooms': num_rooms,
+					'showContainerRoom': document.getElementById('room_check').checked,
+					'showContainerFood': document.getElementById('food_check').checked,
 				},
 			}).then(result => {
+				console.log("A ver si funciona")
+				console.log(result)
+				return
 				if (result.error_date) {
 					var data = {"title": "* La fecha de llegada debe ser mayor al la fecha actual."};
 					return $error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
@@ -561,13 +649,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var checkbox = $('[name="reserva"]:checked').map(function(){
 				return this.value;
 			  }).get();
-			  console.log(checkbox);
+			console.log(checkbox)
 
 			// var containers = $('.selectDay').map(function(){
 			// 	return this;
 			// }).get();
-			// var date_from = $('#dateFrom').val();
-			// var date_until = $('#date_until').val();
+			var date_from = $('#dateFrom').val();
+			var date_until = $('#date_until').val();
 			// var adults = $('#evaluar_adults').val();
 			// var ninos = $('#evaluar_ninos').val();
 			// var rooms = $('#evaluar_rooms').val()
@@ -610,9 +698,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			this._rpc({
 				route: '/reservation/reserved_rooms',
 				params: {
-					// 'ids': checkbox,
-					// 'date_from': date_from,
-					// 'date_until': date_until,
+					'ids': checkbox,
+					'date_from': date_from,
+					'date_until': date_until,
 					// 'adults': adults,
 					// 'ninos': ninos,
 					// 'rooms': rooms,

@@ -62,6 +62,7 @@ class Website(http.Controller):
 
             # Obtenemos el campo que queremos devolver
             return {
+                "id": partner.id,
                 "name": partner.name,
                 "email": partner.email,
                 "phone": partner.phone
@@ -78,33 +79,32 @@ class Website(http.Controller):
         adults = kwargs['adults']
         ninos = kwargs['ninos']
         rooms_count = kwargs['rooms']
-        rooms = []
-        error_date = False
-        service = False
-        today = datetime.today() - relativedelta(hours=4)
-        if datetime.strptime(date_from, '%Y-%m-%d').date() < today.date():
-            error_date = True
-        if kwargs['showContainerRoom']:
-            hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, rooms_count)
-            room = hotel_reservation.read(['name', 'image_1920', 'room_amenities'])
-            
-            for room in hotel_reservation:
-                rooms.append({
-                    'name': room.name,
-                    'id': room.id,
-                    'image_1920': room.image_1920,
-                    'capacity': room.capacity,
-                    'room_amenities': [' '+ amenities.name for amenities in room.room_amenities],
-                    'token': room.token
-                })
-        else:
-            service = True
-        data = {'rooms_list': rooms,"error_date":error_date, 'service':service}
-        return data
+        user_id = request.env.user
+        warehouse_id = user_id.company_id.warehouse_id
+        HotelReservation = request.env['hotel.reservation'].sudo()
+        try:
+            HotelReservation.create({
+                "partner_id": user_id.partner_id,
+                "warehouse_id": warehouse_id,
+                "partner_invoice_id": user_id.partner_id,
+                "partner_order_id": user_id.partner_id,
+                "partner_shipping_id": user_id.partner_id,
+                "checkin": date_from,
+                "checkout": date_until,
+                "adults": adults,
+                "children": ninos,
+                "token": tools.default_hash()
+            })
+            # Reservation created successfully
+            _logger.info("Reservation created!")
+            return {"status": "ok"}
+        except Exception as e:
+            # Handle the exception
+            _logger.info("Error creating reservation:", e)
+            return {"status": "No ok"}
 
     @http.route('/reservation/reserved_rooms', type='json', auth="public", website=True, sitemap=False)
     def reserved_rooms(self, access_token=None, revive='', **post):
-        print("AMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
         # HotelReservation = request.env['hotel.reservation'].sudo()
         # HotelReservationOrden = request.env['hotel.reservation.order'].sudo()
         # HotelReservationLine = request.env['hotel_reservation.line'].sudo()
@@ -121,14 +121,14 @@ class Website(http.Controller):
         # date_from = post['date_from']
         # date_to = post['date_until']
    
-        # ids = post['ids']
+        ids = post['ids']
         # id_room = 0
         # list_ids = []
         # ninos = int(post['ninos'])
         user_id = request.env.user
-        print(user_id)
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        return {"data": user_id.login}
+        _logger.info(user_id.partner_id)
+        _logger.info(ids)
+        return {"data": user_id.partner_id}
         partner_id = user_id.partner_id
         # pricelist_id = request.env['product.pricelist'].sudo().search([])
         reservation_id = 0
