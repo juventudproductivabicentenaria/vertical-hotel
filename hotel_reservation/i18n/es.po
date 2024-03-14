@@ -639,14 +639,10 @@ msgstr "Fecha de salida"
 #. module: hotel_reservation
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 #, python-format
-msgid "Check-in date should be greater than the current date."
-msgstr "La fecha de entrada debe ser mayor que la fecha actual."
 
 #. module: hotel_reservation
 #: code:addons/hotel_reservation/models/hotel_reservation.py:0
 #, python-format
-msgid "Check-out date should be greater than Check-in date."
-msgstr "La fecha de salida debe ser mayor que la fecha de entrada."
 
 #. module: hotel_reservation
 #: model:ir.actions.report,name:hotel_reservation.hotel_checkin_details

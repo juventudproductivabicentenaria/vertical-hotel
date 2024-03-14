@@ -2065,14 +2065,10 @@ msgstr "Línea de habitación"
 #. module: hotel
 #: code:addons/hotel/models/hotel_folio.py:0
 #, python-format
-msgid "Room line Check In Date Should be less than the Check Out Date!"
-msgstr "Línea de habitación La fecha de entrada debe ser inferior a la fecha de salida!"
 
 #. module: hotel
 #: code:addons/hotel/models/hotel_folio.py:0
 #, python-format
-msgid "Room line check in date should be greater than the current date."
-msgstr "La fecha de entrada de la línea de habitación debe ser mayor que la fecha actual."
 
 #. module: hotel
 #: model_terms:ir.ui.view,arch_db:hotel.view_hotel_room_search model_terms:ir.ui.view,arch_db:hotel.view_hotel_room_tree

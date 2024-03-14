@@ -73,35 +73,77 @@ class Website(http.Controller):
         
     @http.route('/reservation/search_reservation', type='json', auth="public", website=True, sitemap=False)
     def search_reservation(self, access_token=None, revive='', **kwargs):
-
+        # main_ci = kwargs["main_ci"]
+        # main_email = kwargs["main_email"]
+        # main_phone = kwargs["main_phone"]
+        institution_visit = kwargs["institution_name"]
+        # main_name = kwargs["main_name"]
         date_from = kwargs['date_from']
         date_until = kwargs['date_until']
         adults = kwargs['adults']
         ninos = kwargs['ninos']
-        rooms_count = kwargs['rooms']
         user_id = request.env.user
-        warehouse_id = user_id.company_id.warehouse_id
+        warehouse_id = user_id.company_id.warehouse_id.id
+        if warehouse_id == False:
+            warehouse_id = 1
         HotelReservation = request.env['hotel.reservation'].sudo()
-        try:
-            HotelReservation.create({
-                "partner_id": user_id.partner_id,
-                "warehouse_id": warehouse_id,
-                "partner_invoice_id": user_id.partner_id,
-                "partner_order_id": user_id.partner_id,
-                "partner_shipping_id": user_id.partner_id,
-                "checkin": date_from,
-                "checkout": date_until,
-                "adults": adults,
-                "children": ninos,
-                "token": tools.default_hash()
+        room = request.env['hotel.room'].sudo().search([],limit=1)
+        new_reservation = HotelReservation.create({
+            "partner_id": user_id.partner_id.id,
+            "partner_invoice_id": user_id.partner_id.id,
+            "partner_order_id": user_id.partner_id.id,
+            "partner_shipping_id": user_id.partner_id.id,
+            "checkin": date_from,
+            "checkout": date_until,
+            "warehouse_id": warehouse_id,
+            "adults": adults,
+            "children": ninos,
+            "token": tools.default_hash()
+        })
+        reservation_line_partners = []
+        _logger.info(kwargs["vats"])
+        vats = kwargs["vats"]
+        HotelReservationLine = request.env['hotel_reservation.line'].sudo()
+        for i in range(0, len(vats)):
+            partner = request.env['res.partner'].search([('vat', '=', vats[i])])
+            if not partner:
+                new_partners = request.env['res.partner'].create({
+                "vat": vats[i],
+                "name": kwargs["names"][i],
+                "email": kwargs["emails"][i],
+                "phone": kwargs["phones"][i],
             })
-            # Reservation created successfully
-            _logger.info("Reservation created!")
-            return {"status": "ok"}
-        except Exception as e:
-            # Handle the exception
-            _logger.info("Error creating reservation:", e)
-            return {"status": "No ok"}
+                reservation_line_partners.append(new_partners)
+            else:
+                reservation_line_partners.append(partner)
+        _logger.info(len(reservation_line_partners))
+        if len(reservation_line_partners) == 1:
+            HotelReservationLine.create({
+                "line_id": new_reservation.id,
+                "is_son": False,
+                "is_couple": False,
+                "partner_id": reservation_line_partners[0].id,
+                "checkin": new_reservation.checkin,
+                "checkout": new_reservation.checkout,
+                # "hotel_room_id": room.id
+            })
+            
+        elif len(reservation_line_partners) == 2:
+            HotelReservationLine.create({
+                "line_id": new_reservation.id,
+                "is_son": False,
+                "is_couple": True,
+                "partner_id": reservation_line_partners[0].id,
+                "couple_id": reservation_line_partners[1].id,
+                "checkin": new_reservation.checkin,
+                "checkout": new_reservation.checkout,
+                # "hotel_room_id": room.id
+            })
+    
+        # Reservation created successfully
+        _logger.info("Reservation created!")
+        _logger.info(new_reservation.id)
+        return {"status": "ok"}
 
     @http.route('/reservation/reserved_rooms', type='json', auth="public", website=True, sitemap=False)
     def reserved_rooms(self, access_token=None, revive='', **post):

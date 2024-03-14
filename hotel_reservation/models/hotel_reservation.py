@@ -48,6 +48,7 @@ class HotelReservation(models.Model):
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
+    
     pricelist_id = fields.Many2one(
         "product.pricelist",
         "Scheme",
@@ -540,8 +541,7 @@ class HotelReservationLine(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Text("Descripcion")
-
-    hotel_room_id = fields.Many2one("hotel.room", "Habitacion", required=True, track_visibility='always',
+    hotel_room_id = fields.Many2one("hotel.room", "Habitacion", default= "", required=False, track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},)
 
     line_id = fields.Many2one("hotel.reservation","Reservacion", readonly=True,track_visibility='always',)
@@ -712,7 +712,7 @@ class HotelRoomReservationLine(models.Model):
     _description = "Hotel Room Reservation"
     _rec_name = "room_id"
 
-    room_id = fields.Many2one("hotel.room", string="Room id")
+    room_id = fields.Many2one("hotel.room", string="Room id", required=False)
     check_in = fields.Datetime("Check In Date", required=True)
     check_out = fields.Datetime("Check Out Date", required=True)
     state = fields.Selection(

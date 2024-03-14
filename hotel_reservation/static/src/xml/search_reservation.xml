@@ -48,7 +48,7 @@
                 </div>
                 <br />
                 <div class="row">
-                    <input id="identification_VAT" type="text" placeholder="Cédula de Identidad" class="form-control mt-3 ml-5"></input>
+                    <input id="identification_VAT" type="text" placeholder="Cédula de Identidad o RIF" class="form-control mt-3 ml-5"></input>
                     <button type="button" id="searchPerson" class="text-start text-primary h5 fw-bold mb-5 ml-4 mt-3">Buscar</button>
                     <div id="container_add" class="container">
                         <div class="seccion-superior">
@@ -172,6 +172,14 @@
                 <div class="row justify-content-center">
                     <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
                 </div>
+                <div id="list_of_people">
+                    <p>
+                        <strong>Lista de personas para la reservación</strong>
+                        <ul id="list_ppl">
+                            
+                        </ul>
+                    </p>
+                </div>
                 <!-- <div class="row justify-content-center">
                     <button id="reservation_button" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
                 </div> -->
@@ -185,9 +193,6 @@
                     <input type="hidden" id="evaluar_breakfast" value="0"/>
                     <input type="hidden" id="evaluar_lunch" value="0"/>
                     <input type="hidden" id="evaluar_dinner" value="0"/>
-                </div>
-                <div id="list_of_people">
-                    
                 </div>
             </div>
         </form>
