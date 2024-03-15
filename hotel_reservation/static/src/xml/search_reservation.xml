@@ -24,13 +24,14 @@
     </t>
     <div t-name="hotel_reservation.search_reservation">
         <form
+            id="search_reservation_form"
             class="form-inline register"
                 action="/reservation"
                 method="post"
                 enctype="multipart/form-data"
                 data-model_name="">
             <div class="container-fluid p-3" style="background-color: #dee2e6;" id="main_container">
-                <p class="text-start text-primary h4 fw-bold mb-5">Solicitud de Reservación</p>
+                <p class="text-center text-primary h2 fw-bold mb-5">Solicitud de Reservación</p>
                 <div class="d-flex align-items-center mb-2 bg-white">
                     <div class="ml-2">
                         <label class="text_adult" for="request_date_from">Fecha Desde</label>
@@ -172,19 +173,19 @@
                 <div class="row justify-content-center">
                     <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
                 </div>
-                <div id="list_of_people">
-                    <p>
-                        <strong>Lista de personas para la reservación</strong>
-                        <ul id="list_ppl">
-                            
-                        </ul>
-                    </p>
-                </div>
                 <!-- <div class="row justify-content-center">
                     <button id="reservation_button" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
                 </div> -->
                 <div class="row justify-content-end">
-                    <button disabled="true" id="add_other_person" type="button" class="btn btn-secondary mb-2 mr-sm-2" href="#">Agregar otra(s) persona(s)</button>
+                    <button id="add_other_person" type="button" class="btn btn-secondary mb-2 mr-sm-2" href="#">Agregar otra(s) persona(s)</button>
+                </div>
+                <div id="list_of_people">
+                    <p id="par_list_persons" class="d-none mt-4 text-center">
+                        <strong>Lista de personas para la reservación</strong>
+                    </p>
+                        <ul id="list_ppl">
+                            
+                        </ul>
                 </div>
                 <div class="col-md-12 col-12">
                     <input type="hidden" id="evaluar_adults" value="0"/>

@@ -554,6 +554,7 @@ class HotelReservationLine(models.Model):
         "res.partner",
         "Pareja",
         track_visibility='always', )
+    
     children_ids = fields.Many2many(
         "res.partner",
         string="Hijos (a)")

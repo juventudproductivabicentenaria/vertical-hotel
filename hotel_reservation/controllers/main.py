@@ -83,11 +83,21 @@ class Website(http.Controller):
         adults = kwargs['adults']
         ninos = kwargs['ninos']
         user_id = request.env.user
+        children_ids = []
+
+        for chil in kwargs['children_list']:
+            new_children = request.env['res.partner'].create({
+                "name": chil["nombre"],
+                "phone": chil["telefono"],
+            })
+            children_ids.append(new_children.id)
+
         warehouse_id = user_id.company_id.warehouse_id.id
         if warehouse_id == False:
             warehouse_id = 1
         HotelReservation = request.env['hotel.reservation'].sudo()
         room = request.env['hotel.room'].sudo().search([],limit=1)
+
         new_reservation = HotelReservation.create({
             "partner_id": user_id.partner_id.id,
             "partner_invoice_id": user_id.partner_id.id,
@@ -100,6 +110,7 @@ class Website(http.Controller):
             "children": ninos,
             "token": tools.default_hash()
         })
+        
         reservation_line_partners = []
         _logger.info(kwargs["vats"])
         vats = kwargs["vats"]
@@ -116,8 +127,10 @@ class Website(http.Controller):
                 reservation_line_partners.append(new_partners)
             else:
                 reservation_line_partners.append(partner)
+                
         _logger.info(len(reservation_line_partners))
-        if len(reservation_line_partners) == 1:
+        
+        if len(reservation_line_partners) == 1 and len(kwargs["children_list"]) == 0:
             HotelReservationLine.create({
                 "line_id": new_reservation.id,
                 "is_son": False,
@@ -128,7 +141,19 @@ class Website(http.Controller):
                 # "hotel_room_id": room.id
             })
             
-        elif len(reservation_line_partners) == 2:
+        elif len(reservation_line_partners) == 1 and len(kwargs["children_list"]) > 0:
+            HotelReservationLine.create({
+                "line_id": new_reservation.id,
+                "is_son": True,
+                "is_couple": False,
+                "partner_id": reservation_line_partners[0].id,
+                "checkin": new_reservation.checkin,
+                "checkout": new_reservation.checkout,
+                'children_ids': children_ids
+                # "hotel_room_id": room.id
+            })
+            
+        elif len(reservation_line_partners) == 2 and len(kwargs["children_list"]) == 0:
             HotelReservationLine.create({
                 "line_id": new_reservation.id,
                 "is_son": False,
@@ -137,6 +162,19 @@ class Website(http.Controller):
                 "couple_id": reservation_line_partners[1].id,
                 "checkin": new_reservation.checkin,
                 "checkout": new_reservation.checkout,
+                # "hotel_room_id": room.id
+            })
+            
+        elif len(reservation_line_partners) == 2 and len(kwargs["children_list"]) > 0:
+            HotelReservationLine.create({
+                "line_id": new_reservation.id,
+                "is_son": True,
+                "is_couple": True,
+                "partner_id": reservation_line_partners[0].id,
+                "couple_id": reservation_line_partners[1].id,
+                "checkin": new_reservation.checkin,
+                "checkout": new_reservation.checkout,
+                'children_ids': children_ids
                 # "hotel_room_id": room.id
             })
     
