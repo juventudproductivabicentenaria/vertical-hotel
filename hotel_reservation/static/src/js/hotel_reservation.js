@@ -7,7 +7,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 	var publicWidget = require('web.public.widget');
 	var core = require('web.core');
 	var qweb = core.qweb;
-
+	var full_objects = [];
+	var adults_counter = 0
+	var childrens_counter = 0
 	console.log("Perfecto");
 
 	publicWidget.registry.reservationWebsite = publicWidget.Widget.extend({
@@ -393,80 +395,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			counter.textContent = result.toString() + " Habitaciones"
 		},
 
-		__add_other_person: function(ev) {
-			let ci = document.getElementById("identification_VAT").value
-			let field_name = document.getElementById("first_last_name_input").value
-			let field_phone = document.getElementById("phone_input").value
-			let field_email = document.getElementById("email_input").value
-			let ci_part = document.getElementById("identification_VAT_partner").value
-			let field_name_part = document.getElementById("first_last_name_roomMate_input").value
-			let field_phone_part = document.getElementById("phone_input_roomMate").value
-			let field_email_part = document.getElementById("email_input_roomMate").value
-			document.getElementById("par_list_persons").classList.remove("d-none")
-			const listaPadre = document.getElementById('list_ppl')
-			var childrens = document.getElementById("container_children").children.length
-			let html_children = document.getElementsByClassName("children_input_class")
-			let html_children_phone = document.getElementsByClassName("children_phone_class")
-			const children_objects = [];
-			let full_objects = [];
-			function delete_data_form() {
-				let form = document.getElementById("search_reservation_form")
-				let roomMate_check = document.getElementById("roomMate_check")
-				let children_check = document.getElementById("children_check")
-
-				if (roomMate_check.checked) {
-					roomMate_check.click()
-				}
-				if (children_check.checked) {
-					children_check.click()
-				}
-				form.reset()
-			}
-			if (html_children) {
-				const childrenArray = Array.from(html_children);
-				const childrenPhoneArray = Array.from(html_children_phone);
-
-
-				for (let i = 0; i < childrenArray.length; i++) {
-					console.log(childrenArray.length)
-					const nombre = childrenArray[i].value;
-					const telefono = childrenPhoneArray[i].value;
-
-					const objeto = {
-						nombre,
-						telefono,
-					};
-					console.log(objeto)
-					children_objects.push(objeto);
-				}
-			}
-			if (ci_part && childrens > 0) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + "), " + "(Niños: " + childrens + ")";
-				listaPadre.appendChild(nuevoElementoLi);
-			}
-			else if (ci_part && childrens == 0) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + ")";
-				listaPadre.appendChild(nuevoElementoLi);
-			}
-			else if (childrens > 0 && !ci_part) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name + " (Niños: " + childrens + ")";
-				listaPadre.appendChild(nuevoElementoLi);
-			}
-			else if (childrens == 0 && !ci_part) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name;
-				listaPadre.appendChild(nuevoElementoLi);
-			}
-			delete_data_form()
-			// const nuevoElementoLi = document.createElement('li');
-			// nuevoElementoLi.textContent = field_name
-			// listaPadre.appendChild(nuevoElementoLi);
-
-		},
-
 		_add_origen: function(ev) {
 			console.log("adding origen")
 		},
@@ -620,12 +548,132 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 		},
 
+		__add_other_person: function(ev) {
+			let ci = document.getElementById("identification_VAT").value
+			let field_name = document.getElementById("first_last_name_input").value
+			let field_phone = document.getElementById("phone_input").value
+			let field_email = document.getElementById("email_input").value
+			try {
+				var ci_part = document.getElementById("identification_VAT_partner").value
+	
+				var field_name_part = document.getElementById("first_last_name_roomMate_input").value
+				var field_phone_part = document.getElementById("phone_input_roomMate").value
+				var field_email_part = document.getElementById("email_input_roomMate").value
+			} catch(e){
+				var ci_part = ""
+	
+				var field_name_part = ""
+				var field_phone_part = ""
+				var field_email_part = ""
+			}
+
+			document.getElementById("par_list_persons").classList.remove("d-none")
+
+			const listaPadre = document.getElementById('list_ppl')
+			var childrens = document.getElementById("container_children").children.length
+			let html_children = document.getElementsByClassName("children_input_class")
+			let html_children_phone = document.getElementsByClassName("children_phone_class")
+			var children_objects = [];
+
+			function delete_data_form() {
+				let form = document.getElementById("search_reservation_form")
+				let roomMate_check = document.getElementById("roomMate_check")
+				let children_check = document.getElementById("children_check")
+
+				if (roomMate_check.checked) {
+					roomMate_check.click()
+				}
+				if (children_check.checked) {
+					children_check.click()
+				}
+				form.reset()
+			}
+			if (html_children) {
+				const childrenArray = Array.from(html_children);
+				const childrenPhoneArray = Array.from(html_children_phone);
+
+
+				for (let i = 0; i < childrenArray.length; i++) {
+					const nombre = childrenArray[i].value;
+					const telefono = childrenPhoneArray[i].value;
+					console.log(nombre)
+					const objeto = {
+						nombre,
+						telefono,
+					};
+
+					children_objects.push(objeto);
+				}
+			}
+
+			const ready_to_insert = {
+				"vat": ci,
+				"name": field_name,
+				"phone": field_phone,
+				"email": field_email,
+				"second_vat": ci_part,
+				"second_name": field_name_part,
+				"second_phone": field_phone_part,
+				"second_email": field_email_part,
+				"childrens": children_objects
+			}
+			full_objects.push(ready_to_insert)
+			children_objects = []
+
+			if (ci_part && childrens > 0) {
+				const nuevoElementoLi = document.createElement('li');
+				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + "), " + "(Niños: " + childrens + ")";
+				listaPadre.appendChild(nuevoElementoLi);
+				adults_counter += 2
+				childrens_counter =+ childrens
+			}
+			else if (ci_part && childrens == 0) {
+				const nuevoElementoLi = document.createElement('li');
+				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + ")";
+				listaPadre.appendChild(nuevoElementoLi);
+				adults_counter += 2
+				childrens_counter =+ childrens
+			}
+			else if (childrens > 0 && !ci_part) {
+				const nuevoElementoLi = document.createElement('li');
+				nuevoElementoLi.textContent = field_name + " (Niños: " + childrens + ")";
+				listaPadre.appendChild(nuevoElementoLi);
+				childrens_counter =+ childrens
+			}
+			else if (childrens == 0 && !ci_part) {
+				const nuevoElementoLi = document.createElement('li');
+				nuevoElementoLi.textContent = field_name;
+				listaPadre.appendChild(nuevoElementoLi);
+			}
+			delete_data_form()
+		},
 
 	    _onNextBlogClick: function (ev) {
+			let first_last_name_input = document.getElementById("first_last_name_input")
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val()
 			let counterRooms = document.getElementById("counterRooms")
-			let adults = 0
+			var self = this;
+			if (full_objects.length > 0) {
+				if (first_last_name_input.value != "") {
+					document.getElementById("add_other_person").click()
+				}
+				this._rpc({
+					route: '/reservation/search_reservation',
+					params: {
+						'full_data': full_objects,
+						'date_from': date_from,
+						'date_until': date_until,
+						'adults': adults_counter,
+						'ninos': childrens_counter
+					},
+				}).then(result => {
+					console.log("A ver si funciona")
+					console.log(result)
+					return
+				});
+				return
+			}
 
 			let list_of_names = []
 			let list_of_cis = []
@@ -656,8 +704,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 			
 
-			console.log(children_objects); 
-
 			if (childrens == null) {
 				childrens = 0
 			}
@@ -666,7 +712,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let main_ci = document.getElementById("identification_VAT")
 			list_of_cis.push(main_ci.value)
 
-			let first_last_name_input = document.getElementById("first_last_name_input")
 			list_of_names.push(first_last_name_input.value)
 
 			let main_phone = document.getElementById("phone_input")
@@ -699,31 +744,32 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				has_partner = true
 			}
 			
-			var self = this;
-			this._rpc({
-				route: '/reservation/search_reservation',
-				params: {
-					'children_list': children_objects,
-					'has_partner': has_partner,
-					'rooms': num_rooms,
-					'names': list_of_names,
-					'vats': list_of_cis,
-					'emails': list_of_emails,
-					'phones': list_of_phones,
-					'institution_name': institution.value,
-					'date_from': date_from,
-					'date_until': date_until,
-					'adults': adults,
-					'ninos': childrens,
-					'rooms': num_rooms,
-					'showContainerRoom': document.getElementById('room_check').checked,
-					'showContainerFood': document.getElementById('food_check').checked,
-				},
-			}).then(result => {
-				console.log("A ver si funciona")
-				console.log(result)
-				return
-			});
+			
+			
+				this._rpc({
+					route: '/reservation/search_reservation',
+					params: {
+						'children_list': children_objects,
+						'has_partner': has_partner,
+						'rooms': num_rooms,
+						'names': list_of_names,
+						'vats': list_of_cis,
+						'emails': list_of_emails,
+						'phones': list_of_phones,
+						'institution_name': institution.value,
+						'date_from': date_from,
+						'date_until': date_until,
+						'adults': adults,
+						'ninos': childrens,
+						'rooms': num_rooms,
+						'showContainerRoom': document.getElementById('room_check').checked,
+						'showContainerFood': document.getElementById('food_check').checked,
+					},
+				}).then(result => {
+					console.log("A ver si funciona")
+					console.log(result)
+					return
+				});
 	    },
 		_render_onNextBlogClick: function (result) {
 			var room = result.rooms_list;
