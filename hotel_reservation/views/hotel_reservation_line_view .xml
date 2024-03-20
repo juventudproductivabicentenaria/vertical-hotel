@@ -14,6 +14,7 @@
                     <label for='line_id' string="Reservacion" />
                     <h1>
                         <field name="line_id" class="oe_inline" />
+                        <field name="include_room" string="Incluir habitación"/>
                     </h1>
                     <group>
                         <group colspan="4" col="4">

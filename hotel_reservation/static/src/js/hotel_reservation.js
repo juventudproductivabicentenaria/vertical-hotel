@@ -238,12 +238,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			input.id = "identification_VAT_partner"
 			input.type = "text"
 			input.placeholder = "Cédula de Identidad o RIF"
-			input.classList.add("form-control", "mt-3", "ml-5")
+			input.classList.add("form-control", "mt-4", "ml-4")
 
 			const button = document.createElement("button");
 			button.type = "button";
 			button.id = "searchRoommate";
-			button.classList.add("text-start", "text-primary", "h5", "fw-bold", "mb-5", "ml-4", "mt-3");
+			button.classList.add("text-start", "text-primary", "h5", "fw-bold", "mb-5", "ml-4", "mt-4");
 			button.textContent = "Buscar";
 
 			
@@ -574,7 +574,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let html_children = document.getElementsByClassName("children_input_class")
 			let html_children_phone = document.getElementsByClassName("children_phone_class")
 			var children_objects = [];
-
+			var include_room = document.getElementById("room_check").checked
 			function delete_data_form() {
 				let form = document.getElementById("search_reservation_form")
 				let roomMate_check = document.getElementById("roomMate_check")
@@ -615,7 +615,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				"second_name": field_name_part,
 				"second_phone": field_phone_part,
 				"second_email": field_email_part,
-				"childrens": children_objects
+				"childrens": children_objects,
+				"include_room": include_room,
 			}
 			full_objects.push(ready_to_insert)
 			children_objects = []
@@ -654,6 +655,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var date_until = $('#date_until').val()
 			let counterRooms = document.getElementById("counterRooms")
 			var self = this;
+
 			if (full_objects.length > 0) {
 				if (first_last_name_input.value != "") {
 					document.getElementById("add_other_person").click()
@@ -731,7 +733,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let second_email = document.getElementById("email_input_roomMate")
 
 			var has_partner = false
-
+			var adults = 0
 			if (first_last_name_input.value != "") {
 				adults += 1
 			}
@@ -743,6 +745,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				list_of_emails.push(second_email.value)
 				has_partner = true
 			}
+			const include_room = document.getElementById("room_check").checked
 			
 			
 			
@@ -762,6 +765,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'adults': adults,
 						'ninos': childrens,
 						'rooms': num_rooms,
+						'include_room': include_room,
 						'showContainerRoom': document.getElementById('room_check').checked,
 						'showContainerFood': document.getElementById('food_check').checked,
 					},

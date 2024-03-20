@@ -550,6 +550,9 @@ class HotelReservationLine(models.Model):
 
     is_son = fields.Boolean("Ninos")
     is_couple = fields.Boolean("Pareja")
+    
+    include_room = fields.Boolean("Incluir Habitación")
+    
     couple_id = fields.Many2one(
         "res.partner",
         "Pareja",
