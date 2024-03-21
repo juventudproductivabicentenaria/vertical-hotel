@@ -229,6 +229,35 @@ class Website(http.Controller):
                                 "include_room": data["include_room"]
                             })
                             children_ids = []
+                            
+                    if data["include_food"]:
+                        HotelFood = request.env['hotel.foods'].sudo()
+                        if data.get("breakfast"):
+                            HotelFood.create({
+                                "date_start": data["breakfast"]["from_break"],
+                                "date_end": data["breakfast"]["until_break"],
+                                "hotel_reservation": new_reservation.id,
+                                "state": "breakfast",
+                                "partner_id": new_partner.id
+                            })
+                            
+                        if data.get("lunch"):
+                            HotelFood.create({
+                                "date_start": data["lunch"]["from_lunch"],
+                                "date_end": data["lunch"]["until_lunch"],
+                                "hotel_reservation": new_reservation.id,
+                                "state": "lunch",
+                                "partner_id": new_partner.id
+                            })
+                            
+                        if data.get("dinner"):
+                            HotelFood.create({
+                                "date_start": data["dinner"]["from_dinner"],
+                                "date_end": data["dinner"]["until_dinner"],
+                                "hotel_reservation": new_reservation.id,
+                                "state": "dinner",
+                                "partner_id": new_partner.id
+                            })
                         
                 else:
                     if 'childrens' in data and data["second_vat"] == "":
@@ -248,8 +277,7 @@ class Website(http.Controller):
                             "checkout": new_reservation.checkout,
                             "children_ids": children_ids,
                             "include_room": data["include_room"]
-                        })
-                                                
+                        })                   
                         
                     elif 'childrens' in data and data["second_vat"] != "":
                         for chil in data['childrens']:
@@ -296,6 +324,7 @@ class Website(http.Controller):
                             })
                             children_ids = []
                             
+                            
                     elif not 'childrens' in data and data["second_vat"] == "":
                         HotelReservationLine.create({
                                 "line_id": new_reservation.id,
@@ -341,7 +370,36 @@ class Website(http.Controller):
                                 "include_room": data["include_room"]
                             })
                             children_ids = []
-                
+                            
+                    if data["include_food"]:
+                        HotelFood = request.env['hotel.foods'].sudo()
+                        if data.get("breakfast"):
+                            HotelFood.create({
+                                "date_start": data["breakfast"]["from_break"],
+                                "date_end": data["breakfast"]["until_break"],
+                                "hotel_reservation": new_reservation.id,
+                                "state": "breakfast",
+                                "partner_id": partner.id
+                            })
+                            
+                        if data.get("lunch"):
+                            HotelFood.create({
+                                "date_start": data["lunch"]["from_lunch"],
+                                "date_end": data["lunch"]["until_lunch"],
+                                "hotel_reservation": new_reservation.id,
+                                "state": "lunch",
+                                "partner_id": partner.id
+                            })
+                            
+                        if data.get("dinner"):
+                            HotelFood.create({
+                                "date_start": data["dinner"]["from_dinner"],
+                                "date_end": data["dinner"]["until_dinner"],
+                                "hotel_reservation": new_reservation.id,
+                                "state": "dinner",
+                                "partner_id": partner.id
+                            })
+                        
             return {"data": "ok"}
         # institution_visit = kwargs["institution_name"]
         # main_name = kwargs["main_name"]
@@ -448,7 +506,35 @@ class Website(http.Controller):
                 "include_room": kwargs["include_room"]
                 # "hotel_room_id": room.id
             })
-    
+            
+        if kwargs["include_food"]:
+            HotelFood = request.env['hotel.foods'].sudo()
+            if kwargs["breakfast"]:
+                HotelFood.create({
+                    "date_start": kwargs["breakfast"]["from_break"],
+                    "date_end": kwargs["breakfast"]["until_break"],
+                    "hotel_reservation": new_reservation.id,
+                    "state": "breakfast",
+                    "partner_id": reservation_line_partners[0].id
+                })
+                
+            if kwargs.get("lunch"):
+                HotelFood.create({
+                    "date_start": kwargs["lunch"]["from_lunch"],
+                    "date_end": kwargs["lunch"]["until_lunch"],
+                    "hotel_reservation": new_reservation.id,
+                    "state": "lunch",
+                    "partner_id": reservation_line_partners[0].id
+                })
+                
+            if kwargs.get("dinner"):
+                HotelFood.create({
+                    "date_start": kwargs["dinner"]["from_dinner"],
+                    "date_end": kwargs["dinner"]["until_dinner"],
+                    "hotel_reservation": new_reservation.id,
+                    "state": "dinner",
+                    "partner_id": reservation_line_partners[0].id
+                })
         # Reservation created successfully
         _logger.info("Reservation created!")
         _logger.info(new_reservation.id)

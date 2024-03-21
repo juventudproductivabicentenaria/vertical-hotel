@@ -33,7 +33,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #food_check': '_add_food',
 			'click #breakfast_check': '_add_breakfast_date',
 			'click #lunch_check': '_add_lunch_date',
-			'click #dinner_check': 'add_dinner_date',
+			'click #dinner_check': '_add_dinner_date',
 			'click #room_check': '_add_room',
 			'click #origen_select': '_add_origen',
 			'click #incremento_ninos': '_sumar_ninos',
@@ -362,22 +362,22 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			`
 		},
 		_add_dinner_date: function(ev) {
-			let container = document.getElementById("breakfast_date_container")
+			let container = document.getElementById("dinner_date_container")
 			let date_since = document.getElementById("dateFrom")
 			let date_to = document.getElementById("date_until")
-			let check = document.getElementById("breakfast_check")
+			let check = document.getElementById("dinner_check")
 			if (!check.checked) {
 				container.innerHTML = ""
 				return
 			}
 			container.innerHTML = `
 			<div class="ml-2">
-                        <label class="text_adult" for="breakfastDateFrom">Fecha Desde</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
+                        <label class="text_adult" for="dinnerDateFrom">Fecha Desde</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="dinnerDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
                 </div>
                 <div class="ml-5">
-                        <label class="text_adult" for="breakfastDateUntil">Fecha Hasta</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateUntil" name="request_breakfast_date_until" required="1"/>
+                        <label class="text_adult" for="dinnerDateUntil">Fecha Hasta</label>
+                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="dinnerDateUntil" name="request_breakfast_date_until" required="1"/>
             </div>
 			`
 		},
@@ -605,41 +605,272 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					children_objects.push(objeto);
 				}
 			}
+			const add_food = document.getElementById("food_check").checked
+			if (add_food) {
+				let breakfast = document.getElementById("breakfast_check").checked
+				let lunch = document.getElementById("lunch_check").checked
+				let dinner = document.getElementById("dinner_check").checked
+				if (breakfast && lunch && dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
 
-			const ready_to_insert = {
-				"vat": ci,
-				"name": field_name,
-				"phone": field_phone,
-				"email": field_email,
-				"second_vat": ci_part,
-				"second_name": field_name_part,
-				"second_phone": field_phone_part,
-				"second_email": field_email_part,
-				"childrens": children_objects,
-				"include_room": include_room,
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+						
+					
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+					
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+					
+					const ready_to_insert = {
+						"vat": ci,
+						"name": field_name,
+						"phone": field_phone,
+						"email": field_email,
+						"second_vat": ci_part,
+						"second_name": field_name_part,
+						"second_phone": field_phone_part,
+						"second_email": field_email_part,
+						"childrens": children_objects,
+						"include_room": include_room,
+						"include_food": true,
+						"breakfast": breakfast_dict,
+						"lunch": lunch_dict,
+						"dinner": dinner_dict
+					}
+					full_objects.push(ready_to_insert)
+					children_objects = []
+				}
+				
+
+				else if (breakfast && lunch && !dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+						
+					
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+					
+					
+					const ready_to_insert = {
+						"vat": ci,
+						"name": field_name,
+						"phone": field_phone,
+						"email": field_email,
+						"second_vat": ci_part,
+						"second_name": field_name_part,
+						"second_phone": field_phone_part,
+						"second_email": field_email_part,
+						"childrens": children_objects,
+						"include_room": include_room,
+						"include_food": true,
+						"breakfast": breakfast_dict,
+						"lunch": lunch_dict
+					}
+					full_objects.push(ready_to_insert)
+					children_objects = []
+				}
+
+				else if (breakfast && !lunch && !dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+						
+
+					const ready_to_insert = {
+						"vat": ci,
+						"name": field_name,
+						"phone": field_phone,
+						"email": field_email,
+						"second_vat": ci_part,
+						"second_name": field_name_part,
+						"second_phone": field_phone_part,
+						"second_email": field_email_part,
+						"childrens": children_objects,
+						"include_room": include_room,
+						"include_food": true,
+						"breakfast": breakfast_dict
+					}
+					full_objects.push(ready_to_insert)
+					children_objects = []
+				}
+
+				else if (!breakfast && lunch && !dinner) {
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+						
+
+					const ready_to_insert = {
+						"vat": ci,
+						"name": field_name,
+						"phone": field_phone,
+						"email": field_email,
+						"second_vat": ci_part,
+						"second_name": field_name_part,
+						"second_phone": field_phone_part,
+						"second_email": field_email_part,
+						"childrens": children_objects,
+						"include_room": include_room,
+						"include_food": true,
+						"lunch": lunch_dict
+					}
+					full_objects.push(ready_to_insert)
+					children_objects = []
+				}
+
+				else if (!breakfast && !lunch && dinner) {
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
+
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+						
+
+					const ready_to_insert = {
+						"vat": ci,
+						"name": field_name,
+						"phone": field_phone,
+						"email": field_email,
+						"second_vat": ci_part,
+						"second_name": field_name_part,
+						"second_phone": field_phone_part,
+						"second_email": field_email_part,
+						"childrens": children_objects,
+						"include_room": include_room,
+						"include_food": true,
+						"dinner": dinner_dict
+					}
+					full_objects.push(ready_to_insert)
+					children_objects = []
+				}
+
+				else if (breakfast && !lunch && dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
+
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+					
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+
+					const ready_to_insert = {
+						"vat": ci,
+						"name": field_name,
+						"phone": field_phone,
+						"email": field_email,
+						"second_vat": ci_part,
+						"second_name": field_name_part,
+						"second_phone": field_phone_part,
+						"second_email": field_email_part,
+						"childrens": children_objects,
+						"include_room": include_room,
+						"include_food": true,
+						"breakfast": breakfast_dict,
+						"dinner": dinner_dict
+					}
+					full_objects.push(ready_to_insert)
+					children_objects = []
+				}
+
+				else if (!breakfast && lunch && dinner) {
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
+					
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+					
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+					
+					const ready_to_insert = {
+						"vat": ci,
+						"name": field_name,
+						"phone": field_phone,
+						"email": field_email,
+						"second_vat": ci_part,
+						"second_name": field_name_part,
+						"second_phone": field_phone_part,
+						"second_email": field_email_part,
+						"childrens": children_objects,
+						"include_room": include_room,
+						"include_food": true,
+						"lunch": lunch_dict,
+						"dinner": dinner_dict
+					}
+					full_objects.push(ready_to_insert)
+					children_objects = []
+				}
+
 			}
-			full_objects.push(ready_to_insert)
-			children_objects = []
+			else {
+				const ready_to_insert = {
+					"vat": ci,
+					"name": field_name,
+					"phone": field_phone,
+					"email": field_email,
+					"second_vat": ci_part,
+					"second_name": field_name_part,
+					"second_phone": field_phone_part,
+					"second_email": field_email_part,
+					"childrens": children_objects,
+					"include_food": false,
+					"include_room": include_room,
+				}
+				full_objects.push(ready_to_insert)
+				children_objects = []
+			}
+
 
 			if (ci_part && childrens > 0) {
 				const nuevoElementoLi = document.createElement('li');
 				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + "), " + "(Niños: " + childrens + ")";
 				listaPadre.appendChild(nuevoElementoLi);
 				adults_counter += 2
-				childrens_counter =+ childrens
+				childrens_counter = childrens + childrens_counter
 			}
 			else if (ci_part && childrens == 0) {
 				const nuevoElementoLi = document.createElement('li');
 				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + ")";
 				listaPadre.appendChild(nuevoElementoLi);
 				adults_counter += 2
-				childrens_counter =+ childrens
+				childrens_counter = childrens + childrens_counter
 			}
 			else if (childrens > 0 && !ci_part) {
 				const nuevoElementoLi = document.createElement('li');
 				nuevoElementoLi.textContent = field_name + " (Niños: " + childrens + ")";
 				listaPadre.appendChild(nuevoElementoLi);
-				childrens_counter =+ childrens
+				childrens_counter = childrens + childrens_counter
 			}
 			else if (childrens == 0 && !ci_part) {
 				const nuevoElementoLi = document.createElement('li');
@@ -746,9 +977,313 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				has_partner = true
 			}
 			const include_room = document.getElementById("room_check").checked
-			
-			
-			
+
+			const add_food = document.getElementById("food_check").checked
+
+			if (add_food) {
+				let breakfast = document.getElementById("breakfast_check").checked
+				let lunch = document.getElementById("lunch_check").checked
+				let dinner = document.getElementById("dinner_check").checked
+				if (breakfast && lunch && dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
+
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+						
+					
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+					
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+
+					this._rpc({
+						route: '/reservation/search_reservation',
+						params: {
+							'children_list': children_objects,
+							'has_partner': has_partner,
+							'rooms': num_rooms,
+							'names': list_of_names,
+							'vats': list_of_cis,
+							'emails': list_of_emails,
+							'phones': list_of_phones,
+							'institution_name': institution.value,
+							'date_from': date_from,
+							'date_until': date_until,
+							'adults': adults,
+							'ninos': childrens,
+							'rooms': num_rooms,
+							'include_room': include_room,
+							'include_food': true,
+							"breakfast": breakfast_dict,
+							"lunch": lunch_dict,
+							"dinner": dinner_dict,
+							'showContainerRoom': document.getElementById('room_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,
+						},
+					}).then(result => {
+						console.log("A ver si funciona")
+						console.log(result)
+						return
+					});
+				}
+				
+
+				else if (breakfast && lunch && !dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+
+					this._rpc({
+						route: '/reservation/search_reservation',
+						params: {
+							'children_list': children_objects,
+							'has_partner': has_partner,
+							'rooms': num_rooms,
+							'names': list_of_names,
+							'vats': list_of_cis,
+							'emails': list_of_emails,
+							'phones': list_of_phones,
+							'institution_name': institution.value,
+							'date_from': date_from,
+							'date_until': date_until,
+							'adults': adults,
+							'ninos': childrens,
+							'rooms': num_rooms,
+							'include_room': include_room,
+							'include_food': true,
+							"breakfast": breakfast_dict,
+							"lunch": lunch_dict,
+							'showContainerRoom': document.getElementById('room_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,
+						},
+					}).then(result => {
+						console.log("A ver si funciona")
+						console.log(result)
+						return
+					});
+					
+				}
+
+				else if (breakfast && !lunch && !dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+
+					this._rpc({
+						route: '/reservation/search_reservation',
+						params: {
+							'children_list': children_objects,
+							'has_partner': has_partner,
+							'rooms': num_rooms,
+							'names': list_of_names,
+							'vats': list_of_cis,
+							'emails': list_of_emails,
+							'phones': list_of_phones,
+							'institution_name': institution.value,
+							'date_from': date_from,
+							'date_until': date_until,
+							'adults': adults,
+							'ninos': childrens,
+							'rooms': num_rooms,
+							'include_room': include_room,
+							'include_food': true,
+							"breakfast": breakfast_dict,
+							'showContainerRoom': document.getElementById('room_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,
+						},
+					}).then(result => {
+						console.log("A ver si funciona")
+						console.log(result)
+						return
+					});
+						
+				}
+
+				else if (!breakfast && lunch && !dinner) {
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+
+					this._rpc({
+						route: '/reservation/search_reservation',
+						params: {
+							'children_list': children_objects,
+							'has_partner': has_partner,
+							'rooms': num_rooms,
+							'names': list_of_names,
+							'vats': list_of_cis,
+							'emails': list_of_emails,
+							'phones': list_of_phones,
+							'institution_name': institution.value,
+							'date_from': date_from,
+							'date_until': date_until,
+							'adults': adults,
+							'ninos': childrens,
+							'rooms': num_rooms,
+							'include_room': include_room,
+							'include_food': true,
+							"lunch": lunch_dict,
+							'showContainerRoom': document.getElementById('room_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,
+						},
+					}).then(result => {
+						console.log("A ver si funciona")
+						console.log(result)
+						return
+					});
+						
+				}
+
+				else if (!breakfast && !lunch && dinner) {
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+
+					this._rpc({
+						route: '/reservation/search_reservation',
+						params: {
+							'children_list': children_objects,
+							'has_partner': has_partner,
+							'rooms': num_rooms,
+							'names': list_of_names,
+							'vats': list_of_cis,
+							'emails': list_of_emails,
+							'phones': list_of_phones,
+							'institution_name': institution.value,
+							'date_from': date_from,
+							'date_until': date_until,
+							'adults': adults,
+							'ninos': childrens,
+							'rooms': num_rooms,
+							'include_room': include_room,
+							'include_food': true,
+							"dinner": dinner_dict,
+							'showContainerRoom': document.getElementById('room_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,
+						},
+					}).then(result => {
+						console.log("A ver si funciona")
+						console.log(result)
+						return
+					});
+						
+				}
+
+				else if (breakfast && !lunch && dinner) {
+					let from_break = document.getElementById("breakfastDateFrom").value
+					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
+
+					const breakfast_dict = {
+						"from_break": from_break,
+						"until_break": until_break}
+					
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+
+					this._rpc({
+						route: '/reservation/search_reservation',
+						params: {
+							'children_list': children_objects,
+							'has_partner': has_partner,
+							'rooms': num_rooms,
+							'names': list_of_names,
+							'vats': list_of_cis,
+							'emails': list_of_emails,
+							'phones': list_of_phones,
+							'institution_name': institution.value,
+							'date_from': date_from,
+							'date_until': date_until,
+							'adults': adults,
+							'ninos': childrens,
+							'rooms': num_rooms,
+							'include_room': include_room,
+							'include_food': true,
+							"breakfast": breakfast_dict,
+							"dinner": dinner_dict,
+							'showContainerRoom': document.getElementById('room_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,
+						},
+					}).then(result => {
+						console.log("A ver si funciona")
+						console.log(result)
+						return
+					});
+
+				}
+
+				else if (!breakfast && lunch && dinner) {
+					let from_lunch = document.getElementById("lunchDateFrom").value
+					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_dinner = document.getElementById("dinnerDateFrom").value
+					let until_dinner = document.getElementById("dinnerDateUntil").value
+					
+					const lunch_dict = {
+						"from_lunch": from_lunch,
+						"until_lunch": until_lunch}
+					
+					const dinner_dict = {
+						"from_dinner": from_dinner,
+						"until_dinner": until_dinner}
+
+					this._rpc({
+						route: '/reservation/search_reservation',
+						params: {
+							'children_list': children_objects,
+							'has_partner': has_partner,
+							'rooms': num_rooms,
+							'names': list_of_names,
+							'vats': list_of_cis,
+							'emails': list_of_emails,
+							'phones': list_of_phones,
+							'institution_name': institution.value,
+							'date_from': date_from,
+							'date_until': date_until,
+							'adults': adults,
+							'ninos': childrens,
+							'rooms': num_rooms,
+							'include_room': include_room,
+							'include_food': true,
+							"lunch": lunch_dict,
+							"dinner": dinner_dict,
+							'showContainerRoom': document.getElementById('room_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,
+						},
+					}).then(result => {
+						console.log("A ver si funciona")
+						console.log(result)
+						return
+					});
+				}
+
+			}
+			else {
 				this._rpc({
 					route: '/reservation/search_reservation',
 					params: {
@@ -766,6 +1301,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'ninos': childrens,
 						'rooms': num_rooms,
 						'include_room': include_room,
+						'include_food': false,
 						'showContainerRoom': document.getElementById('room_check').checked,
 						'showContainerFood': document.getElementById('food_check').checked,
 					},
@@ -774,6 +1310,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					console.log(result)
 					return
 				});
+			}
+
+				
 	    },
 		_render_onNextBlogClick: function (result) {
 			var room = result.rooms_list;

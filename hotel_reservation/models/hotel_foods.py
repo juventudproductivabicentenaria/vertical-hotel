@@ -70,5 +70,3 @@ class HotelFoods(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
-
-
