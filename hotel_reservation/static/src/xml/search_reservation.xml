@@ -50,7 +50,7 @@
                 <br />
                 <div class="row">
                     <input id="identification_VAT" type="text" placeholder="Cédula de Identidad o RIF" class="form-control mt-3 ml-4"></input>
-                    <button type="button" id="searchPerson" class="text-start text-primary h5 fw-bold mb-5 ml-4 mt-3">Buscar</button>
+                    <button type="button" id="searchPerson" class="btn btn-secondary mb-5 ml-4 mt-3">Buscar</button>
                     <div id="container_add" class="container">
                         <div class="seccion-superior">
                             <input size="40" id="first_last_name_input" type="text" placeholder="Nombre y Apellido" class="form-control ml-4" disabled="true"></input>
@@ -64,12 +64,12 @@
                 </div>
                 <br />
                 
-                    <ul class="list-group mb-3 mt-3">
-                        <li class="list-group-item d-flex align-items-center">
-                            <label class="form-check-label mr-2" for="room_check">Incluir Habitación</label>
-                            <input class="form-check-input" type="checkbox" id="room_check"> </input>
+                <ul class="list-group mb-3 mt-3">
+                    <li class="list-group-item d-flex align-items-center w-25 mb-4 bg-primary text-light border border-secondary" style="border-radius: 20px;">
+                        <label class="form-check-label mr-2" for="room_check">Incluir Habitación</label>
+                        <input class="form-check-input" type="checkbox" id="room_check"> </input>
                         </li>
-                        <li class="list-group-item d-flex align-items-center">
+                        <li class="list-group-item d-flex align-items-center w-25 bg-primary text-light border border-secondary" style="border-radius: 20px;">
                             <label class="form-check-label mr-2" for="roomMate_check">Acompañante</label>
                             <input value="Acompañante" class="form-check-input" type="checkbox" id="roomMate_check"> </input>
                         </li>
@@ -77,19 +77,21 @@
                             <div id="container_roomMate" class="container_roomMate_class">
                             </div>
                         </div>
-                        <li class="list-group-item d-flex align-items-center mt-4">
+                        <li class="list-group-item d-flex align-items-center mt-4 w-25 bg-primary text-light border border-secondary" style="border-radius: 20px;">
                             <label class="form-check-label mr-2" for="children_check">Niños</label>
                             <input class="form-check-input" type="checkbox" id="children_check"> </input>
                         </li>
                         <div id="container_children" class="container_children_class">
                         </div>
                     </ul>
+                    <!-- <img src="/hotel_reservation/static/src/img/logo_alcaravan.png" alt="Logo de Alcaravan" style="float: right;"></img> -->
+                    
 
                 
                 <p id="includeFood" class="text-start text-primary h5 fw-bold ml-4 mt-5">Acerca de la Comida</p>
                 <div class="d-flex align-items-center mb-2">
                     <ul class="list-group mb-3 mt-3">
-                        <li class="list-group-item d-flex align-items-center">
+                        <li class="list-group-item d-flex align-items-center bg-primary text-light border border-secondary" style="border-radius: 20px;">
                             <label class="form-check-label mr-2" for="food_check">Incluir Comida</label>
                             <input value="Incluir Comida" class="form-check-input" type="checkbox" id="food_check"> </input>
                         </li>
@@ -195,7 +197,6 @@
             </div>
         </form>
     </div>
-
     <!-- <div class="controls btn-group mb-2 mr-sm-2">
         <button type="button" class="btn btn-primary">
             <i class="fa fa-user"></i>

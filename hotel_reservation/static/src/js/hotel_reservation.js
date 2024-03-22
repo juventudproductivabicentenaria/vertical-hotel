@@ -243,7 +243,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			const button = document.createElement("button");
 			button.type = "button";
 			button.id = "searchRoommate";
-			button.classList.add("text-start", "text-primary", "h5", "fw-bold", "mb-5", "ml-4", "mt-4");
+			button.classList.add("btn", "btn-secondary", "mb-5", "ml-4", "mt-4");
 			button.textContent = "Buscar";
 
 			
