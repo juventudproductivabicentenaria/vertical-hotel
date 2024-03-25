@@ -135,6 +135,13 @@ class HotelReservation(models.Model):
         "invoice_id",
         string="Folio",
     )
+    
+    foods_ids = fields.One2many(
+        "hotel.foods",
+        "hotel_reservation",
+        string="Food"
+    )
+    
     no_of_folio = fields.Integer("No. Folio", compute="_compute_folio_id")
     token = fields.Char(string="token", default=lambda self: self._has_default(), required=True)
 
@@ -184,10 +191,10 @@ class HotelReservation(models.Model):
             #                 " Members Accomodation."
             #             )
             #         )
-            if reservation.adults <= 0:
-                raise ValidationError(
-                    _("Number of Adults must be Positive value.")
-                )
+            # if reservation.adults <= 0:
+            #     raise ValidationError(
+            #         _("Number of Adults must be Positive value.")
+            #     )
 
     @api.constrains("checkin", "checkout")
     def check_in_out_dates(self):

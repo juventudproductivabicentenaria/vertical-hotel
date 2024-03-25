@@ -142,6 +142,9 @@
                         <page name="history" string='History'>
                             <field name='folios_ids' readonly='1' />
                         </page>
+                        <page name="food" string='Food'>
+                            <field name='foods_ids' />
+                        </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">

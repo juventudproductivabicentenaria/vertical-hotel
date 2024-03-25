@@ -35,7 +35,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #lunch_check': '_add_lunch_date',
 			'click #dinner_check': '_add_dinner_date',
 			'click #room_check': '_add_room',
-			'click #origen_select': '_add_origen',
+			'click #origen-select': '_add_origen',
+			'click #destino-select': "_add_destino",
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
@@ -299,26 +300,39 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				container.innerHTML = ""
 				return
 			}
-			container.innerHTML = `<ul class="list-group mb-3 mt-3">
-			<li class="list-group-item d-flex align-items-center">
-				<label class="form-check-label mr-2" for="breakfast_check">Desayuno</label>
-				<input value="Desayuno" class="form-check-input" type="checkbox" id="breakfast_check"> </input>
-			</li>
-			<div id="breakfast_date_container" class="d-flex align-items-center mb-5 mt-3">
+			container.innerHTML = `<div class="container">
+			<div class="row">
+				<div class="col-sm-4 border border-primary" style="border-radius: 20px;">
+					<ul class="list-group mb-3 mt-3">
+						<li class="list-group-item d-flex align-items-center bg-secondary text-light border border-primary">
+							<label class="form-check-label mr-2" for="breakfast_check">Desayuno</label>
+							<input value="Desayuno" class="form-check-input" type="checkbox" id="breakfast_check">
+						</li>
+						<div id="breakfast_date_container" class="d-flex align-items-center mb-5 mt-3"></div>
+					</ul>
+				</div>
+		
+				<div class="col-sm-4 border border-primary" style="border-radius: 20px;">
+					<ul class="list-group mb-3 mt-3">
+						<li class="list-group-item d-flex align-items-center bg-secondary text-light border border-primary">
+							<label class="form-check-label mr-2" for="lunch_check">Almuerzo</label>
+							<input value="Almuerzo" class="form-check-input" type="checkbox" id="lunch_check">
+						</li>
+						<div id="lunch_date_container" class="d-flex align-items-center mb-5 mt-3"></div>
+					</ul>
+				</div>
+		
+				<div class="col-sm-4 border border-primary" style="border-radius: 20px;">
+					<ul class="list-group mb-3 mt-3">
+						<li class="list-group-item d-flex align-items-center bg-secondary text-light border border-primary">
+							<label class="form-check-label mr-2" for="dinner_check">Cena</label>
+							<input value="Cena" class="form-check-input" type="checkbox" id="dinner_check">
+						</li>
+						<div id="dinner_date_container" class="d-flex align-items-center mb-5 mt-3"></div>
+					</ul>
+				</div>
 			</div>
-			<li class="list-group-item d-flex align-items-center">
-				<label class="form-check-label mr-2" for="lunch_check">Almuerzo</label>
-				<input value="Almuerzo" class="form-check-input" type="checkbox" id="lunch_check"> </input>
-			</li>
-			<div id="lunch_date_container" class="d-flex align-items-center mb-5 mt-3">
-			</div>
-			<li class="list-group-item d-flex align-items-center">
-				<label class="form-check-label mr-2" for="dinner_check">Cena</label>
-				<input value="Cena" class="form-check-input" type="checkbox" id="dinner_check"> </input>
-			</li>
-			<div id="dinner_date_container" class="d-flex align-items-center mb-5 mt-3">
-			</div>
-		</ul>`
+		</div>`
 		},
 
 		_add_breakfast_date: function(ev) {
@@ -331,11 +345,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				return
 			}
 			container.innerHTML = `
-			<div class="ml-2">
+			<div class="">
                         <label class="text_adult" for="breakfastDateFrom">Fecha Desde</label>
                         <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
                 </div>
-                <div class="ml-5">
+                <div class="ml-2">
                         <label class="text_adult" for="breakfastDateUntil">Fecha Hasta</label>
                         <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateUntil" name="request_breakfast_date_until" required="1"/>
             </div>
@@ -351,11 +365,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				return
 			}
 			container.innerHTML = `
-			<div class="ml-2">
+			<div class="">
                         <label class="text_adult" for="lunchDateFrom">Fecha Desde</label>
                         <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="lunchDateFrom" max="2024-02-24" name="request_lunch_date_from" required="1"/>
                 </div>
-                <div class="ml-5">
+                <div class="ml-2">
                         <label class="text_adult" for="lunchDateUntil">Fecha Hasta</label>
                         <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="lunchDateUntil" name="request_lunch_date_until" required="1"/>
             </div>
@@ -371,11 +385,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				return
 			}
 			container.innerHTML = `
-			<div class="ml-2">
+			<div class="">
                         <label class="text_adult" for="dinnerDateFrom">Fecha Desde</label>
                         <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="dinnerDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
                 </div>
-                <div class="ml-5">
+                <div class="ml-2">
                         <label class="text_adult" for="dinnerDateUntil">Fecha Hasta</label>
                         <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="dinnerDateUntil" name="request_breakfast_date_until" required="1"/>
             </div>
@@ -396,7 +410,40 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 		_add_origen: function(ev) {
-			console.log("adding origen")
+			const estados = [
+				"Anzoátegui", "Apure", "Aragua", "Barinas", "Bolívar", "Carabobo",
+				"Cojedes", "Delta Amacuro", "Dependencias Federales", "Distrito Federal", "Falcón",
+				"Guárico", "Lara", "Mérida", "Miranda", "Monagas", "Nueva Esparta", "Portuguesa",
+				"Sucre", "Táchira", "Trujillo", "Vargas", "Yaracuy", "Zulia"
+			];
+		
+			const select = document.getElementById("origen-select");
+			if (select.children.length > 1) {
+				return
+			}
+			estados.forEach(estado => {
+				const option = document.createElement("option");
+				option.text = estado;
+				select.add(option);
+			});
+		},
+		_add_destino: function(ev) {
+			const estados = [
+				"Anzoátegui", "Apure", "Aragua", "Barinas", "Bolívar", "Carabobo",
+				"Cojedes", "Delta Amacuro", "Dependencias Federales", "Distrito Federal", "Falcón",
+				"Guárico", "Lara", "Mérida", "Miranda", "Monagas", "Nueva Esparta", "Portuguesa",
+				"Sucre", "Táchira", "Trujillo", "Vargas", "Yaracuy", "Zulia"
+			];
+		
+			const select = document.getElementById("destino-select");
+			if (select.children.length > 1) {
+				return
+			}
+			estados.forEach(estado => {
+				const option = document.createElement("option");
+				option.text = estado;
+				select.add(option);
+			});
 		},
 
 		_resta_adults: function(ev){

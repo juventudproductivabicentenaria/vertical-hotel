@@ -32,7 +32,7 @@
                 data-model_name="">
             <div class="container-fluid p-3" style="background-color: #dee2e6; border-radius: 50px;" id="main_container">
                 <p class="text-center text-primary h1 fw-bold mb-5">Solicitud de Reservación</p>
-                <div class="d-flex align-items-center mb-2 bg-white">
+                <div class="d-flex align-items-center bg-white">
                     <div class="ml-2">
                         <label class="text_adult" for="request_date_from">Fecha Desde</label>
                         <input type="date" class="border rounded p-2" id="dateFrom" name="request_date_from" required="1" t-att-value="date_from"/>
@@ -48,6 +48,8 @@
 
                 </div>
                 <br />
+                <br />
+                <p class="text-center text-primary h2 fw-bold mb-3">Datos del huesped</p>
                 <div class="row">
                     <input id="identification_VAT" type="text" placeholder="Cédula de Identidad o RIF" class="form-control mt-3 ml-4"></input>
                     <button type="button" id="searchPerson" class="btn btn-secondary mb-5 ml-4 mt-3">Buscar</button>
@@ -106,11 +108,19 @@
                     
                     <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
                         Origen
-                        <select id="origen-select">
+                        <select id="origen-select" class="mt-3 w-100">
+                            <option>
+                                Amazonas
+                            </option>
                         </select>
                     </div>
                     <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
                         Destino
+                        <select id="destino-select" class="mt-3 w-100">
+                            <option>
+                                Amazonas
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <!-- <div class="row">
