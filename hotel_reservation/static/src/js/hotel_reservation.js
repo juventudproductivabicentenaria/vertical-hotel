@@ -626,14 +626,25 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let form = document.getElementById("search_reservation_form")
 				let roomMate_check = document.getElementById("roomMate_check")
 				let children_check = document.getElementById("children_check")
-
+				let food_checked = document.getElementById("food_check")
 				if (roomMate_check.checked) {
 					roomMate_check.click()
 				}
 				if (children_check.checked) {
 					children_check.click()
 				}
+				if (food_checked.checked) {
+					food_checked.click()
+				}
+				const date_from_before = document.getElementById("dateFrom").value
+				const date_until_before = document.getElementById("date_until").value
 				form.reset()
+
+				document.getElementById("dateFrom").value = date_from_before
+				document.getElementById("date_until").value = date_until_before
+				
+				document.getElementById("dateFrom").disabled = true;
+				document.getElementById("date_until").disabled = true
 			}
 			if (html_children) {
 				const childrenArray = Array.from(html_children);
@@ -924,7 +935,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				nuevoElementoLi.textContent = field_name;
 				listaPadre.appendChild(nuevoElementoLi);
 			}
+
 			delete_data_form()
+
 		},
 
 	    _onNextBlogClick: function (ev) {

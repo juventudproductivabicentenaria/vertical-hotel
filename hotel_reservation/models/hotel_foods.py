@@ -42,6 +42,7 @@ class HotelFoods(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
+    
     state = fields.Selection(
         [
             ("breakfast", "Desayuno"),

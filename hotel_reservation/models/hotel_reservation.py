@@ -128,6 +128,7 @@ class HotelReservation(models.Model):
         readonly=True,
         default="draft",
     )
+    
     folios_ids = fields.Many2many(
         "hotel.folio",
         "hotel_folio_reservation_rel",
@@ -140,6 +141,12 @@ class HotelReservation(models.Model):
         "hotel.foods",
         "hotel_reservation",
         string="Food"
+    )
+    
+    transport_ids = fields.One2many(
+        "hotel.transport",
+        "hotel_reservation",
+        string="Transport"
     )
     
     no_of_folio = fields.Integer("No. Folio", compute="_compute_folio_id")

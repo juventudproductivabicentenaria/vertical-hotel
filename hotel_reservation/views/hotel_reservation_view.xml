@@ -142,8 +142,30 @@
                         <page name="history" string='History'>
                             <field name='folios_ids' readonly='1' />
                         </page>
-                        <page name="food" string='Food'>
-                            <field name='foods_ids' />
+                        <page name="food" string='Comidas'>
+
+                            <field name='foods_ids'>
+                                <tree string="">
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="state"/>
+                                    <field name="hotel_reservation"/>
+                                    <field name="partner_id"/>
+                                </tree>
+                            </field>
+
+                        </page>
+                        <page name="transport" string='Transporte'>
+
+                            <field name='transport_ids'>
+                                <tree string="">
+                                    <field name="move_from"/>
+                                    <field name="move_to"/>
+                                    <field name="hotel_reservation"/>
+                                    <field name="partner_id"/>
+                                </tree>
+                            </field>
+
                         </page>
                     </notebook>
                 </sheet>
