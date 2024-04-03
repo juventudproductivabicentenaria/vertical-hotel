@@ -258,7 +258,14 @@ class Website(http.Controller):
                                 "state": "dinner",
                                 "partner_id": new_partner.id
                             })
-                        
+                    if data["include_transport"] == True:
+                        HotelTransport = request.env['hotel.transport'].sudo()
+                        HotelTransport.create({
+                            "hotel_reservation": new_reservation.id,
+                            "move_from": data["origen"],
+                            "move_to": data["destiny"],
+                            "partner_id": new_partner.id
+                        })
                 else:
                     if 'childrens' in data and data["second_vat"] == "":
                         for chil in data['childrens']:
@@ -399,6 +406,15 @@ class Website(http.Controller):
                                 "state": "dinner",
                                 "partner_id": partner.id
                             })
+                    
+                    if data["include_transport"] == True:
+                        HotelTransport = request.env['hotel.transport'].sudo()
+                        HotelTransport.create({
+                            "hotel_reservation": new_reservation.id,
+                            "move_from": data["origen"],
+                            "move_to": data["destiny"],
+                            "partner_id": partner.id
+                        })
                         
             return {"data": "ok"}
         # institution_visit = kwargs["institution_name"]
@@ -535,6 +551,15 @@ class Website(http.Controller):
                     "state": "dinner",
                     "partner_id": reservation_line_partners[0].id
                 })
+                
+        if kwargs["include_transport"] == True:
+            HotelTransport = request.env['hotel.transport'].sudo()
+            HotelTransport.create({
+                "hotel_reservation": new_reservation.id,
+                "move_from": kwargs["origen"],
+                "move_to": kwargs["destiny"],
+                "partner_id": reservation_line_partners[0].id
+            })
         # Reservation created successfully
         _logger.info("Reservation created!")
         _logger.info(new_reservation.id)

@@ -34,9 +34,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'click #breakfast_check': '_add_breakfast_date',
 			'click #lunch_check': '_add_lunch_date',
 			'click #dinner_check': '_add_dinner_date',
+			'click #transport_check': '_add_transport',
 			'click #room_check': '_add_room',
-			'click #origen-select': '_add_origen',
-			'click #destino-select': "_add_destino",
+			'click #origen_select': '_add_origen',
+			'click #destino_select': "_add_destino",
 			'click #incremento_ninos': '_sumar_ninos',
 			'click #desminuir_adults': '_resta_adults',
 			'click #desminuir_ninos': '_resta_ninos',
@@ -417,7 +418,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				"Sucre", "Táchira", "Trujillo", "Vargas", "Yaracuy", "Zulia"
 			];
 		
-			const select = document.getElementById("origen-select");
+			const select = document.getElementById("origen_select");
 			if (select.children.length > 1) {
 				return
 			}
@@ -435,7 +436,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				"Sucre", "Táchira", "Trujillo", "Vargas", "Yaracuy", "Zulia"
 			];
 		
-			const select = document.getElementById("destino-select");
+			const select = document.getElementById("destino_select");
 			if (select.children.length > 1) {
 				return
 			}
@@ -595,6 +596,33 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 		},
 
+		_add_transport: function(ev) {
+			let container = document.getElementById("container_transport")
+			let check = document.getElementById("transport_check")
+			if (!check.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `
+			<div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
+                        Origen
+                        <select id="origen_select" class="mt-3 w-100">
+                            <option>
+                                Amazonas
+                            </option>
+                        </select>
+                    </div>
+                    <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
+                        Destino
+                        <select id="destino_select" class="mt-3 w-100">
+                            <option>
+                                Amazonas
+                            </option>
+                        </select>
+                    </div>
+			`
+		},
+
 		__add_other_person: function(ev) {
 			let ci = document.getElementById("identification_VAT").value
 			let field_name = document.getElementById("first_last_name_input").value
@@ -664,6 +692,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 			}
 			const add_food = document.getElementById("food_check").checked
+			const add_transport = document.getElementById("transport_check").checked
+			if (add_transport) {
+				var origen = document.getElementById("origen_select").value;
+				var destiny = document.getElementById("destino_select").value;
+			}
+			else {
+				origen = ""
+				destiny = ""
+			}
 			if (add_food) {
 				let breakfast = document.getElementById("breakfast_check").checked
 				let lunch = document.getElementById("lunch_check").checked
@@ -703,7 +740,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"include_food": true,
 						"breakfast": breakfast_dict,
 						"lunch": lunch_dict,
-						"dinner": dinner_dict
+						"dinner": dinner_dict,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -738,7 +778,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"include_room": include_room,
 						"include_food": true,
 						"breakfast": breakfast_dict,
-						"lunch": lunch_dict
+						"lunch": lunch_dict,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -764,7 +807,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"childrens": children_objects,
 						"include_room": include_room,
 						"include_food": true,
-						"breakfast": breakfast_dict
+						"breakfast": breakfast_dict,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -791,7 +837,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"childrens": children_objects,
 						"include_room": include_room,
 						"include_food": true,
-						"lunch": lunch_dict
+						"lunch": lunch_dict,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -818,7 +867,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"childrens": children_objects,
 						"include_room": include_room,
 						"include_food": true,
-						"dinner": dinner_dict
+						"dinner": dinner_dict,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -851,7 +903,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"include_room": include_room,
 						"include_food": true,
 						"breakfast": breakfast_dict,
-						"dinner": dinner_dict
+						"dinner": dinner_dict,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -884,7 +939,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"include_room": include_room,
 						"include_food": true,
 						"lunch": lunch_dict,
-						"dinner": dinner_dict
+						"dinner": dinner_dict,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -904,6 +962,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					"childrens": children_objects,
 					"include_food": false,
 					"include_room": include_room,
+					"include_transport": add_transport,
+					"origen": origen,
+					"destiny": destiny
 				}
 				full_objects.push(ready_to_insert)
 				children_objects = []
@@ -1039,7 +1100,17 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			const include_room = document.getElementById("room_check").checked
 
 			const add_food = document.getElementById("food_check").checked
-
+			const add_transport = document.getElementById("transport_check").checked
+			if (add_transport) {
+				var origen = document.getElementById("origen_select").value;
+				var destiny = document.getElementById("destino_select").value;
+				console.log(origen)
+				console.log(destiny)
+			}
+			else {
+				origen = ""
+				destiny = ""
+			}
 			if (add_food) {
 				let breakfast = document.getElementById("breakfast_check").checked
 				let lunch = document.getElementById("lunch_check").checked
@@ -1086,6 +1157,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"breakfast": breakfast_dict,
 							"lunch": lunch_dict,
 							"dinner": dinner_dict,
+							"include_transport": add_transport,
+							"origen": origen,
+							"destiny": destiny,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1130,6 +1204,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_food': true,
 							"breakfast": breakfast_dict,
 							"lunch": lunch_dict,
+							"include_transport": add_transport,
+							"origen": origen,
+							"destiny": destiny,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1167,6 +1244,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_room': include_room,
 							'include_food': true,
 							"breakfast": breakfast_dict,
+							"include_transport": add_transport,
+							"origen": origen,
+							"destiny": destiny,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1205,6 +1285,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_room': include_room,
 							'include_food': true,
 							"lunch": lunch_dict,
+							"include_transport": add_transport,
+							"origen": origen,
+							"destiny": destiny,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1242,6 +1325,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_room': include_room,
 							'include_food': true,
 							"dinner": dinner_dict,
+							"include_transport": add_transport,
+							"origen": origen,
+							"destiny": destiny,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1287,6 +1373,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_food': true,
 							"breakfast": breakfast_dict,
 							"dinner": dinner_dict,
+							"include_transport": add_transport,
+							"origen": origen,
+							"destiny": destiny,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1332,6 +1421,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_food': true,
 							"lunch": lunch_dict,
 							"dinner": dinner_dict,
+							"include_transport": add_transport,
+							"origen": origen,
+							"destiny": destiny,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1362,6 +1454,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'rooms': num_rooms,
 						'include_room': include_room,
 						'include_food': false,
+						"include_transport": add_transport,
+						"origen": origen,
+						"destiny": destiny,
 						'showContainerRoom': document.getElementById('room_check').checked,
 						'showContainerFood': document.getElementById('food_check').checked,
 					},
