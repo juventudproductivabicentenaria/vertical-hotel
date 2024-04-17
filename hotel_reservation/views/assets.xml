@@ -31,6 +31,34 @@
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/home_reservation.js"
             />
+            <!-- <script
+                type="text/javascript"
+                src="/hotel_reservation/static/src/js/jquery-3.2.1.min.js.js"
+            /> -->
+            <script
+                type="text/javascript"
+                src="/hotel_reservation/static/src/js/bootstrap.min.js.js"
+            />
+            <script
+                type="text/javascript"
+                src="/hotel_reservation/static/src/js/bootstrap-datepicker.min.js.js"
+            />
+            <!-- <link
+                rel="stylesheet"
+                href="/hotel_reservation/static/src/css/bootstrap.min.css"
+            /> -->
+            <link
+                rel="stylesheet"
+                href="/hotel_reservation/static/src/css/bootstrap-theme.min.css"
+            />
+            <link
+                rel="stylesheet"
+                href="/hotel_reservation/static/src/css/bootstrap-datepicker3.min.css"
+            />
+            <link
+                rel="stylesheet"
+                href="/hotel_reservation/static/src/css/font-awesome.min.css"
+            />
         </xpath>
         <xpath expr="link[last()]" position="after">
             <link

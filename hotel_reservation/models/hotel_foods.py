@@ -19,18 +19,9 @@ class HotelFoods(models.Model):
     _name = "hotel.foods"
     _description = "Hotel Foods"
 
-    date_start = fields.Date(
-        "Fecha de inicio",
+    dates = fields.Char(
+        string="Fechas de comida",
         required=True,
-        default=fields.Date.context_today,
-        readonly=True,
-        states={"draft": [("readonly", False)]}
-    )
-
-    date_end = fields.Date(
-        "Fecha de cierre",
-        required=True,
-        default=fields.Date.context_today,
         readonly=True,
         states={"draft": [("readonly", False)]}
     )

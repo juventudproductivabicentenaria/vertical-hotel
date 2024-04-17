@@ -49,9 +49,9 @@
                 </div>
                 <br />
                 <br />
-                <p class="text-center text-primary h2 fw-bold mb-3">Datos del huesped</p>
+                <p class="text-center text-secondary h2 fw-bold mb-3">Datos del huesped</p>
                 <div class="row">
-                    <input id="identification_VAT" type="text" placeholder="Cédula de Identidad o RIF" class="form-control mt-3 ml-4"></input>
+                    <input id="identification_VAT" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Cédula de Identidad o RIF" class="form-control mt-3 ml-4"></input>
                     <button type="button" id="searchPerson" class="btn btn-secondary mb-5 ml-4 mt-3">Buscar</button>
                     <div id="container_add" class="container">
                         <div class="seccion-superior">
@@ -86,7 +86,7 @@
                         <div id="container_children" class="container_children_class">
                         </div>
                     </ul>
-                    <!-- <img src="/hotel_reservation/static/src/img/logo_alcaravan.png" alt="Logo de Alcaravan" style="float: right;"></img> -->
+                    <img src="/hotel_reservation/static/src/img/logo_alcaravan.png" alt="Logo de Alcaravan" style="position: fixed; right: 6%; top: 40%"></img>
                     
 
                 
@@ -115,6 +115,14 @@
                 <div class="d-flex align-items-center mb-2" id="container_transport">
                     
                 </div>
+                <!-- <div class="d-flex align-items-center mb-2">
+                    <ul class="list-group mb-3 mt-3">
+                        <li class="list-group-item d-flex align-items-center bg-primary text-light border border-secondary" style="border-radius: 20px;">
+                            <label class="form-check-label mr-2" for="vehicle_check">Posee Vehículo</label>
+                            <input value="Posee Vehículo" class="form-check-input" type="checkbox" id="vehicle_ckeck"> </input>
+                        </li>
+                    </ul>
+                </div> -->
                 <!-- <div class="row">
                     <input id="showContainerRoom" type="checkbox" class="border rounded p-2"/>
                     <label class="text_title">Reservacion de habitaciones</label>
@@ -173,7 +181,7 @@
                 </div> -->
                 <div class="row justify-content-center">
                     <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
-                    <button id="add_other_person" type="button" class="btn btn-secondary mb-2 mr-sm-2" href="#">Agregar otra(s) persona(s)</button>
+                    <button id="add_other_person" type="button" class="btn btn-secondary mb-2 mr-sm-2" href="#">Agregar otro(s) huesped(es)</button>
                 </div>
                 <div id="list_of_people">
                     <p id="par_list_persons" class="d-none mt-4 text-center">

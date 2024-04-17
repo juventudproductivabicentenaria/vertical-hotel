@@ -234,8 +234,7 @@ class Website(http.Controller):
                         HotelFood = request.env['hotel.foods'].sudo()
                         if data.get("breakfast"):
                             HotelFood.create({
-                                "date_start": data["breakfast"]["from_break"],
-                                "date_end": data["breakfast"]["until_break"],
+                                "dates": data["breakfast"]["from_break"],
                                 "hotel_reservation": new_reservation.id,
                                 "state": "breakfast",
                                 "partner_id": new_partner.id
@@ -243,8 +242,7 @@ class Website(http.Controller):
                             
                         if data.get("lunch"):
                             HotelFood.create({
-                                "date_start": data["lunch"]["from_lunch"],
-                                "date_end": data["lunch"]["until_lunch"],
+                                "dates": data["lunch"]["from_lunch"],
                                 "hotel_reservation": new_reservation.id,
                                 "state": "lunch",
                                 "partner_id": new_partner.id
@@ -252,12 +250,12 @@ class Website(http.Controller):
                             
                         if data.get("dinner"):
                             HotelFood.create({
-                                "date_start": data["dinner"]["from_dinner"],
-                                "date_end": data["dinner"]["until_dinner"],
+                                "dates": data["dinner"]["from_dinner"],
                                 "hotel_reservation": new_reservation.id,
                                 "state": "dinner",
                                 "partner_id": new_partner.id
                             })
+                            
                     if data["include_transport"] == True:
                         HotelTransport = request.env['hotel.transport'].sudo()
                         HotelTransport.create({
@@ -382,8 +380,7 @@ class Website(http.Controller):
                         HotelFood = request.env['hotel.foods'].sudo()
                         if data.get("breakfast"):
                             HotelFood.create({
-                                "date_start": data["breakfast"]["from_break"],
-                                "date_end": data["breakfast"]["until_break"],
+                                "dates": data["breakfast"]["from_break"],
                                 "hotel_reservation": new_reservation.id,
                                 "state": "breakfast",
                                 "partner_id": partner.id
@@ -391,8 +388,7 @@ class Website(http.Controller):
                             
                         if data.get("lunch"):
                             HotelFood.create({
-                                "date_start": data["lunch"]["from_lunch"],
-                                "date_end": data["lunch"]["until_lunch"],
+                                "dates": data["lunch"]["from_lunch"],
                                 "hotel_reservation": new_reservation.id,
                                 "state": "lunch",
                                 "partner_id": partner.id
@@ -400,8 +396,7 @@ class Website(http.Controller):
                             
                         if data.get("dinner"):
                             HotelFood.create({
-                                "date_start": data["dinner"]["from_dinner"],
-                                "date_end": data["dinner"]["until_dinner"],
+                                "dates": data["dinner"]["from_dinner"],
                                 "hotel_reservation": new_reservation.id,
                                 "state": "dinner",
                                 "partner_id": partner.id
@@ -527,8 +522,7 @@ class Website(http.Controller):
             HotelFood = request.env['hotel.foods'].sudo()
             if kwargs["breakfast"]:
                 HotelFood.create({
-                    "date_start": kwargs["breakfast"]["from_break"],
-                    "date_end": kwargs["breakfast"]["until_break"],
+                    "dates": kwargs["breakfast"]["from_break"],
                     "hotel_reservation": new_reservation.id,
                     "state": "breakfast",
                     "partner_id": reservation_line_partners[0].id
@@ -536,8 +530,7 @@ class Website(http.Controller):
                 
             if kwargs.get("lunch"):
                 HotelFood.create({
-                    "date_start": kwargs["lunch"]["from_lunch"],
-                    "date_end": kwargs["lunch"]["until_lunch"],
+                    "dates": kwargs["lunch"]["from_lunch"],
                     "hotel_reservation": new_reservation.id,
                     "state": "lunch",
                     "partner_id": reservation_line_partners[0].id
@@ -545,8 +538,7 @@ class Website(http.Controller):
                 
             if kwargs.get("dinner"):
                 HotelFood.create({
-                    "date_start": kwargs["dinner"]["from_dinner"],
-                    "date_end": kwargs["dinner"]["until_dinner"],
+                    "dates": kwargs["dinner"]["from_dinner"],
                     "hotel_reservation": new_reservation.id,
                     "state": "dinner",
                     "partner_id": reservation_line_partners[0].id

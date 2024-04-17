@@ -240,6 +240,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			input.id = "identification_VAT_partner"
 			input.type = "text"
 			input.placeholder = "Cédula de Identidad o RIF"
+			input.oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
 			input.classList.add("form-control", "mt-4", "ml-4")
 
 			const button = document.createElement("button");
@@ -309,7 +310,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							<label class="form-check-label mr-2" for="breakfast_check">Desayuno</label>
 							<input value="Desayuno" class="form-check-input" type="checkbox" id="breakfast_check">
 						</li>
-						<div id="breakfast_date_container" class="d-flex align-items-center mb-5 mt-3"></div>
+						<div id="breakfast_date_container" class="d-flex align-items-center mb-5 mt-2 ml-5"></div>
 					</ul>
 				</div>
 		
@@ -319,7 +320,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							<label class="form-check-label mr-2" for="lunch_check">Almuerzo</label>
 							<input value="Almuerzo" class="form-check-input" type="checkbox" id="lunch_check">
 						</li>
-						<div id="lunch_date_container" class="d-flex align-items-center mb-5 mt-3"></div>
+						<div id="lunch_date_container" class="d-flex align-items-center mb-5 mt-2 ml-5"></div>
 					</ul>
 				</div>
 		
@@ -329,7 +330,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							<label class="form-check-label mr-2" for="dinner_check">Cena</label>
 							<input value="Cena" class="form-check-input" type="checkbox" id="dinner_check">
 						</li>
-						<div id="dinner_date_container" class="d-flex align-items-center mb-5 mt-3"></div>
+						<div id="dinner_date_container" class="d-flex align-items-center mb-5 mt-2 ml-5"></div>
 					</ul>
 				</div>
 			</div>
@@ -340,26 +341,43 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let container = document.getElementById("breakfast_date_container")
 			let date_since = document.getElementById("dateFrom")
 			let date_to = document.getElementById("date_until")
+			const endDate = new Date(date_to.value);
+			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
 			let check = document.getElementById("breakfast_check")
 			if (!check.checked) {
 				container.innerHTML = ""
 				return
 			}
 			container.innerHTML = `
+			
 			<div class="">
-                        <label class="text_adult" for="breakfastDateFrom">Fecha Desde</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
-                </div>
-                <div class="ml-2">
-                        <label class="text_adult" for="breakfastDateUntil">Fecha Hasta</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="breakfastDateUntil" name="request_breakfast_date_until" required="1"/>
-            </div>
+				<label class="text_adult" for="breakfastDate">Fechas para desayunar</label>
+				<input type="text" class="border rounded p-2" id="breakfastDate" name="request_breakfast_date_from" required="1"/>
+			</div>
 			`
+			
+
+			$(document).ready(function() {
+				$('#breakfastDate').datepicker({
+					startDate: new Date(),
+					endDate: newEndDate,
+					multidate: true,
+					format: "dd/mm/yyyy",
+					daysOfWeekHighlighted: "5,6",
+					language: 'es',
+				})
+			});
+
+
 		},
 		_add_lunch_date: function(ev) {
 			let container = document.getElementById("lunch_date_container")
 			let date_since = document.getElementById("dateFrom")
 			let date_to = document.getElementById("date_until")
+			const endDate = new Date(date_to.value);
+			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
 			let check = document.getElementById("lunch_check")
 			if (!check.checked) {
 				container.innerHTML = ""
@@ -367,14 +385,20 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 			container.innerHTML = `
 			<div class="">
-                        <label class="text_adult" for="lunchDateFrom">Fecha Desde</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="lunchDateFrom" max="2024-02-24" name="request_lunch_date_from" required="1"/>
-                </div>
-                <div class="ml-2">
-                        <label class="text_adult" for="lunchDateUntil">Fecha Hasta</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="lunchDateUntil" name="request_lunch_date_until" required="1"/>
-            </div>
+				<label class="text_adult" for="lunchDate">Fechas para Almorzar</label>
+				<input type="text" class="border rounded p-2" id="lunchDate" name="request_lunch_date_from" required="1"/>
+			</div>
 			`
+			$(document).ready(function() {
+				$('#lunchDate').datepicker({
+					startDate: new Date(),
+					endDate: newEndDate,
+					multidate: true,
+					format: "dd/mm/yyyy",
+					daysOfWeekHighlighted: "5,6",
+					language: 'es',
+				})
+			});
 		},
 		_add_dinner_date: function(ev) {
 			let container = document.getElementById("dinner_date_container")
@@ -387,14 +411,20 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 			container.innerHTML = `
 			<div class="">
-                        <label class="text_adult" for="dinnerDateFrom">Fecha Desde</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="dinnerDateFrom" max="2024-02-24" name="request_breakfast_date_from" required="1"/>
-                </div>
-                <div class="ml-2">
-                        <label class="text_adult" for="dinnerDateUntil">Fecha Hasta</label>
-                        <input type="date" class="border rounded p-2" min="${date_since.value}" max="${date_to.value}" id="dinnerDateUntil" name="request_breakfast_date_until" required="1"/>
-            </div>
+				<label class="text_adult" for="dinnerDate">Fechas para Cenar</label>
+				<input type="text" class="border rounded p-2" id="dinnerDate" name="request_breakfast_date_from" required="1"/>
+			</div>
 			`
+			$(document).ready(function() {
+				$('#dinnerDate').datepicker({
+					startDate: new Date(),
+					endDate: new Date(date_to.value),
+					multidate: true,
+					format: "dd/mm/yyyy",
+					daysOfWeekHighlighted: "5,6",
+					language: 'es',
+				})
+			});
 		},
 
 		_add_room: function(ev) {
@@ -706,25 +736,19 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let lunch = document.getElementById("lunch_check").checked
 				let dinner = document.getElementById("dinner_check").checked
 				if (breakfast && lunch && dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
+					let from_lunch = document.getElementById("lunchDate").value
+					let from_dinner = document.getElementById("dinnerDate").value
 
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 						
 					
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 					
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 					
 					const ready_to_insert = {
 						"vat": ci,
@@ -751,18 +775,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				
 
 				else if (breakfast && lunch && !dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
+					let from_lunch = document.getElementById("lunchDate").value
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 						
 					
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 					
 					
 					const ready_to_insert = {
@@ -788,11 +808,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 
 				else if (breakfast && !lunch && !dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 						
 
 					const ready_to_insert = {
@@ -817,12 +835,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 
 				else if (!breakfast && lunch && !dinner) {
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_lunch = document.getElementById("lunchDate").value
 
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 						
 
 					const ready_to_insert = {
@@ -847,12 +863,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 
 				else if (!breakfast && !lunch && dinner) {
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
+					let from_dinner = document.getElementById("dinnerDate").value
 
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 						
 
 					const ready_to_insert = {
@@ -877,18 +891,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 
 				else if (breakfast && !lunch && dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
+					let from_dinner = document.getElementById("dinnerDate").value
 
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 					
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 
 					const ready_to_insert = {
 						"vat": ci,
@@ -913,18 +923,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 
 				else if (!breakfast && lunch && dinner) {
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
+					let from_lunch = document.getElementById("lunchDate").value
+					let from_dinner = document.getElementById("dinnerDate").value
 					
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 					
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 					
 					const ready_to_insert = {
 						"vat": ci,
@@ -974,27 +980,51 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			if (ci_part && childrens > 0) {
 				const nuevoElementoLi = document.createElement('li');
 				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + "), " + "(Niños: " + childrens + ")";
+				nuevoElementoLi.classList.add('fade');
+
+				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
 				listaPadre.appendChild(nuevoElementoLi);
+				setTimeout(function() {
+					nuevoElementoLi.classList.add('show');
+				}, 100);
 				adults_counter += 2
 				childrens_counter = childrens + childrens_counter
 			}
 			else if (ci_part && childrens == 0) {
 				const nuevoElementoLi = document.createElement('li');
 				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + ")";
+				nuevoElementoLi.classList.add('fade');
+
+				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
 				listaPadre.appendChild(nuevoElementoLi);
+				setTimeout(function() {
+					nuevoElementoLi.classList.add('show');
+				}, 100);
 				adults_counter += 2
 				childrens_counter = childrens + childrens_counter
 			}
 			else if (childrens > 0 && !ci_part) {
 				const nuevoElementoLi = document.createElement('li');
 				nuevoElementoLi.textContent = field_name + " (Niños: " + childrens + ")";
+				nuevoElementoLi.classList.add('fade');
+
+				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
 				listaPadre.appendChild(nuevoElementoLi);
+				setTimeout(function() {
+					nuevoElementoLi.classList.add('show');
+				}, 100);
 				childrens_counter = childrens + childrens_counter
 			}
 			else if (childrens == 0 && !ci_part) {
 				const nuevoElementoLi = document.createElement('li');
 				nuevoElementoLi.textContent = field_name;
+				nuevoElementoLi.classList.add('fade');
+
+				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
 				listaPadre.appendChild(nuevoElementoLi);
+				setTimeout(function() {
+					nuevoElementoLi.classList.add('show');
+				}, 100);
 			}
 
 			delete_data_form()
@@ -1002,7 +1032,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 	    _onNextBlogClick: function (ev) {
-			let first_last_name_input = document.getElementById("first_last_name_input")
+			var respuesta = confirm("Por favor, presione OK solo cuando esté seguro de que desea realizar la reservación.");
+			if (respuesta) {
+				// Ejecutar la acción si el usuario hace clic en "Aceptar"
+				let first_last_name_input = document.getElementById("first_last_name_input")
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val()
 			let counterRooms = document.getElementById("counterRooms")
@@ -1024,6 +1057,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}).then(result => {
 					console.log("A ver si funciona")
 					console.log(result)
+
+					window.alert("¡Su reservación ha sido creada con éxito!");
+
+					setTimeout(function() {
+					// Realizar la acción después de 3 segundos
+						window.location.href = '/';
+					}, 3000); // 3000 milisegundos equivalen a 3 segundos
 					return
 				});
 				return
@@ -1116,25 +1156,19 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let lunch = document.getElementById("lunch_check").checked
 				let dinner = document.getElementById("dinner_check").checked
 				if (breakfast && lunch && dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
+					let from_lunch = document.getElementById("lunchDate").value
+					let from_dinner = document.getElementById("dinnerDate").value
 
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 						
 					
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 					
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 
 					this._rpc({
 						route: '/reservation/search_reservation',
@@ -1166,23 +1200,25 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}).then(result => {
 						console.log("A ver si funciona")
 						console.log(result)
+						window.alert("¡Su reservación ha sido creada con éxito!");
+
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 3000); // 3000 milisegundos equivalen a 3 segundos
 						return
 					});
 				}
 				
 
 				else if (breakfast && lunch && !dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
+					let from_lunch = document.getElementById("lunchDate").value
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 
 					this._rpc({
 						route: '/reservation/search_reservation',
@@ -1213,17 +1249,21 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}).then(result => {
 						console.log("A ver si funciona")
 						console.log(result)
+						window.alert("¡Su reservación ha sido creada con éxito!");
+
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 3000); // 3000 milisegundos equivalen a 3 segundos
 						return
 					});
 					
 				}
 
 				else if (breakfast && !lunch && !dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 
 					this._rpc({
 						route: '/reservation/search_reservation',
@@ -1253,18 +1293,22 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}).then(result => {
 						console.log("A ver si funciona")
 						console.log(result)
+						window.alert("¡Su reservación ha sido creada con éxito!");
+
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 3000); // 3000 milisegundos equivalen a 3 segundos
 						return
 					});
 						
 				}
 
 				else if (!breakfast && lunch && !dinner) {
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
+					let from_lunch = document.getElementById("lunchDate").value
 
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 
 					this._rpc({
 						route: '/reservation/search_reservation',
@@ -1294,17 +1338,21 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}).then(result => {
 						console.log("A ver si funciona")
 						console.log(result)
+						window.alert("¡Su reservación ha sido creada con éxito!");
+
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 3000); // 3000 milisegundos equivalen a 3 segundos
 						return
 					});
 						
 				}
 
 				else if (!breakfast && !lunch && dinner) {
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
+					let from_dinner = document.getElementById("dinnerDate").value
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 
 					this._rpc({
 						route: '/reservation/search_reservation',
@@ -1334,24 +1382,26 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}).then(result => {
 						console.log("A ver si funciona")
 						console.log(result)
+						window.alert("¡Su reservación ha sido creada con éxito!");
+
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 3000); // 3000 milisegundos equivalen a 3 segundos
 						return
 					});
 						
 				}
 
 				else if (breakfast && !lunch && dinner) {
-					let from_break = document.getElementById("breakfastDateFrom").value
-					let until_break = document.getElementById("breakfastDateUntil").value
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
+					let from_break = document.getElementById("breakfastDate").value
+					let from_dinner = document.getElementById("dinnerDate").value
 
 					const breakfast_dict = {
-						"from_break": from_break,
-						"until_break": until_break}
+						"from_break": from_break}
 					
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 
 					this._rpc({
 						route: '/reservation/search_reservation',
@@ -1382,24 +1432,27 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}).then(result => {
 						console.log("A ver si funciona")
 						console.log(result)
+						window.alert("¡Su reservación ha sido creada con éxito!");
+
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 3000); // 3000 milisegundos equivalen a 3 segundos
 						return
 					});
 
 				}
 
 				else if (!breakfast && lunch && dinner) {
-					let from_lunch = document.getElementById("lunchDateFrom").value
-					let until_lunch = document.getElementById("lunchDateUntil").value
-					let from_dinner = document.getElementById("dinnerDateFrom").value
-					let until_dinner = document.getElementById("dinnerDateUntil").value
-					
+					let from_lunch = document.getElementById("lunchDate").value
+
+					let from_dinner = document.getElementById("dinnerDate").value
+
 					const lunch_dict = {
-						"from_lunch": from_lunch,
-						"until_lunch": until_lunch}
+						"from_lunch": from_lunch}
 					
 					const dinner_dict = {
-						"from_dinner": from_dinner,
-						"until_dinner": until_dinner}
+						"from_dinner": from_dinner}
 
 					this._rpc({
 						route: '/reservation/search_reservation',
@@ -1430,6 +1483,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}).then(result => {
 						console.log("A ver si funciona")
 						console.log(result)
+						window.alert("¡Su reservación ha sido creada con éxito!");
+
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 3000); // 3000 milisegundos equivalen a 3 segundos
 						return
 					});
 				}
@@ -1461,12 +1520,38 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'showContainerFood': document.getElementById('food_check').checked,
 					},
 				}).then(result => {
-					console.log("A ver si funciona")
-					console.log(result)
+					window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
+
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
 					return
 				});
+
 			}
 
+			} else {
+				// Cancelar la acción si el usuario hace clic en "Cancelar" o cierra el cuadro de diálogo
+				alert("La acción ha sido cancelada. Puede presionar el botón de nuevo cuando esté seguro.");
+				return
+			}
 				
 	    },
 		_render_onNextBlogClick: function (result) {
