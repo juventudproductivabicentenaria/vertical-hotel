@@ -135,6 +135,7 @@
                                     <field name="checkin"/>
                                     <field name="checkout"/>
                                     <field name="name" string="Descripcion"/>
+                                    <field name="institution_from"/>
 
                                 </tree>
                             </field>

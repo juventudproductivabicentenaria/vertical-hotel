@@ -270,96 +270,98 @@ class HotelReservation(models.Model):
         delta = date2 - date1
         return {date1 + timedelta(days=i) for i in range(delta.days + 1)}
 
+    
     def confirm_reservation(self):
         """
-        This method create a new record set for hotel room reservation line
+        This method creates a new record set for hotel room reservation line
         -------------------------------------------------------------------
         @param self: The object pointer
         @return: new record set for hotel room reservation line.
         """
         reservation_line_obj = self.env["hotel.room.reservation.line"]
         vals = {}
+        
         for reservation in self:
             reserv_checkin = reservation.checkin
             reserv_checkout = reservation.checkout
             room_bool = False
-            for line_id in reservation.reservation_line_ids:
-                room = line_id.hotel_room_id
-                if room:
-                    if room.room_reservation_line_ids:
+            
+            if not reservation.reservation_line_ids:  # Si no hay líneas de reserva
+                self.state = "confirm"
+                vals = {
+                    "check_in": reservation.checkin,
+                    "check_out": reservation.checkout,
+                    "state": "assigned",
+                    "reservation_id": reservation.id,
+                }
+                reservation_line_obj.create(vals)
+            else:
+                for line_id in reservation.reservation_line_ids:
+                    room = line_id.hotel_room_id
+                    if room and room.room_reservation_line_ids:
                         for reserv in room.room_reservation_line_ids.search(
-                            [
-                                ("status", "in", ("confirm", "done")),
-                                ("room_id", "=", room.id),
-                            ]
-                        ):
-                            check_in = reserv.check_in
-                            check_out = reserv.check_out
-                            if check_in <= reserv_checkin <= check_out:
-                                room_bool = True
-                            if check_in <= reserv_checkout <= check_out:
-                                room_bool = True
-                            if (
-                                reserv_checkin <= check_in
-                                and reserv_checkout >= check_out
+                                [
+                                    ("status", "in", ("confirm", "done")),
+                                    ("room_id", "=", room.id),
+                                ]
                             ):
-                                room_bool = True
-                            r_checkin = (reservation.checkin).date()
-                            r_checkout = (reservation.checkout).date()
-                            check_intm = (reserv.check_in).date()
-                            check_outtm = (reserv.check_out).date()
-                            range1 = [r_checkin, r_checkout]
-                            range2 = [check_intm, check_outtm]
-                            overlap_dates = self.check_overlap(
-                                *range1
-                            ) & self.check_overlap(*range2)
-                            if room_bool:
-                                raise ValidationError(
-                                    _(
-                                        "You tried to Confirm "
-                                        "Reservation with room"
-                                        " those already "
-                                        "reserved in this "
-                                        "Reservation Period. "
-                                        "Overlap Dates are "
-                                        "%s"
+                                check_in = reserv.check_in
+                                check_out = reserv.check_out
+                                if check_in <= reserv_checkin <= check_out:
+                                    room_bool = True
+                                if check_in <= reserv_checkout <= check_out:
+                                    room_bool = True
+                                if (
+                                    reserv_checkin <= check_in
+                                    and reserv_checkout >= check_out
+                                ):
+                                    room_bool = True
+                                r_checkin = (reservation.checkin).date()
+                                r_checkout = (reservation.checkout).date()
+                                check_intm = (reserv.check_in).date()
+                                check_outtm = (reserv.check_out).date()
+                                range1 = [r_checkin, r_checkout]
+                                range2 = [check_intm, check_outtm]
+                                overlap_dates = self.check_overlap(
+                                    *range1
+                                ) & self.check_overlap(*range2)
+                                if room_bool:
+                                    raise ValidationError(
+                                        _(
+                                            "You tried to Confirm "
+                                            "Reservation with room"
+                                            " those already "
+                                            "reserved in this "
+                                            "Reservation Period. "
+                                            "Overlap Dates are "
+                                            "%s"
+                                        )
+                                        % overlap_dates
                                     )
-                                    % overlap_dates
-                                )
-                            else:
-                                self.state = "confirm"
-                                vals = {
-                                    "room_id": room.id,
-                                    "check_in": reservation.checkin,
-                                    "check_out": reservation.checkout,
-                                    "state": "assigned",
-                                    "reservation_id": reservation.id,
-                                }
-                                room.write(
-                                    {"isroom": False, "status": "occupied"}
-                                )
-                        else:
-                            self.state = "confirm"
-                            vals = {
-                                "room_id": room.id,
-                                "check_in": reservation.checkin,
-                                "check_out": reservation.checkout,
-                                "state": "assigned",
-                                "reservation_id": reservation.id,
-                            }
-                            room.write({"isroom": False, "status": "occupied"})
+                                else:
+                                    self.state = "confirm"
+                                    vals = {
+                                        "room_id": room.id,
+                                        "check_in": reservation.checkin,
+                                        "check_out": reservation.checkout,
+                                        "state": "assigned",
+                                        "reservation_id": reservation.id,
+                                    }
+                                    room.write(
+                                        {"isroom": False, "status": "occupied"}
+                                    )
                     else:
                         self.state = "confirm"
                         vals = {
-                            "room_id": room.id,
                             "check_in": reservation.checkin,
                             "check_out": reservation.checkout,
                             "state": "assigned",
                             "reservation_id": reservation.id,
                         }
-                        room.write({"isroom": False, "status": "occupied"})
-                    reservation_line_obj.create(vals)
+                        reservation_line_obj.create(vals)
+    
         return True
+
 
     def cancel_reservation(self):
         """
@@ -566,7 +568,7 @@ class HotelReservationLine(models.Model):
     is_couple = fields.Boolean("Pareja")
     
     include_room = fields.Boolean("Incluir Habitación")
-    
+    institution_from = fields.Char(string="Institución de donde nos visitan", readonly=False, required=False, default=None)
     couple_id = fields.Many2one(
         "res.partner",
         "Pareja",

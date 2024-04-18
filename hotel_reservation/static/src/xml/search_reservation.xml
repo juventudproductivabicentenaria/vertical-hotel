@@ -86,8 +86,7 @@
                         <div id="container_children" class="container_children_class">
                         </div>
                     </ul>
-                    <img src="/hotel_reservation/static/src/img/logo_alcaravan.png" alt="Logo de Alcaravan" style="position: fixed; right: 6%; top: 40%"></img>
-                    
+                    <img src="/hotel_reservation/static/src/img/logo_alcaravan.png" alt="Logo de Alcaravan" class="d-none d-md-block" style="position: fixed; right: 6%; top: 40%"> </img>
 
                 
                 <p id="includeFood" class="text-start text-primary h5 fw-bold ml-4 mt-5">Acerca de la Comida</p>
