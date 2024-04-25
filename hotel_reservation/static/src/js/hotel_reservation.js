@@ -671,7 +671,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				var field_phone_part = ""
 				var field_email_part = ""
 			}
-
+			const institution = document.getElementById("institution")
 			document.getElementById("par_list_persons").classList.remove("d-none")
 
 			const listaPadre = document.getElementById('list_ppl')
@@ -767,7 +767,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"dinner": dinner_dict,
 						"include_transport": add_transport,
 						"origen": origen,
-						"destiny": destiny
+						"destiny": destiny,
+						'institution_name': institution.value,
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -801,7 +802,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"lunch": lunch_dict,
 						"include_transport": add_transport,
 						"origen": origen,
-						"destiny": destiny
+						"destiny": destiny,
+						'institution_name': institution.value,
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -828,7 +830,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"breakfast": breakfast_dict,
 						"include_transport": add_transport,
 						"origen": origen,
-						"destiny": destiny
+						"destiny": destiny,
+						'institution_name': institution.value,
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -856,7 +859,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"lunch": lunch_dict,
 						"include_transport": add_transport,
 						"origen": origen,
-						"destiny": destiny
+						"destiny": destiny,
+						'institution_name': institution.value,
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -884,7 +888,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"dinner": dinner_dict,
 						"include_transport": add_transport,
 						"origen": origen,
-						"destiny": destiny
+						"destiny": destiny,
+						'institution_name': institution.value,
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -916,7 +921,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"dinner": dinner_dict,
 						"include_transport": add_transport,
 						"origen": origen,
-						"destiny": destiny
+						"destiny": destiny,
+						'institution_name': institution.value,
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -948,7 +954,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"dinner": dinner_dict,
 						"include_transport": add_transport,
 						"origen": origen,
-						"destiny": destiny
+						"destiny": destiny,
+						'institution_name': institution.value,
 					}
 					full_objects.push(ready_to_insert)
 					children_objects = []
@@ -970,7 +977,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					"include_room": include_room,
 					"include_transport": add_transport,
 					"origen": origen,
-					"destiny": destiny
+					"destiny": destiny,
+					'institution_name': institution.value,
 				}
 				full_objects.push(ready_to_insert)
 				children_objects = []
@@ -1055,15 +1063,28 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'ninos': childrens_counter
 					},
 				}).then(result => {
-					console.log("A ver si funciona")
-					console.log(result)
-
 					window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
-					setTimeout(function() {
-					// Realizar la acción después de 3 segundos
-						window.location.href = '/';
-					}, 3000); // 3000 milisegundos equivalen a 3 segundos
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
+						setTimeout(function() {
+						// Realizar la acción después de 3 segundos
+							window.location.href = '/';
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
 					return
 				});
 				return
@@ -1198,15 +1219,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("A ver si funciona")
-						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
 						setTimeout(function() {
 						// Realizar la acción después de 3 segundos
 							window.location.href = '/';
-						}, 3000); // 3000 milisegundos equivalen a 3 segundos
-						return
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					return
 					});
 				}
 				
@@ -1247,15 +1282,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("A ver si funciona")
-						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
 						setTimeout(function() {
 						// Realizar la acción después de 3 segundos
 							window.location.href = '/';
-						}, 3000); // 3000 milisegundos equivalen a 3 segundos
-						return
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					return
 					});
 					
 				}
@@ -1291,15 +1340,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("A ver si funciona")
-						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
 						setTimeout(function() {
 						// Realizar la acción después de 3 segundos
 							window.location.href = '/';
-						}, 3000); // 3000 milisegundos equivalen a 3 segundos
-						return
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					return
 					});
 						
 				}
@@ -1336,15 +1399,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("A ver si funciona")
-						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
 						setTimeout(function() {
 						// Realizar la acción después de 3 segundos
 							window.location.href = '/';
-						}, 3000); // 3000 milisegundos equivalen a 3 segundos
-						return
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					return
 					});
 						
 				}
@@ -1380,15 +1457,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("A ver si funciona")
-						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
 						setTimeout(function() {
 						// Realizar la acción después de 3 segundos
 							window.location.href = '/';
-						}, 3000); // 3000 milisegundos equivalen a 3 segundos
-						return
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					return
 					});
 						
 				}
@@ -1430,15 +1521,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("A ver si funciona")
-						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
 						setTimeout(function() {
 						// Realizar la acción después de 3 segundos
 							window.location.href = '/';
-						}, 3000); // 3000 milisegundos equivalen a 3 segundos
-						return
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					return
 					});
 
 				}
@@ -1481,15 +1586,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("A ver si funciona")
-						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
+					const shadowDiv = document.createElement('div');
+					shadowDiv.style.position = 'fixed';
+					shadowDiv.style.top = '0';
+					shadowDiv.style.left = '0';
+					shadowDiv.style.width = '100%';
+					shadowDiv.style.height = '100%';
+					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
 
+					// Agregar el div a la página
+					document.body.appendChild(shadowDiv);
+
+					// Bloquear la funcionalidad del sitio
+					shadowDiv.addEventListener('click', function(event) {
+					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+					event.stopPropagation(); // detener la propagación de eventos
+					});
 						setTimeout(function() {
 						// Realizar la acción después de 3 segundos
 							window.location.href = '/';
-						}, 3000); // 3000 milisegundos equivalen a 3 segundos
-						return
+						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					return
 					});
 				}
 

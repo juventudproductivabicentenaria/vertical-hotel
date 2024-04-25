@@ -324,6 +324,7 @@ class Website(http.Controller):
                             children_ids = []
                             
                         else:
+                            print(data)
                             HotelReservationLine.create({
                                 "line_id": new_reservation.id,
                                 "is_son": True,
