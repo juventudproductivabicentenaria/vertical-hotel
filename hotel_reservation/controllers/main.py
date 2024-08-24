@@ -90,7 +90,12 @@ class Website(http.Controller):
                 warehouse_id = 1
             HotelReservation = request.env['hotel.reservation'].sudo()
             room = request.env['hotel.room'].sudo().search([],limit=1)
-
+            hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos)
+            print("hotel_reservation")
+            print("hotel_reservation")
+            print(hotel_reservation)
+            if not hotel_reservation:
+                return {"error": "No se encontro ninguna habitacion disponible"}
             new_reservation = HotelReservation.create({
                 "partner_id": user_id.partner_id.id,
                 "partner_invoice_id": user_id.partner_id.id,
@@ -439,7 +444,11 @@ class Website(http.Controller):
             warehouse_id = 1
         HotelReservation = request.env['hotel.reservation'].sudo()
         room = request.env['hotel.room'].sudo().search([],limit=1)
-
+        hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, 0)
+        print("hotel_reservation")
+        print("hotel_reservation")
+        print(hotel_reservation)
+        print((asds))
         new_reservation = HotelReservation.create({
             "partner_id": user_id.partner_id.id,
             "partner_invoice_id": user_id.partner_id.id,
