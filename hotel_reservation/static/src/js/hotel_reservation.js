@@ -227,7 +227,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 		_add_roomMate: function(ev) {
-			let container = document.getElementById("container_roomMate")
+			let container = $("#container_roomMate")
 			let container_row = document.getElementById("row_partner_div")
 			let roomMateCheck = document.getElementById("roomMate_check")
 			if (!roomMateCheck.checked) {
@@ -236,27 +236,27 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				container.innerHTML = ""
 				return
 			}
-			const input = document.createElement("input")
-			input.id = "identification_VAT_partner"
-			input.type = "text"
-			input.placeholder = "Cédula de Identidad o RIF"
-			input.oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
-			input.classList.add("form-control", "mt-4", "ml-4")
+			container.r
+			// const input = document.createElement("input")
+			// input.id = "identification_VAT_partner"
+			// input.type = "text"
+			// input.placeholder = "Cédula de Identidad o RIF"
+			// input.oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
+			// input.classList.add("form-control", "mt-4", "ml-4")
 
-			const button = document.createElement("button");
-			button.type = "button";
-			button.id = "searchRoommate";
-			button.classList.add("btn", "btn-secondary", "mb-5", "ml-4", "mt-4");
-			button.textContent = "Buscar";
-
+			// const button = document.createElement("button");
+			// button.type = "button";
+			// button.id = "searchRoommate";
+			// button.classList.add("btn", "btn-secondary", "mb-5", "ml-4", "mt-4");
+			// button.textContent = "Buscar";
 			
-			container.innerHTML = `<div class="seccion-superior-roomMate mt-3 mb-3">
-			<input size="40" id="first_last_name_roomMate_input" disabled="true" type="text" placeholder="Nombre y Apellido" class="form-control ml-4"></input>
-			<input id="phone_input_roomMate" type="text" disabled="true" placeholder="Teléfono" class="form-control"></input>
-			<input size="40" id="email_input_roomMate" disabled="true" type="text" placeholder="Correo Electrónico" class="form-control"></input>
-		</div>`
-			container_row.prepend(button);
-			container_row.prepend(input);
+		// 	container.innerHTML = `<div class="seccion-superior-roomMate mt-3 mb-3">
+		// 	<input size="40" id="first_last_name_roomMate_input" disabled="true" type="text" placeholder="Nombre y Apellido" class="form-control ml-4"></input>
+		// 	<input id="phone_input_roomMate" type="text" disabled="true" placeholder="Teléfono" class="form-control"></input>
+		// 	<input size="40" id="email_input_roomMate" disabled="true" type="text" placeholder="Correo Electrónico" class="form-control"></input>
+		// </div>`
+			// container_row.prepend(button);
+			// container_row.prepend(input);
 		},
 
 		_add_children: function(ev) {
@@ -1039,16 +1039,65 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 		},
 
+		verificationDataError: function (ev) {
+			var self = this;
+			var identification_vat = $('#identification_VAT').val()
+			var first_last_name_input = $('#first_last_name_input').val()
+			var phone_input = $('#phone_input').val()
+			var email_input = $('#email_input').val()
+			var room_check = $('#room_check').is(':checked')
+			var food_check = $('#food_check').is(':checked')
+		
+			var $error_data = $('#error_data')
+			if (identification_vat == null || identification_vat == undefined || identification_vat == '') {
+				var data = {"title": "* Por favor, introduzca el cédula de identidad o rif."};
+				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
+				return true
+			}
+			if (first_last_name_input == null || first_last_name_input == undefined || first_last_name_input == '') {
+				var data = {"title": "* Por favor, introduzca el nombre y apellido."};
+				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
+				return true
+			}
+			if (phone_input == null || phone_input == undefined || phone_input == '') {
+				var data = {"title": "* Por favor, introduzca el teléfono."};
+				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
+				return true
+			}
+			if (email_input == null || email_input == undefined || email_input == '') {
+				var data = {"title": "* Por favor, introduzca el correo electrónico."};
+				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
+				return true
+			}
+			if (room_check == null && food_check == null || room_check == false && food_check == false) {
+				var data = {"title": "* Por favor, seleccione al menos una opción de Comida o Habitación."};
+				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
+				return true
+			}
+			return false
+		},
 	    _onNextBlogClick: function (ev) {
+			var self = this;
+			var $error_data = $('#error_data')
+			$error_data.hide();
 			var respuesta = confirm("Por favor, presione OK solo cuando esté seguro de que desea realizar la reservación.");
 			if (respuesta) {
 				// Ejecutar la acción si el usuario hace clic en "Aceptar"
 				let first_last_name_input = document.getElementById("first_last_name_input")
+				
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val()
 			let counterRooms = document.getElementById("counterRooms")
-			var self = this;
 
+			var error = this.verificationDataError(ev);
+			console.log('error')
+			console.log(error)
+			if (error) {
+		
+				$error_data.show();
+				return
+			}
+			
 			if (full_objects.length > 0) {
 				if (first_last_name_input.value != "") {
 					document.getElementById("add_other_person").click()

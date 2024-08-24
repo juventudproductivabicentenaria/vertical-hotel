@@ -12,7 +12,7 @@ odoo.define('hotel_reservation.HomeReservations', function (require) {
 
     start: function () {
       const initBg = (autoplay = true) => {
-        const bgImgsNames = ['san_juan1.jpeg', 'san_juan2.jpg', 'san_juan3.jpeg'];
+        const bgImgsNames = ['san_juan1.jpeg', 'san_juan2.png', 'san_juan3.jpg'];
         const bgImgs = bgImgsNames.map(img => "/hotel_reservation/static/src/img/" + img);
   
         $.backstretch(bgImgs, {duration: 4000, fade: 500});

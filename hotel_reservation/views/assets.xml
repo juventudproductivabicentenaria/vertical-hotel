@@ -59,6 +59,10 @@
                 rel="stylesheet"
                 href="/hotel_reservation/static/src/css/font-awesome.min.css"
             />
+            <link
+                rel="stylesheet"
+                href="/hotel_reservation/static/src/css/room_summary.css"
+            />
         </xpath>
         <xpath expr="link[last()]" position="after">
             <link

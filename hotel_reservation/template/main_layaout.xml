@@ -8,9 +8,10 @@
                     data-scroll-background-ratio="1" data-snippet="s_cover" 
                     data-name="Cover" style="background-position: 0% 26.9058%; position: relative;" 
                     data-oe-shape-data="{&quot;shape&quot;:&quot;web_editor/Wavy/11&quot;,&quot;flip&quot;:[]}">
-                    <span class="s_parallax_bg oe_img_bg" style="background-image:url('/hotel_reservation/static/src/img/san_juan1.jpeg');"
+                    <span class="s_parallax_bg oe_img_bg" 
+                        style="background-image:url('/hotel_reservation/static/src/img/san_juan2.jpeg');"
                         data-scroll-background-ratio="0" data-original-id="749" 
-                        data-original-src="/hotel_reservation/static/src/img/san_juan1.jpeg" 
+                        data-original-src="/hotel_reservation/static/src/img/san_juan2.jpeg" 
                         data-mimetype="image/jpeg" data-resize-width="1920"></span>
                     <div class="o_we_shape o_web_editor_Wavy_11" style=""></div>
                     <div class="s_allow_columns container">

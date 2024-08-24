@@ -18,10 +18,28 @@
     </t>
 
     <t t-name="hotel_reservation.error_data">
-        <span id="error_data" class="w-auto text-danger">
+        <span id="error_data" class="w-auto text-black">
             <t t-esc="title"/>
         </span>
     </t>
+    <t t-name="hotel_reservation.add_other_person">
+        <div class="m-4" id="add_other_person">
+            <div class="row">
+                <input id="identification_VAT_partner" type="text"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                    placeholder="Cédula de Identidad o RIF" 
+                    class="form-control"/>
+                <button type="button" id="searchRoommate" class="btn bottom-type-1 ml-3">Buscar</button>
+            </div>
+            <div class="seccion-superior-roomMate mt-3">
+                <input size="40" id="first_last_name_roomMate_input" disabled="true" type="text" placeholder="Nombre y Apellido" class="form-control"></input>
+                <input id="phone_input_roomMate" type="text" disabled="true" placeholder="Teléfono" class="form-control"></input>
+                <input size="40" id="email_input_roomMate" disabled="true" type="text" placeholder="Correo Electrónico" class="form-control"></input>
+            </div>
+        </div>
+       
+    </t>
+
     <div t-name="hotel_reservation.search_reservation">
         <form
             id="search_reservation_form"
@@ -31,159 +49,93 @@
                 enctype="multipart/form-data"
                 data-model_name="">
             <div class="container-fluid p-3" style="background-color: #dee2e6; border-radius: 50px;" id="main_container">
-                <p class="text-center text-primary h1 fw-bold mb-5">Solicitud de Reservación</p>
-                <div class="d-flex align-items-center bg-white">
-                    <div class="ml-2">
-                        <label class="text_adult" for="request_date_from">Fecha Desde</label>
-                        <input type="date" class="border rounded p-2" id="dateFrom" name="request_date_from" required="1" t-att-value="date_from"/>
+                <h2 class="text-center text-title-1 mb-5">SOLICITUD DE RESERVACIÓN</h2>
+                <div class="row m-4">
+                    <div class="w-25">
+                        <label class="text-type-1 justify-content-start" for="request_date_from">Fecha Desde</label>
+                        <input type="date" class="form-control " 
+                            id="dateFrom" name="request_date_from" required="1" t-att-value="date_from"/>
                     </div>
-                    <div class="ml-5">
-                        <label class="text_adult" for="request_date_to">Fecha Hasta</label>
-                        <input type="date" class="border rounded p-2" id="date_until" name="request_date_until" required="1" t-att-value="date_until"/>
+                    <div class=" w-25">
+                        <label class=" text-type-1 justify-content-start" for="request_date_to">Fecha Hasta</label>
+                        <input type="date" class="form-control" 
+                            id="date_until" name="request_date_until" required="1" t-att-value="date_until"/>
                     </div>
-                    <div class="border bg-light ml-5" style="width: 500px; height: 50px;">
-                        <p id="counterRooms" class="text-center" style="font-size:30px;">0 Habitaciones</p>
+                    <div class=" w-25">
+                        <label class=" text-type-1 justify-content-start" for="request_counterRooms">Habitaciones</label>
+                        <!-- <input type="text" class="border rounded p-2" id="counterRooms" name="request_counterRooms"/> -->
+                        <p id="counterRooms" class="text-type-1">0</p>
                     </div>
-                      
-
+                    <!-- <div class="border bg-light ml-5" style="width: 500px; height: 50px;">
+                        <p id="counterRooms" class="text-center" style="font-size:25px;">0 Habitaciones </p>
+                    </div> -->
                 </div>
                 <br />
-                <br />
-                <p class="text-center text-secondary h2 fw-bold mb-3">Datos del huesped</p>
-                <div class="row">
-                    <input id="identification_VAT" type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" placeholder="Cédula de Identidad o RIF" class="form-control mt-3 ml-4"></input>
-                    <button type="button" id="searchPerson" class="btn btn-secondary mb-5 ml-4 mt-3">Buscar</button>
-                    <div id="container_add" class="container">
-                        <div class="seccion-superior">
-                            <input size="40" id="first_last_name_input" type="text" placeholder="Nombre y Apellido" class="form-control ml-4" disabled="true"></input>
-                            <input id="phone_input" type="text" placeholder="Teléfono" class="form-control" disabled="true"></input>
-                        </div>
-                        <div class="seccion-inferior mt-2">
-                            <input size="40" id="email_input" type="text" placeholder="Correo Electrónico" class="form-control ml-4" disabled="true"></input>
-                            <input size="30" id="institution" type="text" placeholder="¿De qué institución nos visita?" class="form-control" disabled="true"></input>
-                        </div>
+                <h2 class="text-center text-title-1 mb-3">DATOS DEL HUESPED</h2>
+                <div class="m-4">
+                    <!-- * Requerido -->
+                    <div class="row">
+                        <input id="identification_VAT" type="text"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')" 
+                            placeholder="Cédula de Identidad o RIF" 
+                            class="form-control"/>
+                        <button type="button" id="searchPerson" class="btn bottom-type-1 ml-3">Buscar</button>
                     </div>
-                </div>
-                <br />
-                
-                <ul class="list-group mb-3 mt-3">
-                    <li class="list-group-item d-flex align-items-center w-25 mb-4 bg-primary text-light border border-secondary" style="border-radius: 20px;">
-                        <label class="form-check-label mr-2" for="room_check">Incluir Habitación</label>
-                        <input class="form-check-input" type="checkbox" id="room_check"> </input>
-                        </li>
-                        <li class="list-group-item d-flex align-items-center w-25 bg-primary text-light border border-secondary" style="border-radius: 20px;">
-                            <label class="form-check-label mr-2" for="roomMate_check">Acompañante</label>
-                            <input value="Acompañante" class="form-check-input" type="checkbox" id="roomMate_check"> </input>
-                        </li>
-                        <div class="row" id="row_partner_div">
-                            <div id="container_roomMate" class="container_roomMate_class">
-                            </div>
-                        </div>
-                        <li class="list-group-item d-flex align-items-center mt-4 w-25 bg-primary text-light border border-secondary" style="border-radius: 20px;">
-                            <label class="form-check-label mr-2" for="children_check">Niños</label>
-                            <input class="form-check-input" type="checkbox" id="children_check"> </input>
-                        </li>
-                        <div id="container_children" class="container_children_class">
-                        </div>
-                    </ul>
-                    <img src="/hotel_reservation/static/src/img/logo_alcaravan.png" alt="Logo de Alcaravan" class="d-none d-md-block" style="position: fixed; right: 6%; top: 40%"> </img>
-
-                
-                <p id="includeFood" class="text-start text-primary h5 fw-bold ml-4 mt-5">Acerca de la Comida</p>
-                <div class="d-flex align-items-center mb-2">
-                    <ul class="list-group mb-3 mt-3">
-                        <li class="list-group-item d-flex align-items-center bg-primary text-light border border-secondary" style="border-radius: 20px;">
-                            <label class="form-check-label mr-2" for="food_check">Incluir Comida</label>
-                            <input value="Incluir Comida" class="form-check-input" type="checkbox" id="food_check"> </input>
-                        </li>
-                    </ul>
-                </div>
-                <div id="breakfast_container">
-
-                </div>
-
-                <p id="include_transport" class="text-start text-primary h5 fw-bold ml-4 mt-4">Acerca del Transporte</p>
-                <div class="d-flex align-items-center mb-2">
-                    <ul class="list-group mb-3 mt-3">
-                        <li class="list-group-item d-flex align-items-center bg-primary text-light border border-secondary" style="border-radius: 20px;">
-                            <label class="form-check-label mr-2" for="transport_check">Requerir Transporte</label>
-                            <input value="Incluir Transporte" class="form-check-input" type="checkbox" id="transport_check"> </input>
-                        </li>
-                    </ul>
-                </div>
-                <div class="d-flex align-items-center mb-2" id="container_transport">
-                    
-                </div>
-                <!-- <div class="d-flex align-items-center mb-2">
-                    <ul class="list-group mb-3 mt-3">
-                        <li class="list-group-item d-flex align-items-center bg-primary text-light border border-secondary" style="border-radius: 20px;">
-                            <label class="form-check-label mr-2" for="vehicle_check">Posee Vehículo</label>
-                            <input value="Posee Vehículo" class="form-check-input" type="checkbox" id="vehicle_ckeck"> </input>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- <div class="row">
-                    <input id="showContainerRoom" type="checkbox" class="border rounded p-2"/>
-                    <label class="text_title">Reservacion de habitaciones</label>
-                </div>
-                <div id="roomContainer" >
-                    <div id="number_rooms" class="row justify-content-around">
-                        <label class="text_adult">Habitaciones</label>
-                        <button id="number_rooms_counter" data-type="increase" class="button_cantidad btn-sm" type="button">
-                            <i class="fa fa-plus-circle fa-2x" ></i>
-                        </button>
-                        <label  class="text_adult" id="result_rooms">0</label>
-                        <button id="number_rooms_counter" data-type="decrease" class="button_cantidad btn-sm" type="button">
-                            <i class="fa fa-minus-circle fa-2x" ></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <input  id="showContainerFood" type="checkbox" class="border rounded p-2"/>
-                    <label class="text_title">Reservacion de Comida</label>
-                </div>
-                <div id="foodContainer" >
-                    <div id="calendar"></div>
-                    <br/>
-                    <div id="number_foods" class="row justify-content-around">
-                        <label class="text_adult">Desayuno</label>
-                        <button id="" data-type="increase" data-food="breakfast" class="button_cantidad btn-sm number_foods_counter" type="button">
-                            <i class="fa fa-plus-circle fa-2x" ></i>
-                        </button>
-                        <label  class="text_adult" id="result_breakfast">0</label>
-                        <button data-type="decrease" data-food="breakfast" class="button_cantidad btn-sm number_foods_counter" type="button">
-                            <i class="fa fa-minus-circle fa-2x" ></i>
-                        </button>
-                        <label class="text_adult">Almuerzo</label>
-                        <button data-type="increase" data-food="lunch" class="button_cantidad btn-sm number_foods_counter" type="button">
-                            <i class="fa fa-plus-circle fa-2x" ></i>
-                        </button>
-                        <label  class="text_adult" id="result_lunch">0</label>
-                        <button data-type="decrease" data-food="lunch" class="button_cantidad btn-sm number_foods_counter" type="button">
-                            <i class="fa fa-minus-circle fa-2x" ></i>
-                        </button>
-                    </div>
-                    <div id="number_foods" class="row justify-content-around">
-                        <label class="text_adult">Cena</label>
-                        <button data-type="increase" data-food="dinner" class="button_cantidad btn-sm number_foods_counter" type="button">
-                            <i class="fa fa-plus-circle fa-2x" ></i>
-                        </button>
-                        <label  class="text_adult" id="result_dinner">0</label>
-                        <button data-type="decrease" data-food="dinner" class="button_cantidad btn-sm number_foods_counter" type="button">
-                            <i class="fa fa-minus-circle fa-2x" ></i>
-                        </button>
+                    <div id="identification_user" class="row mt-3">
+                        <input size="30" id="first_last_name_input" 
+                            type="text" placeholder="Nombre y Apellido" class="form-control" disabled="true"/>
+                        <input size="20" id="phone_input" 
+                            type="text" placeholder="Teléfono" class="form-control" disabled="true"/>
+                        <input size="30" id="email_input" 
+                            type="text" placeholder="Correo Electrónico" class="form-control" disabled="true"/>
+                        <input size="20" id="institution" 
+                            type="text" placeholder="¿De qué institución nos visita?" class="form-control" disabled="true"/>
                     </div>
                 </div>
                 <br />
+                <div class="row m-4">
+                    <div class="d-flex align-items-center w-25">
+                        <label class=" mr-2 text-type-1" for="room_check">Incluir Habitación</label>
+                        <input class="form-check-input " type="checkbox" id="room_check"/>
+                    </div>
+                    <div class="d-flex align-items-center w-25">
+                        <label class=" mr-2 text-type-1" for="roomMate_check">Acompañante</label>
+                        <input value="Acompañante" class="form-check-input" type="checkbox" id="roomMate_check"/>
+                    </div>
+                    <div class="d-flex align-items-center w-25">
+                        <label class=" mr-2 text-type-1" for="children_check">Niños</label>
+                        <input class="form-check-input" type="checkbox" id="children_check"/>
+                    </div>
+                </div>
+
+                <div class="row" id="row_partner_div">
+                    <div id="container_roomMate" class="container_roomMate_class"></div>
+                </div>
+                <div id="container_children" class="container_children_class"></div>
+
+                <!-- <p id="includeFood" class="text-start text-primary h5 fw-bold ml-4 mt-5">Acerca de la Comida</p> -->
+                <div class="row m-4">
+                    <div class="d-flex align-items-center w-25">
+                        <label class=" mr-2 text-type-1" for="food_check">Incluir Comida</label>
+                        <input value="Incluir Comida" class="form-check-input" type="checkbox" id="food_check"/>
+                    </div>
+                    <div class="d-flex align-items-center w-25">
+                        <label class=" mr-2 text-type-1" for="transport_check">Requerir Transporte</label>
+                        <input value="Incluir Transporte" class="form-check-input" type="checkbox" id="transport_check"/>
+                    </div>
+                </div>
+                <div id="breakfast_container"> </div>
+                <div class="d-flex align-items-center mb-2" id="container_transport"></div>
+
                 <div class="row justify-content-center">
                     <span id="error_data" class=""></span>
-                </div> -->
+                </div> 
                 <div class="row justify-content-center">
-                    <button id="busqueda" type="button" class="btn btn-primary mb-2 mr-sm-2" href="#">Realizar Reservación</button>
-                    <button id="add_other_person" type="button" class="btn btn-secondary mb-2 mr-sm-2" href="#">Agregar otro(s) huesped(es)</button>
+                    <button id="busqueda" type="button" class="btn bottom-type-1 mb-2 mr-sm-2" href="#">Realizar Reservación</button>
+                    <button id="add_other_person" type="button" class="btn bottom-type-1 mb-2 mr-sm-2" href="#">Agregar otro(s) huesped(es)</button>
                 </div>
-                <div id="list_of_people">
-                    <p id="par_list_persons" class="d-none mt-4 text-center">
+                <div id="list_of_people" class="m-4">
+                    <p id="par_list_persons" class="d-none text-center">
                         <strong>Lista de personas para la reservación</strong>
                     </p>
                         <ul id="list_ppl">
