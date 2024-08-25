@@ -1168,11 +1168,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'ninos': childrens_counter
 					},
 				}).then(result => {
+					self.unblockUI(ev);
 					if (result.error_validation) {
 						self.MessageDialog(result.title_error, result.content_error)
 						return
 					};
-					self.unblockUI(ev);
+					window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 				});
 				return
 			}
@@ -1306,11 +1307,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
 							return
 						};
-						self.unblockUI(ev);
+						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						return
 					});
 				}
@@ -1352,12 +1354,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
 							return
 						};
-						self.unblockUI(ev);
-						
+						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						return
 					});
 					
@@ -1394,12 +1396,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then((result) => {
-					if (result.error_validation) {
-						self.MessageDialog(result.title_error, result.content_error)
+						self.unblockUI(ev);
+						if (result.error_validation) {
+							self.MessageDialog(result.title_error, result.content_error)
+							return
+						};
+						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						return
-					};
-					self.unblockUI(ev);
-					return
 					});
 						
 				}
@@ -1436,11 +1439,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
 							return
 						};
-						self.unblockUI(ev);
+						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						return
 					});
 						
@@ -1477,11 +1481,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
 							return
 						};
-						self.unblockUI(ev);
+						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						return
 					});
 						
@@ -1524,11 +1529,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
 							return
 						};
-						self.unblockUI(ev);
+						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						return
 					});
 
@@ -1572,11 +1578,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
 							return
 						};
-						self.unblockUI(ev);
+						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						return
 					});
 				}
@@ -1612,6 +1619,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						self.MessageDialog(result.title_error, result.content_error)
 						return
 					};
+					window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 					return
 				});
 

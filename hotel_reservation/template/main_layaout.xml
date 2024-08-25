@@ -38,14 +38,16 @@
                     <div class="wrapper wrapper--w960 font-robo">
                         <t t-foreach="reservations" t-as="reservation">
                             <div class="row row-space">
-                                <div class="banner  col-sm-4 col-md-8" style="height: 20px; transform: translateY(-20%);">
+                                <!-- <div class="banner  col-sm-4 col-md-8" style="height: 20px; transform: translateY(-20%);">
                                     <strong style="font-family:sans-serif; font-size: 1.7em; color:rgba(253, 0, 0, 0.452);;">Recordatorio:</strong>
                                     <div style="font-family: 'Quicksand', sans-serif; font-size: 1.7em;">
                                         EL horario de entrada es de 04:00 pm hasta las 12:00 pm
                                     </div>
-                                </div>
+                                </div> -->
                                 <div style="transform: translateX(5%);">
-                                    <a href="/reservation">
+                                    <a href="
+                                    
+                                    ">
                                         <button class="btn btn-primary" style="border-radius: 12px;">
                                             <i class="fa fa-arrow-circle-left fa-2x"></i>
                                         </button>

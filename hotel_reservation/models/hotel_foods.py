@@ -31,6 +31,12 @@ class HotelFoods(models.Model):
         states={"draft": [("readonly", False)]}
     )
 
+    date = fields.Date(
+        string="Fecha",
+        required=True,
+        readonly=True,
+        states={"draft": [("readonly", False)]}
+    )
     hotel_reservation = fields.Many2one(
         "hotel.reservation",
         "Reservacion",

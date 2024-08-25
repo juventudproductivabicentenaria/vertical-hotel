@@ -27,6 +27,8 @@ class HotelRoom(models.Model):
         delegate=True,
         ondelete="cascade",
     )
+    
+
     floor_id = fields.Many2one(
         "hotel.floor", "Floor No", help="At which floor the room is located."
     )

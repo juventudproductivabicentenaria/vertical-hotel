@@ -123,6 +123,7 @@
 
                             <field name='foods_ids'>
                                 <tree string="">
+                                    <field name="code"/>
                                     <field name="dates"/>
                                     <field name="state"/>
                                     <field name="hotel_reservation"/>
@@ -135,6 +136,7 @@
 
                             <field name='transport_ids'>
                                 <tree string="">
+                                    <field name="code"/>
                                     <field name="move_from"/>
                                     <field name="move_to"/>
                                     <field name="hotel_reservation"/>
