@@ -11,14 +11,14 @@
                     <field name="state" widget="statusbar" />
                 </header>
                 <sheet>
-                    <label for='line_id' string="Reservacion" />
                     <h1>
-                        <field name="line_id" class="oe_inline" />
-                        <field name="include_room" string="Incluir habitación"/>
+                        <field name="code" string="Codigo" class="oe_inline" />
                     </h1>
                     <group>
                         <group colspan="4" col="4">
-                            <field name="hotel_room_id" />
+                            <field name="line_id" string="Reservacion" readonly="1"/>
+                            <field name="include_room" string="Incluir habitación"/>
+                            <field name="hotel_room_id" attrs="{'invisible': [('include_room', '!=', True)]}" />
                             <field name="checkin" />
                             <field name="is_son" />
                             <field name="is_couple" />

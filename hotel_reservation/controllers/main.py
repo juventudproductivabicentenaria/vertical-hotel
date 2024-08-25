@@ -86,13 +86,11 @@ class Website(http.Controller):
         if warehouse_id == False:
             warehouse_id = 1
         hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, 0)
-        print("hotel_reservation")
-        print("hotel_reservation")
-        print(hotel_reservation)
-        if hotel_reservation:
+        if not hotel_reservation:
             return {
-                "data": "error",
-                'error': "No se encontro ninguna habitacion disponible",
+                "error_validation": True,
+                "title_error": "Error al crear la reservación",
+                "content_error": "No se encontro ninguna habitacion disponible entre las fechas seleccionadas.",
                 }
                 
         if "full_data" in kwargs:
@@ -111,22 +109,31 @@ class Website(http.Controller):
                 "children": ninos,
                 "token": tools.default_hash()
             })
-        
-            reservation_line_partners = []
 
+            reservation_partner_ids = []
+            reservation_line_partners = []
+            total_children = 0
             HotelReservationLine = request.env['hotel_reservation.line'].sudo()
             for data in kwargs["full_data"]:
                 partner = request.env['res.partner'].search([('vat', '=', data["vat"])])
-                
+                if partner:
+                    reservation_partner_ids.append( {
+                        "vat": partner.vat,
+                        "name": partner.name,
+                        "email": partner.email,
+                        "phone": partner.phone,
+                    })
                 children_ids = []
-                
                 if not partner:
-                    new_partner = request.env['res.partner'].create({
-                    "vat": data["vat"],
-                    "name": data["name"],
-                    "email": data["email"],
-                    "phone": data["phone"],
-                })
+                    partner_vals = {   
+                        "vat": data["vat"],
+                        "name": data["name"],
+                        "email": data["email"],
+                        "phone": data["phone"],
+                    }
+                    new_partner = request.env['res.partner'].create({partner_vals})
+                    reservation_partner_ids.append(partner_vals)
+
                     if 'childrens' in data and data["second_vat"] == "":
                         for chil in data['childrens']:
                             new_children = request.env['res.partner'].create({
@@ -134,10 +141,11 @@ class Website(http.Controller):
                                 "phone": chil["telefono"],
                             })
                             children_ids.append(new_children.id)
+                            total_children += 1
                             
-                        HotelReservationLine.create({
+                        reservation_line = HotelReservationLine.create({
                             "line_id": new_reservation.id,
-                            "is_son": True,
+                            "is_son": True if len(children_ids) > 0 else False,
                             "is_couple": False,
                             "partner_id": new_partner.id,
                             "checkin": new_reservation.checkin,
@@ -155,20 +163,29 @@ class Website(http.Controller):
                                 "phone": chil["telefono"],
                             })
                             children_ids.append(new_children.id)
+                            total_children += 1
                             
                         partner_2 = request.env['res.partner'].search([('vat', '=', data["second_vat"])])
-                        
+                        if partner_2:
+                            reservation_partner_ids.append( {
+                                "vat": partner_2.vat,
+                                "name": partner_2.name,
+                                "email": partner_2.email,
+                                "phone": partner_2.phone,
+                            })
                         if not partner_2:
-                            new_partner_2 = request.env['res.partner'].create({
-                            "vat": data["second_vat"],
-                            "name": data["second_name"],
-                            "email": data["second_email"],
-                            "phone": data["second_phone"],
-                        })
+                            partner_vals = {
+                                "vat": data["second_vat"],
+                                "name": data["second_name"],
+                                "email": data["second_email"],
+                                "phone": data["second_phone"],
+                            }
+                            new_partner_2 = request.env['res.partner'].create({partner_vals})
+                            reservation_partner_ids.append(partner_vals)
                             
-                            HotelReservationLine.create({
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
-                                "is_son": True,
+                                "is_son": True if len(children_ids) > 0 else False,
                                 "is_couple": True,
                                 "partner_id": new_partner.id,
                                 "couple_id": new_partner_2.id,
@@ -181,9 +198,9 @@ class Website(http.Controller):
                             children_ids = []
                             
                         else:
-                            HotelReservationLine.create({
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
-                                "is_son": True,
+                                "is_son": True if len(children_ids) > 0 else False,
                                 "is_couple": True,
                                 "partner_id": new_partner.id,
                                 "couple_id": partner_2.id,
@@ -196,7 +213,7 @@ class Website(http.Controller):
                             children_ids = []
                             
                     elif not 'childrens' in data and data["second_vat"] == "":
-                        HotelReservationLine.create({
+                        reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
                                 "is_son": False,
                                 "is_couple": False,
@@ -211,13 +228,15 @@ class Website(http.Controller):
                         partner_2 = request.env['res.partner'].search([('vat', '=', data["second_vat"])])
                         
                         if not partner_2:
-                            new_partner_2 = request.env['res.partner'].create({
-                            "vat": data["second_vat"],
-                            "name": data["second_name"],
-                            "email": data["second_email"],
-                            "phone": data["second_phone"],
-                        })
-                            HotelReservationLine.create({
+                            partner_vals = {
+                                "vat": data["second_vat"],
+                                "name": data["second_name"],
+                                "email": data["second_email"],
+                                "phone": data["second_phone"],
+                            }
+                            new_partner_2 = request.env['res.partner'].create({partner_vals})
+                            reservation_partner_ids.append(partner_vals)
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
                                 "is_son": False,
                                 "is_couple": True,
@@ -231,7 +250,7 @@ class Website(http.Controller):
                             children_ids = []
                             
                         else:
-                            HotelReservationLine.create({
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
                                 "is_son": False,
                                 "is_couple": True,
@@ -286,10 +305,11 @@ class Website(http.Controller):
                                 "phone": chil["telefono"],
                             })
                             children_ids.append(new_children.id)
+                            total_children += 1
                             
-                        HotelReservationLine.create({
+                        reservation_line = HotelReservationLine.create({
                             "line_id": new_reservation.id,
-                            "is_son": True,
+                            "is_son": True if len(children_ids) > 0 else False,
                             "is_couple": False,
                             "partner_id": partner.id,
                             "checkin": new_reservation.checkin,
@@ -306,20 +326,23 @@ class Website(http.Controller):
                                 "phone": chil["telefono"],
                             })
                             children_ids.append(new_children.id)
+                            total_children += 1
                             
                         partner_2 = request.env['res.partner'].search([('vat', '=', data["second_vat"])])
                         
                         if not partner_2:
-                            new_partner_2 = request.env['res.partner'].create({
-                            "vat": data["second_vat"],
-                            "name": data["second_name"],
-                            "email": data["second_email"],
-                            "phone": data["second_phone"],
-                        })
-                            
-                            HotelReservationLine.create({
+                            partner_vals = {
+                                "vat": data["second_vat"],
+                                "name": data["second_name"],
+                                "email": data["second_email"],
+                                "phone": data["second_phone"],
+                            }
+                            new_partner_2 = request.env['res.partner'].create({partner_vals})
+                            reservation_partner_ids.append(partner_vals)
+
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
-                                "is_son": True,
+                                "is_son": True if len(children_ids) > 0 else False,
                                 "is_couple": True,
                                 "partner_id": partner.id,
                                 "couple_id": new_partner_2.id,
@@ -333,9 +356,9 @@ class Website(http.Controller):
                             
                         else:
                             print(data)
-                            HotelReservationLine.create({
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
-                                "is_son": True,
+                                "is_son": True if len(children_ids) > 0 else False,
                                 "is_couple": True,
                                 "partner_id": partner.id,
                                 "couple_id": partner_2.id,
@@ -349,7 +372,7 @@ class Website(http.Controller):
                             
                             
                     elif not 'childrens' in data and data["second_vat"] == "":
-                        HotelReservationLine.create({
+                        reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
                                 "is_son": False,
                                 "is_couple": False,
@@ -362,15 +385,24 @@ class Website(http.Controller):
                         
                     elif not 'childrens' in data and data["second_vat"] != "":
                         partner_2 = request.env['res.partner'].search([('vat', '=', data["second_vat"])])
-                        
+                        if partner_2:
+                            reservation_partner_ids.append( {
+                                "vat": partner_2.vat,
+                                "name": partner_2.name,
+                                "email": partner_2.email,
+                                "phone": partner_2.phone,
+                            })
                         if not partner_2:
-                            new_partner_2 = request.env['res.partner'].create({
-                            "vat": data["second_vat"],
-                            "name": data["second_name"],
-                            "email": data["second_email"],
-                            "phone": data["second_phone"],
-                        })
-                            HotelReservationLine.create({
+                            partner_vals = {
+                                "vat": data["second_vat"],
+                                "name": data["second_name"],
+                                "email": data["second_email"],
+                                "phone": data["second_phone"],
+                            }
+                            new_partner_2 = request.env['res.partner'].create({partner_vals})
+                            reservation_partner_ids.append(partner_vals)
+
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
                                 "is_son": False,
                                 "is_couple": True,
@@ -384,7 +416,7 @@ class Website(http.Controller):
                             children_ids = []
                             
                         else:
-                            HotelReservationLine.create({
+                            reservation_line = HotelReservationLine.create({
                                 "line_id": new_reservation.id,
                                 "is_son": False,
                                 "is_couple": True,
@@ -442,8 +474,6 @@ class Website(http.Controller):
             warehouse_id = 1
         HotelReservation = request.env['hotel.reservation'].sudo()
         room = request.env['hotel.room'].sudo().search([],limit=1)
-   
-        # print((asds))
         new_reservation = HotelReservation.create({
             "partner_id": user_id.partner_id.id,
             "partner_invoice_id": user_id.partner_id.id,
@@ -463,6 +493,7 @@ class Website(http.Controller):
                 "phone": chil["telefono"],
             })
             children_ids.append(new_children.id)
+            total_children += 1
             
         reservation_line_partners = []
 
@@ -472,19 +503,21 @@ class Website(http.Controller):
         for i in range(0, len(vats)):
             partner = request.env['res.partner'].search([('vat', '=', vats[i])])
             if not partner:
-                new_partners = request.env['res.partner'].create({
-                "vat": vats[i],
-                "name": kwargs["names"][i],
-                "email": kwargs["emails"][i],
-                "phone": kwargs["phones"][i],
-            })
+                partner_vals = {
+                    "vat": vats[i],
+                    "name": kwargs["names"][i],
+                    "email": kwargs["emails"][i],
+                    "phone": kwargs["phones"][i],
+                }
+                new_partners = request.env['res.partner'].create({partner_vals})
+                reservation_partner_ids.append(partner_vals)
                 reservation_line_partners.append(new_partners)
             else:
                 reservation_line_partners.append(partner)
                 
         
         if len(reservation_line_partners) == 1 and len(kwargs["children_list"]) == 0:
-            HotelReservationLine.create({
+            reservation_line = HotelReservationLine.create({
                 "line_id": new_reservation.id,
                 "is_son": False,
                 "is_couple": False,
@@ -497,9 +530,9 @@ class Website(http.Controller):
             })
             
         elif len(reservation_line_partners) == 1 and len(kwargs["children_list"]) > 0:
-            HotelReservationLine.create({
+            reservation_line = HotelReservationLine.create({
                 "line_id": new_reservation.id,
-                "is_son": True,
+                "is_son": True if len(children_ids) > 0 else False,
                 "is_couple": False,
                 "partner_id": reservation_line_partners[0].id,
                 "checkin": new_reservation.checkin,
@@ -511,7 +544,7 @@ class Website(http.Controller):
             })
             
         elif len(reservation_line_partners) == 2 and len(kwargs["children_list"]) == 0:
-            HotelReservationLine.create({
+            reservation_line = HotelReservationLine.create({
                 "line_id": new_reservation.id,
                 "is_son": False,
                 "is_couple": True,
@@ -525,9 +558,9 @@ class Website(http.Controller):
             })
             
         elif len(reservation_line_partners) == 2 and len(kwargs["children_list"]) > 0:
-            HotelReservationLine.create({
+            reservation_line = HotelReservationLine.create({
                 "line_id": new_reservation.id,
-                "is_son": True,
+                "is_son": True if len(children_ids) > 0 else False,
                 "is_couple": True,
                 "partner_id": reservation_line_partners[0].id,
                 "couple_id": reservation_line_partners[1].id,
@@ -576,7 +609,17 @@ class Website(http.Controller):
         # Reservation created successfully
         _logger.info("Reservation created!")
         _logger.info(new_reservation.id)
-        return {"status": "ok"}
+        result = {
+            "status": "ok",
+            "code": new_reservation.reservation_no,
+            "date_order": new_reservation.date_order.strftime("%d-%m-%Y %H:%M:%S"),
+            "checkin": new_reservation.checkin.strftime("%d-%m-%Y %H:%M:%S"),
+            "checkout": new_reservation.checkout.strftime("%d-%m-%Y %H:%M:%S"),
+            "partner_id": new_reservation.partner_id.name,
+            "reservation_partner_ids": reservation_line_partners,
+            "total_children": total_children,
+        }
+        return result
 
     @http.route('/reservation/reserved_rooms', type='json', auth="public", website=True, sitemap=False)
     def reserved_rooms(self, access_token=None, revive='', **post):

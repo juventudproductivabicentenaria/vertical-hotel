@@ -791,7 +791,7 @@ msgstr "Fecha fin"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation__checkin
-msgid "Expected-Date-Arrival"
+msgid "Fecha prevista de llegada"
 msgstr "Fecha-Llegada-Prevista"
 
 #. module: hotel_reservation

@@ -82,14 +82,14 @@ class HotelReservation(models.Model):
         help="Delivery address" "for current reservation. ",
     )
     checkin = fields.Datetime(
-        "Expected-Date-Arrival",
+        "Fecha prevista de llegada",
         required=True,
         readonly=True,
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     checkout = fields.Datetime(
-        "Expected-Date-Departure",
+        "Fecha prevista de salida",
         required=True,
         readonly=True,
         track_visibility='always',
@@ -553,9 +553,9 @@ class HotelReservationLine(models.Model):
 
     _name = "hotel_reservation.line"
     _description = "Reservation Line"
-    _rec_name = "line_id"
+    _rec_name = "code"
     _inherit = ["mail.thread", "mail.activity.mixin"]
-
+    
     name = fields.Text("Descripcion")
     hotel_room_id = fields.Many2one("hotel.room", "Habitacion", default= "", required=False, track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},)
@@ -591,13 +591,13 @@ class HotelReservationLine(models.Model):
             ("cancel", "Cancel"),
             ("done", "Done"),
         ],
-        "State",
+        "Estado",
         readonly=True,
         related='line_id.state', store=True
     )
 
     checkin = fields.Datetime(
-        "Expected-Date-Arrival",
+        "Fecha prevista de llegada",
         required=True,
         related='line_id.checkin',
         store=True,
@@ -606,7 +606,7 @@ class HotelReservationLine(models.Model):
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
     checkout = fields.Datetime(
-        "Expected-Date-Departure",
+        "Fecha prevista de salida",
         required=True,
         # readonly=True,
         related='line_id.checkout',
@@ -618,6 +618,9 @@ class HotelReservationLine(models.Model):
 
     @api.model
     def create(self, vals):
+        vals["code"] = (
+            self.env["ir.sequence"].next_by_code("hotel.reservation.line") or "New"
+        )
         res = super(HotelReservationLine, self).create(vals)
         return res
     

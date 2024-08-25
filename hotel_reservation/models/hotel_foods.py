@@ -18,7 +18,12 @@ except (ImportError, IOError) as err:
 class HotelFoods(models.Model):
     _name = "hotel.foods"
     _description = "Hotel Foods"
+    _rec_name = "code"
+    _order = "code"
 
+    code = fields.Char(
+        string="Codigo",  
+    )
     dates = fields.Char(
         string="Fechas de comida",
         required=True,
@@ -62,3 +67,11 @@ class HotelFoods(models.Model):
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
+
+    @api.model
+    def create(self, vals):
+        vals["code"] = (
+            self.env["ir.sequence"].next_by_code("hotel.foods") or "New"
+        )
+        res = super(HotelFoods, self).create(vals)
+        return res

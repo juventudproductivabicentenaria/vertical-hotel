@@ -125,6 +125,28 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}, 1000); // 3000 milisegundos equivalen a 3 segundos
 		},
 
+		MessageDialog: function (title, content) {
+			new Dialog(self,{
+				technical: false,
+				size:'medium',
+				buttons: [
+					{
+						classes: 'btn bottom-type-1',
+						text: "Reservar",
+						childrens_counter: function(){
+							self._onReservar(ev, true);
+					},
+						close: true,
+					},
+				],
+				dialogClass:'col-md-offset-1 col-md-8 text-left',
+				title: title,
+				$content:qweb.render("hotel_reservation.confirm_data",{
+					"content": content
+				})
+			}).open();
+		},
+
 		// _stop_boton: function(event) {
 		// 	event.stopPropagation();
 		// 	console.log('Stop');
@@ -174,7 +196,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let field_email = document.getElementById("email_input")
 				let institution = document.getElementById("institution")
 				if (result.missing) {
-					alert("No se encontraron datos con el documento proporcionado. Por favor, introduzca los datos de la persona manualmente.")
+					alert("No se encontraron datos con el documento proporcionado. Por favor, Introduzca los datos de la persona manualmente.")
 					field_name.value = ""
 					field_phone.value = ""
 					field_email.value = ""
@@ -221,7 +243,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let field_phone = document.getElementById("phone_input_roomMate")
 				let field_email = document.getElementById("email_input_roomMate")
 				if (result.missing) {
-					alert("No se encontraron datos con el documento proporcionado. Por favor, introduzca los datos de la persona manualmente.")
+					alert("No se encontraron datos con el documento proporcionado. Por favor, Introduzca los datos de la persona manualmente.")
 					field_name.value = ""
 					field_phone.value = ""
 					field_email.value = ""
@@ -1080,27 +1102,27 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		
 			var $error_data = $('#error_data')
 			if (identification_vat == null || identification_vat == undefined || identification_vat == '') {
-				var data = {"title": "* Por favor, introduzca el cédula de identidad o rif."};
+				var data = {"title": "* Por favor, Introduzca la Cédula de Identidad / RIF."};
 				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
 				return true
 			}
 			if (first_last_name_input == null || first_last_name_input == undefined || first_last_name_input == '') {
-				var data = {"title": "* Por favor, introduzca el nombre y apellido."};
+				var data = {"title": "* Por favor, Introduzca el Nombre y Apellido."};
 				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
 				return true
 			}
 			if (phone_input == null || phone_input == undefined || phone_input == '') {
-				var data = {"title": "* Por favor, introduzca el teléfono."};
+				var data = {"title": "* Por favor, Introduzca el teléfono."};
 				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
 				return true
 			}
 			if (email_input == null || email_input == undefined || email_input == '') {
-				var data = {"title": "* Por favor, introduzca el correo electrónico."};
+				var data = {"title": "* Por favor, Introduzca el correo electrónico."};
 				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
 				return true
 			}
 			if (room_check == null && food_check == null || room_check == false && food_check == false) {
-				var data = {"title": "* Por favor, seleccione al menos una opción de Comida o Habitación."};
+				var data = {"title": "* Por favor, Seleccione al menos una opción de Comida o Habitación."};
 				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
 				return true
 			}
@@ -1115,25 +1137,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				$error_data.show();
 				return
 			}
-			new Dialog(self,{
-                technical: false,
-                size:'medium',
-                buttons: [
-                    {
-                        classes: 'btn bottom-type-1',
-                        text: "Reservar",
-						click: function(){
-							self._onReservar(ev, true);
-					},
-
-						// action: function() {
-                        close: true,
-                    },
-                ],
-                dialogClass:'col-md-offset-1 col-md-8 text-left',
-                title:"Realizar Reserva",
-                $content:qweb.render("hotel_reservation.confirm_data")
-			}).open();
+			self._onReservar(ev, true);
 		},
 
 	    _onReservar: function (ev, respuesta) {
@@ -1164,11 +1168,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'ninos': childrens_counter
 					},
 				}).then(result => {
-					console.log("result")
-					console.log("result")
-					console.log("result")
-					console.log("result")
-					console.log(result)
+					if (result.error_validation) {
+						self.MessageDialog(result.title_error, result.content_error)
+						return
+					};
 					self.unblockUI(ev);
 				});
 				return
@@ -1303,14 +1306,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						window.alert("¡Su reservación ha sido creada con éxito!");
-					self.unblockUI(ev);
-					return
+						if (result.error_validation) {
+							self.MessageDialog(result.title_error, result.content_error)
+							return
+						};
+						self.unblockUI(ev);
+						return
 					});
 				}
 				
@@ -1351,20 +1352,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						window.alert("¡Su reservación ha sido creada con éxito!");
+						if (result.error_validation) {
+							self.MessageDialog(result.title_error, result.content_error)
+							return
+						};
 						self.unblockUI(ev);
-					
-					return
+						
+						return
 					});
 					
 				}
@@ -1400,19 +1394,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then((result) => {
-						console.log("result");
-						console.log("result");
-						console.log("result");
-						console.log("result");
-						console.log("result");
-						console.log(result);
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						window.alert("¡Su reservación ha sido creada con éxito!");
-						self.unblockUI(ev);
+					if (result.error_validation) {
+						self.MessageDialog(result.title_error, result.content_error)
+						return
+					};
+					self.unblockUI(ev);
 					return
 					});
 						
@@ -1450,19 +1436,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						window.alert("¡Su reservación ha sido creada con éxito!");
+						if (result.error_validation) {
+							self.MessageDialog(result.title_error, result.content_error)
+							return
+						};
 						self.unblockUI(ev);
-					return
+						return
 					});
 						
 				}
@@ -1498,14 +1477,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						window.alert("¡Su reservación ha sido creada con éxito!");
+						if (result.error_validation) {
+							self.MessageDialog(result.title_error, result.content_error)
+							return
+						};
 						self.unblockUI(ev);
-					return
+						return
 					});
 						
 				}
@@ -1547,14 +1524,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						window.alert("¡Su reservación ha sido creada con éxito!");
+						if (result.error_validation) {
+							self.MessageDialog(result.title_error, result.content_error)
+							return
+						};
 						self.unblockUI(ev);
-					return
+						return
 					});
 
 				}
@@ -1597,14 +1572,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log("result")
-						console.log(result)
-						window.alert("¡Su reservación ha sido creada con éxito!");
+						if (result.error_validation) {
+							self.MessageDialog(result.title_error, result.content_error)
+							return
+						};
 						self.unblockUI(ev);
-					return
+						return
 					});
 				}
 
@@ -1635,13 +1608,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'showContainerFood': document.getElementById('food_check').checked,
 					},
 				}).then(result => {
-					console.log("result")
-					console.log("result")
-					console.log("result")
-					console.log("result")
-					console.log(result)
-					window.alert("¡Su reservación ha sido creada con éxito!");
-					
+					if (result.error_validation) {
+						self.MessageDialog(result.title_error, result.content_error)
+						return
+					};
 					return
 				});
 
@@ -1688,7 +1658,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let institution = document.getElementById("institution")
 
 			if (first_last_name_input.value == "" || phone_input.value == "" || email_input.value == "" || institution.value == "") {
-				alert("Por favor introduzca todos los datos necesarios de la persona que nos visita")
+				alert("Por favor Introduzca todos los datos necesarios de la persona que nos visita")
 				return
 			}
 			

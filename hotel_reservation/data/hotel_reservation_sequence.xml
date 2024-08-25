@@ -3,7 +3,25 @@
     <record id="seq_hotel_reservation" model="ir.sequence">
         <field name="name">Hotel Reservation</field>
         <field name="code">hotel.reservation</field>
-        <field name="prefix">R/</field>
+        <field name="prefix">R-%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_hotel_reservatio_line" model="ir.sequence">
+        <field name="name">Reservation room</field>
+        <field name="code">hotel.reservation.line</field>
+        <field name="prefix">RH-%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_hotel_foods" model="ir.sequence">
+        <field name="name">Hotel Foods</field>
+        <field name="code">hotel.foods</field>
+        <field name="prefix">C-%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_hotel_transport" model="ir.sequence">
+        <field name="name">Hotel Transport</field>
+        <field name="code">hotel.transport</field>
+        <field name="prefix">T-%(year)s/</field>
         <field name="padding">5</field>
     </record>
 </odoo>

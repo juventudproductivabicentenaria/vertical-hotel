@@ -17,7 +17,12 @@ except (ImportError, IOError) as err:
 class HotelTransport(models.Model):
     _name = "hotel.transport"
     _description = "Hotel Transport"
+    _rec_name = "code"
+    _order = "code"
 
+    code = fields.Char(
+        string="Codigo",  
+    )
     hotel_reservation = fields.Many2one(
         "hotel.reservation",
         "Reservacion",
@@ -33,3 +38,11 @@ class HotelTransport(models.Model):
         "Pasajero",
         required=True,
     )
+
+    @api.model
+    def create(self, vals):
+        vals["code"] = (
+            self.env["ir.sequence"].next_by_code("hotel.transport") or "New"
+        )
+        res = super(HotelTransport, self).create(vals)
+        return res
