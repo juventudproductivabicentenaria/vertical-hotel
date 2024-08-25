@@ -1142,7 +1142,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 	    _onReservar: function (ev, respuesta) {
 			var self = this;
-
 			// var respuesta = confirm("Por favor, presione OK solo cuando esté seguro de que desea realizar la reservación.");
 			if (respuesta) {
 				// Ejecutar la acción si el usuario hace clic en "Aceptar"
@@ -1151,7 +1150,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val()
 			let counterRooms = document.getElementById("counterRooms")
-
 			
 			if (full_objects.length > 0) {
 				if (first_last_name_input.value != "") {
@@ -1395,7 +1393,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
-					}).then((result) => {
+					}).then(result => {
 						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)

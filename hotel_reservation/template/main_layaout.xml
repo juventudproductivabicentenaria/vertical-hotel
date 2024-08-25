@@ -45,9 +45,7 @@
                                     </div>
                                 </div> -->
                                 <div style="transform: translateX(5%);">
-                                    <a href="
-                                    
-                                    ">
+                                    <a href="/reservation">
                                         <button class="btn btn-primary" style="border-radius: 12px;">
                                             <i class="fa fa-arrow-circle-left fa-2x"></i>
                                         </button>

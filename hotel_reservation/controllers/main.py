@@ -97,7 +97,8 @@ class Website(http.Controller):
                 "title_error": "Error al crear la reservación",
                 "content_error": "No se encontro ninguna habitacion disponible entre las fechas seleccionadas.",
                 }
-                
+        reservation_partner_ids = []
+        total_children = 0
         if "full_data" in kwargs:
             _logger.info(kwargs["full_data"])
 
@@ -115,9 +116,7 @@ class Website(http.Controller):
                 "token": tools.default_hash()
             })
 
-            reservation_partner_ids = []
             reservation_line_partners = []
-            total_children = 0
             for data in kwargs["full_data"]:
                 partner = ResPartner.search([('vat', '=', data["vat"])])
                 if partner:
