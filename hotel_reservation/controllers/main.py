@@ -624,7 +624,6 @@ class Website(http.Controller):
         _logger.info("Reservation created!")
         _logger.info(new_reservation.id)
         result = {
-            "error_validation": False,
             "reserved": True,
             "reservation_id": new_reservation.id,
             "token": new_reservation.token,
