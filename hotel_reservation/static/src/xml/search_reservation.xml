@@ -22,6 +22,12 @@
             <t t-esc="title"/>
         </span>
     </t>
+    <t t-name="hotel_reservation.confirm_data">
+        <span id="error_data" class="w-auto text-black">
+            Se realizara una busqueda de habitaciones disponibles antes de realizar la reserva.
+        </span>
+    </t>
+
     <t t-name="hotel_reservation.add_other_person">
         <div class="m-4" id="add_other_person">
             <div class="row">
@@ -92,7 +98,6 @@
                             type="text" placeholder="¿De qué institución nos visita?" class="form-control" disabled="true"/>
                     </div>
                 </div>
-                <br />
                 <div class="row m-4">
                     <div class="d-flex align-items-center w-25">
                         <label class=" mr-2 text-type-1" for="room_check">Incluir Habitación</label>
@@ -107,11 +112,12 @@
                         <input class="form-check-input" type="checkbox" id="children_check"/>
                     </div>
                 </div>
-
                 <div class="row" id="row_partner_div">
-                    <div id="container_roomMate" class="container_roomMate_class"></div>
+                    <div id="container_roomMate" class="container_roomMate_class "></div>
                 </div>
-                <div id="container_children" class="container_children_class"></div>
+                <div id="container_children" class="container_children_class m-4">
+
+                </div>
 
                 <!-- <p id="includeFood" class="text-start text-primary h5 fw-bold ml-4 mt-5">Acerca de la Comida</p> -->
                 <div class="row m-4">
@@ -132,7 +138,7 @@
                 </div> 
                 <div class="row justify-content-center">
                     <button id="busqueda" type="button" class="btn bottom-type-1 mb-2 mr-sm-2" href="#">Realizar Reservación</button>
-                    <button id="add_other_person" type="button" class="btn bottom-type-1 mb-2 mr-sm-2" href="#">Agregar otro(s) huesped(es)</button>
+                    <button id="add_other_person" type="button" class="btn bottom-type-2 mb-2 mr-sm-2" href="#">Agregar otro(s) huesped(es)</button>
                 </div>
                 <div id="list_of_people" class="m-4">
                     <p id="par_list_persons" class="d-none text-center">

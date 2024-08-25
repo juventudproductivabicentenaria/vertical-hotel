@@ -39,15 +39,29 @@
     color: #000000;
 }
 .text-title-1{
-    font-size: 25px;
-    font-weight: 500;
-    line-height: 2;
     font-family: "champagne", "Open Sans", sans-serif;
     color: #22394c;
+    font-size: 32px;
+    font-weight: 300;
+    /* color: #555; */
 }
 
 .bottom-type-1{
     background: #1e3243;
+    color: #fff;
+    cursor: pointer;
+    margin: 0 15px 15px 0;
+    display: inline-block;
+    padding: 6px 15px;
+    font-size: 12px;
+    line-height: 20px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    transition: all 0.3s ease-in-out;
+}
+.bottom-type-2{
+    background: #6c8498;
     color: #fff;
     cursor: pointer;
     margin: 0 15px 15px 0;

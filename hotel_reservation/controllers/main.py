@@ -76,26 +76,29 @@ class Website(http.Controller):
         # main_ci = kwargs["main_ci"]
         # main_email = kwargs["main_email"]
         # main_phone = kwargs["main_phone"]
+        date_from = kwargs['date_from']
+        date_until = kwargs['date_until']   
+        adults = kwargs['adults']
+        ninos = kwargs['ninos']
+        user_id = request.env.user
+
+        warehouse_id = user_id.company_id.warehouse_id.id
+        if warehouse_id == False:
+            warehouse_id = 1
+        hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, 0)
+        print("hotel_reservation")
+        print("hotel_reservation")
+        print(hotel_reservation)
+        if hotel_reservation:
+            return {
+                "data": "error",
+                'error': "No se encontro ninguna habitacion disponible",
+                }
+                
         if "full_data" in kwargs:
             _logger.info(kwargs["full_data"])
-            date_from = kwargs['date_from']
-            date_until = kwargs['date_until']
-            adults = kwargs['adults']
-            ninos = kwargs['ninos']
-            user_id = request.env.user
-            
 
-            warehouse_id = user_id.company_id.warehouse_id.id
-            if warehouse_id == False:
-                warehouse_id = 1
             HotelReservation = request.env['hotel.reservation'].sudo()
-            room = request.env['hotel.room'].sudo().search([],limit=1)
-            hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos)
-            print("hotel_reservation")
-            print("hotel_reservation")
-            print(hotel_reservation)
-            if not hotel_reservation:
-                return {"error": "No se encontro ninguna habitacion disponible"}
             new_reservation = HotelReservation.create({
                 "partner_id": user_id.partner_id.id,
                 "partner_invoice_id": user_id.partner_id.id,
@@ -432,11 +435,6 @@ class Website(http.Controller):
             return {"data": "ok"}
         # institution_visit = kwargs["institution_name"]
         # main_name = kwargs["main_name"]
-        date_from = kwargs['date_from']
-        date_until = kwargs['date_until']
-        adults = kwargs['adults']
-        ninos = kwargs['ninos']
-        user_id = request.env.user
         
         children_ids = []
         warehouse_id = user_id.company_id.warehouse_id.id
@@ -444,11 +442,8 @@ class Website(http.Controller):
             warehouse_id = 1
         HotelReservation = request.env['hotel.reservation'].sudo()
         room = request.env['hotel.room'].sudo().search([],limit=1)
-        hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, 0)
-        print("hotel_reservation")
-        print("hotel_reservation")
-        print(hotel_reservation)
-        print((asds))
+   
+        # print((asds))
         new_reservation = HotelReservation.create({
             "partner_id": user_id.partner_id.id,
             "partner_invoice_id": user_id.partner_id.id,

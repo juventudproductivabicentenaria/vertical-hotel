@@ -27,10 +27,10 @@
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/jquery_backstretch_min.js"
                 />
-            <script
+            <!-- <script
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/home_reservation.js"
-            />
+            /> -->
             <!-- <script
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/jquery-3.2.1.min.js.js"

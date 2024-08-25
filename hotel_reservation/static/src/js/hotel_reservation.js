@@ -11,7 +11,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 	var adults_counter = 0
 	var childrens_counter = 0
 	console.log("Perfecto");
+	var Dialog = require('web.Dialog');
+	// var framework = require('web.framework');
 
+	
 	publicWidget.registry.reservationWebsite = publicWidget.Widget.extend({
 
 		selector: '#reservation', //id
@@ -98,6 +101,29 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				this.$('.rooms_available').html(roomHtml)
 			};
         },
+		unblockUI: function () {
+			const shadowDiv = document.createElement('div');
+			shadowDiv.style.position = 'fixed';
+			shadowDiv.style.top = '0';
+			shadowDiv.style.left = '0';
+			shadowDiv.style.width = '100%';
+			shadowDiv.style.height = '100%';
+			shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
+			shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
+		
+			// Agregar el div a la página
+			document.body.appendChild(shadowDiv);
+		
+			// Bloquear la funcionalidad del sitio
+			shadowDiv.addEventListener('click', function(event) {
+			event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
+			event.stopPropagation(); // detener la propagación de eventos
+			});
+				setTimeout(function() {
+				// Realizar la acción después de 3 segundos
+					window.location.href = '/';
+				}, 1000); // 3000 milisegundos equivalen a 3 segundos
+		},
 
 		// _stop_boton: function(event) {
 		// 	event.stopPropagation();
@@ -227,7 +253,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 		_add_roomMate: function(ev) {
-			let container = $("#container_roomMate")
+			let container = document.getElementById("container_roomMate")
 			let container_row = document.getElementById("row_partner_div")
 			let roomMateCheck = document.getElementById("roomMate_check")
 			if (!roomMateCheck.checked) {
@@ -237,26 +263,27 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				return
 			}
 			container.r
-			// const input = document.createElement("input")
-			// input.id = "identification_VAT_partner"
-			// input.type = "text"
-			// input.placeholder = "Cédula de Identidad o RIF"
-			// input.oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
-			// input.classList.add("form-control", "mt-4", "ml-4")
+			const input = document.createElement("input")
+			input.id = "identification_VAT_partner"
+			input.type = "text"
+			input.placeholder = "Cédula de Identidad o RIF"
+			input.oninput = "this.value = this.value.replace(/[^0-9]/g, '')"
+			input.classList.add("form-control", "mt-4", "ml-4")
 
-			// const button = document.createElement("button");
-			// button.type = "button";
-			// button.id = "searchRoommate";
-			// button.classList.add("btn", "btn-secondary", "mb-5", "ml-4", "mt-4");
-			// button.textContent = "Buscar";
+			const button = document.createElement("button");
+			button.type = "button";
+			button.id = "searchRoommate";
+			button.classList.add("btn", "bottom-type-1", "ml-3", "mt-4");
+			button.textContent = "Buscar";
 			
-		// 	container.innerHTML = `<div class="seccion-superior-roomMate mt-3 mb-3">
-		// 	<input size="40" id="first_last_name_roomMate_input" disabled="true" type="text" placeholder="Nombre y Apellido" class="form-control ml-4"></input>
-		// 	<input id="phone_input_roomMate" type="text" disabled="true" placeholder="Teléfono" class="form-control"></input>
-		// 	<input size="40" id="email_input_roomMate" disabled="true" type="text" placeholder="Correo Electrónico" class="form-control"></input>
-		// </div>`
-			// container_row.prepend(button);
-			// container_row.prepend(input);
+			container.innerHTML = `
+			<div class="seccion-superior-roomMate row m-4">
+				<input size="40" id="first_last_name_roomMate_input" disabled="true" type="text" placeholder="Nombre y Apellido" class="form-control"></input>
+				<input id="phone_input_roomMate" type="text" disabled="true" placeholder="Teléfono" class="form-control"></input>
+				<input size="40" id="email_input_roomMate" disabled="true" type="text" placeholder="Correo Electrónico" class="form-control"></input>
+			</div>`
+			container_row.prepend(button);
+			container_row.prepend(input);
 		},
 
 		_add_children: function(ev) {
@@ -266,11 +293,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				container.innerHTML = ""
 				return
 			}
-			container.innerHTML = `<div id="upper_section" class="seccion-superior-children mt-3 mb-3">
-			<input size="40" id="first_last_name_children_input" type="text" placeholder="Nombre y Apellido" class="form-control ml-4 children_input_class""></input>
-			<input id="phone_children" type="text" placeholder="Teléfono" class="form-control children_phone_class"></input>
-			<button type="button" id="add_other_children_button" class="ml-2 btn btn-md btn-primary">+ </button>
-		</div>`
+			container.innerHTML = `
+			<div id="upper_section" class="seccion-superior-children row mb-1">
+				<input size="40" id="first_last_name_children_input" type="text" placeholder="Nombre y Apellido" class="form-control children_input_class""></input>
+				<input id="phone_children" type="text" placeholder="Teléfono" class="form-control children_phone_class"></input>
+				<button type="button" id="add_other_children_button" class="ml-2 btn bottom-type-1">+ </button>
+			</div>`
 		},
 
 		_add_other_children: function(ev) {
@@ -278,12 +306,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let first_input = document.getElementById("upper_section")
 			let deleteButt = document.getElementById("delete_other_children_button")
 			if (!deleteButt) {
-			first_input.insertAdjacentHTML("beforeend", `<button type="button" id="delete_other_children_button" class="ml-2 btn btn-md btn-primary" >- </button>`)
+			first_input.insertAdjacentHTML("beforeend", `
+				<button type="button" id="delete_other_children_button" class="ml-2 btn bottom-type-1" >- </button>`)
 			}
-			container.insertAdjacentHTML("beforeend", `<div class="another_seccion-superior-children mt-3 mb-3">
-			<input size="40" type="text" placeholder="Nombre y Apellido" class="form-control ml-4 children_input_class"></input>
-			<input id="phone_children" type="text" placeholder="Teléfono" class="form-control children_phone_class"></input>
-		</div>`)
+			container.insertAdjacentHTML("beforeend", `
+			<div class="another_seccion-superior-children row mb-1">
+				<input size="40" type="text" placeholder="Nombre y Apellido" class="form-control children_input_class"></input>
+				<input id="phone_children" type="text" placeholder="Teléfono" class="form-control children_phone_class"></input>
+			</div>`)
 		},
 
 		_delete_other_children: function(ev) {
@@ -1076,11 +1106,40 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 			return false
 		},
-	    _onNextBlogClick: function (ev) {
+		_onNextBlogClick: function (ev) {
 			var self = this;
 			var $error_data = $('#error_data')
 			$error_data.hide();
-			var respuesta = confirm("Por favor, presione OK solo cuando esté seguro de que desea realizar la reservación.");
+			var error = this.verificationDataError(ev);
+			if (error) {
+				$error_data.show();
+				return
+			}
+			new Dialog(self,{
+                technical: false,
+                size:'medium',
+                buttons: [
+                    {
+                        classes: 'btn bottom-type-1',
+                        text: "Reservar",
+						click: function(){
+							self._onReservar(ev, true);
+					},
+
+						// action: function() {
+                        close: true,
+                    },
+                ],
+                dialogClass:'col-md-offset-1 col-md-8 text-left',
+                title:"Realizar Reserva",
+                $content:qweb.render("hotel_reservation.confirm_data")
+			}).open();
+		},
+
+	    _onReservar: function (ev, respuesta) {
+			var self = this;
+
+			// var respuesta = confirm("Por favor, presione OK solo cuando esté seguro de que desea realizar la reservación.");
 			if (respuesta) {
 				// Ejecutar la acción si el usuario hace clic en "Aceptar"
 				let first_last_name_input = document.getElementById("first_last_name_input")
@@ -1089,19 +1148,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var date_until = $('#date_until').val()
 			let counterRooms = document.getElementById("counterRooms")
 
-			var error = this.verificationDataError(ev);
-			console.log('error')
-			console.log(error)
-			if (error) {
-		
-				$error_data.show();
-				return
-			}
 			
 			if (full_objects.length > 0) {
 				if (first_last_name_input.value != "") {
 					document.getElementById("add_other_person").click()
 				}
+
 				this._rpc({
 					route: '/reservation/search_reservation',
 					params: {
@@ -1112,29 +1164,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'ninos': childrens_counter
 					},
 				}).then(result => {
-					window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
-					return
+					console.log("result")
+					console.log("result")
+					console.log("result")
+					console.log("result")
+					console.log(result)
+					self.unblockUI(ev);
 				});
 				return
 			}
@@ -1239,7 +1274,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					
 					const dinner_dict = {
 						"from_dinner": from_dinner}
-
+	
 					this._rpc({
 						route: '/reservation/search_reservation',
 						params: {
@@ -1268,28 +1303,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					self.unblockUI(ev);
 					return
 					});
 				}
@@ -1303,7 +1323,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 					const lunch_dict = {
 						"from_lunch": from_lunch}
-
+	
 					this._rpc({
 						route: '/reservation/search_reservation',
 						params: {
@@ -1331,28 +1351,19 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+						self.unblockUI(ev);
+					
 					return
 					});
 					
@@ -1362,7 +1373,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					let from_break = document.getElementById("breakfastDate").value
 					const breakfast_dict = {
 						"from_break": from_break}
-
+	
 					this._rpc({
 						route: '/reservation/search_reservation',
 						params: {
@@ -1388,29 +1399,20 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
-					}).then(result => {
+					}).then((result) => {
+						console.log("result");
+						console.log("result");
+						console.log("result");
+						console.log("result");
+						console.log("result");
+						console.log(result);
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+						self.unblockUI(ev);
 					return
 					});
 						
@@ -1421,7 +1423,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 					const lunch_dict = {
 						"from_lunch": from_lunch}
-
+	
 					this._rpc({
 						route: '/reservation/search_reservation',
 						params: {
@@ -1448,28 +1450,18 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+						self.unblockUI(ev);
 					return
 					});
 						
@@ -1479,7 +1471,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					let from_dinner = document.getElementById("dinnerDate").value
 					const dinner_dict = {
 						"from_dinner": from_dinner}
-
+	
 					this._rpc({
 						route: '/reservation/search_reservation',
 						params: {
@@ -1506,28 +1498,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+						self.unblockUI(ev);
 					return
 					});
 						
@@ -1542,7 +1519,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					
 					const dinner_dict = {
 						"from_dinner": from_dinner}
-
+	
 					this._rpc({
 						route: '/reservation/search_reservation',
 						params: {
@@ -1570,28 +1547,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+						self.unblockUI(ev);
 					return
 					});
 
@@ -1635,28 +1597,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
 					}).then(result => {
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log("result")
+						console.log(result)
 						window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+						self.unblockUI(ev);
 					return
 					});
 				}
@@ -1688,28 +1635,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'showContainerFood': document.getElementById('food_check').checked,
 					},
 				}).then(result => {
+					console.log("result")
+					console.log("result")
+					console.log("result")
+					console.log("result")
+					console.log(result)
 					window.alert("¡Su reservación ha sido creada con éxito!");
-					const shadowDiv = document.createElement('div');
-					shadowDiv.style.position = 'fixed';
-					shadowDiv.style.top = '0';
-					shadowDiv.style.left = '0';
-					shadowDiv.style.width = '100%';
-					shadowDiv.style.height = '100%';
-					shadowDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // color de la sombra con 50% de opacidad
-					shadowDiv.style.zIndex = '9999'; // asegura que la sombra esté por encima de todo el contenido
-
-					// Agregar el div a la página
-					document.body.appendChild(shadowDiv);
-
-					// Bloquear la funcionalidad del sitio
-					shadowDiv.addEventListener('click', function(event) {
-					event.preventDefault(); // prevenir el comportamiento predeterminado de los enlaces
-					event.stopPropagation(); // detener la propagación de eventos
-					});
-						setTimeout(function() {
-						// Realizar la acción después de 3 segundos
-							window.location.href = '/';
-						}, 1000); // 3000 milisegundos equivalen a 3 segundos
+					
 					return
 				});
 
