@@ -30,9 +30,9 @@ class HotelRoom(models.Model):
     @api.onchange('is_deposit')
     def onchange_is_deposit(self):
         if self.is_deposit:
-            self.state =  "deposit"
+            self.status =  "deposit"
         else:
-            self.state =  "available"
+            self.status =  "available"
 
     def _has_default(self):
         return tools.default_hash()
