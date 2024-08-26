@@ -47,7 +47,7 @@ class HotelRoom(models.Model):
     )
     status = fields.Selection([
             ("available", "Available"),
-            ("occupied", "Occupied")
+            ("occupied", "Occupied"),
             ('deposit', 'Deposito'),
         ],
         "Status",

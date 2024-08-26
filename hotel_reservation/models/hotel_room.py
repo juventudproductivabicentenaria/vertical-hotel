@@ -20,7 +20,7 @@ class HotelRoom(models.Model):
 
     _inherit = "hotel.room"
     _description = "Hotel Room"
-
+    
     @api.onchange('is_deposit')
     def onchange_is_deposit(self):
         if self.is_deposit:
