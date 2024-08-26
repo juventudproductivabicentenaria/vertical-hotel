@@ -20,7 +20,7 @@ class HotelRoom(models.Model):
 
     _inherit = "hotel.room"
     _description = "Hotel Room"
-    
+
     @api.onchange('is_deposit')
     def onchange_is_deposit(self):
         if self.is_deposit:
@@ -205,6 +205,7 @@ class RoomReservationSummary(models.Model):
                     for chk_date in date_range_list:
                         room_list_stats.append(
                             {
+                                "status": room.status,
                                 "state": "Free",
                                 "date": chk_date,
                                 "room_id": room.id,
@@ -303,6 +304,7 @@ class RoomReservationSummary(models.Model):
                                     "state": "Reserved",
                                     "date": chk_date,
                                     "room_id": room.id,
+                                    "status": room.status,
                                     "is_draft": "No",
                                     "data_model": "",
                                     "data_id": 0,
@@ -311,6 +313,7 @@ class RoomReservationSummary(models.Model):
                         else:
                             room_list_stats.append(
                                 {
+                                    "status": room.status,
                                     "state": "Free",
                                     "date": chk_date,
                                     "room_id": room.id,
