@@ -22,10 +22,20 @@ class HotelRoom(models.Model):
     _description = "Hotel Room"
 
     status = fields.Selection(
-        selection_add=[('deposit', 'SDeposito')],
+        selection_add=[('deposit', 'Deposito')],
     )
 
     is_deposit = fields.Boolean(string="Es un depósito")
+
+
+    def write(self, vals):
+        if vals.get("is_deposit"):
+            vals.update({"status":  "deposit"})
+        res = super(HotelRoom, self).write(vals)
+        if vals.get("is_deposit"):
+            vals.update({"status":  "deposit"})
+        self.status = 'deposit'
+        return res
 
     @api.onchange('is_deposit')
     def onchange_is_deposit(self):
