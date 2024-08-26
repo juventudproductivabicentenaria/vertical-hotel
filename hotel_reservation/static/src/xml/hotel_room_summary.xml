@@ -18,7 +18,7 @@
                             <t t-esc="detail.name" />
                         </td>
                         <t t-foreach="detail.value" t-as="status">
-                            <t t-if="status.state == 'deposit'">
+                            <t t-if="status.status == 'deposit'">
                                 <td
                                     class="table_deposit"
                                     t-att-data-model="status.data_model"
@@ -28,7 +28,7 @@
                                     <t t-esc="status.state" />
                                 </td>
                             </t>
-
+                            
                             <t t-elif="status.state == 'Free'">
                                 <td
                                     class="table_free"
