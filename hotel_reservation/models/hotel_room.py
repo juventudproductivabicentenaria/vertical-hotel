@@ -21,6 +21,19 @@ class HotelRoom(models.Model):
     _inherit = "hotel.room"
     _description = "Hotel Room"
 
+    status = fields.Selection(
+        selection_add=[('deposit', 'SDeposito')],
+    )
+
+    is_deposit = fields.Boolean(string="Es un depósito")
+
+    @api.onchange('is_deposit')
+    def onchange_is_deposit(self):
+        if self.is_deposit:
+            self.state =  "deposit"
+        else:
+            self.state =  "available"
+
     def _has_default(self):
         return tools.default_hash()
 

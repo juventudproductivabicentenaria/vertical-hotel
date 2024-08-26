@@ -10,3 +10,10 @@ class ProductProduct(models.Model):
     isroom = fields.Boolean("Is Room")
     iscategid = fields.Boolean("Is Categ")
     isservice = fields.Boolean("Is Service")
+
+    default_code = fields.Char('Default Code', copy=False)
+
+    # def _get_default_code(self):
+    #     if self.default_code:
+    #         return self.default_code
+    #     return super(ProductProduct, self)._get_default_code()

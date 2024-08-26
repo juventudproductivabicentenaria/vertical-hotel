@@ -20,6 +20,14 @@
     vertical-align: middle;
     cursor: pointer;
 }
+.table_deposit {
+    background-color: rgb(101, 101, 109);
+    color: white;
+    text-align: center;
+    min-width: 100px;
+    vertical-align: middle;
+    cursor: pointer;
+}
 .table_free {
     background-color: green;
     color: white;

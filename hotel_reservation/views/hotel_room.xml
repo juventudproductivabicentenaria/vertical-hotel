@@ -8,8 +8,16 @@
             <field name="inherit_id" ref="hotel.view_hotel_room_form"/>
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='isroom']" position="before">
+                    <label for='isroom' string="Cambiar estado" attrs="{'invisible':[('is_deposit','=',True)]}"/>
+                </xpath>    
                 <xpath expr="//field[@name='isroom']" position="after">
+                    <label for='is_deposit'></label>
+                    <field name="is_deposit"/>
                     <field name="token" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='isroom']" position="attributes">
+                    <attribute name="attrs">{'invisible':[('is_deposit','=',True)]}</attribute>
                 </xpath>
             </field>
         </record>
