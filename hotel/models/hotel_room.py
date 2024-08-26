@@ -45,8 +45,11 @@ class HotelRoom(models.Model):
         "rcateg_id",
         help="List of room amenities. ",
     )
-    status = fields.Selection(
-        [("available", "Available"), ("occupied", "Occupied")],
+    status = fields.Selection([
+            ("available", "Available"),
+            ("occupied", "Occupied")
+            ('deposit', 'Deposito'),
+        ],
         "Status",
         default="available",
     )
@@ -55,6 +58,8 @@ class HotelRoom(models.Model):
         "folio.room.line", "room_id", string="Room Reservation Line"
     )
     product_manager = fields.Many2one("res.users", "Product Manager")
+
+    is_deposit = fields.Boolean(string="Es un depósito")
 
     @api.model
     def create(self, vals):
@@ -98,6 +103,8 @@ class HotelRoom(models.Model):
             vals.update({"color": 2, "status": "occupied"})
         if "isroom" in vals and vals["isroom"] is True:
             vals.update({"color": 5, "status": "available"})
+        if vals.get("is_deposit"):
+            vals.update({"status":  "deposit"})
         return super(HotelRoom, self).write(vals)
 
     def set_room_status_occupied(self):
