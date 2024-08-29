@@ -76,6 +76,7 @@
                             </div>
                         </form>
                         <tree editable="buttom">
+                            <field name="state"  readonly="1"/>
                             <field name="activity_id"  attrs="{'readonly':[('state','in',['done','cancel'])]}"/>
                             <field name="housekeeper_id"/>
                             <field name="today_date"/>
@@ -83,7 +84,6 @@
                             <field name="clean_end_time"/>
                             <field name="done_activity"  attrs="{'readonly':['|',('no_done_activity','=',True), ('state','in',['done','cancel'])]}"/>
                             <field name="no_done_activity"  attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/>
-                            <field name="state"  readonly="1"/>
                         </tree>
                     </field>
                     <newline/>
