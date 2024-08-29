@@ -17,6 +17,11 @@ class ResCompany(models.Model):
         'stock.warehouse',
         string='Hotel',
     )
+    
+    pricelist_id = fields.Many2one(
+        'product.pricelist',
+        string='Lista de precios',
+    )
 
 
 class ResConfigSettings(models.TransientModel):
@@ -29,6 +34,14 @@ class ResConfigSettings(models.TransientModel):
         required=True,
         help='Hotel setup for website',
         string='Hotel',
+    )
+
+    pricelist_id = fields.Many2one(
+        'product.pricelist',
+        related='company_id.pricelist_id',
+        readonly=False,
+        required=True,
+        string='Lista de precios',
     )
 
 

@@ -16,12 +16,12 @@ class ResPartner(models.Model):
         "hotel.institution", "Intitucion/Empresa", required=False,
     )
 
-    @api.onchange('vat')
-    def _check_field_vat(self):
-        regex = r'^[VE]-\d{1,8}$'
-        for record in self:
-            if record.vat and not re.match(regex, record.vat):
-                raise UserError(_("Follow the format V-12345678 o E-12345678, please"))
+    # @api.onchange('vat')
+    # def _check_field_vat(self):
+    #     regex = r'^[VE]-\d{1,8}$'
+    #     for record in self:
+    #         if record.vat and not re.match(regex, record.vat):
+    #             raise UserError(_("Follow the format V-12345678 o E-12345678, please"))
             
 
     @api.constrains('vat')

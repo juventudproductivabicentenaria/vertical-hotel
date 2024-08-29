@@ -13,6 +13,14 @@ class HotelMenucardType(models.Model):
         "hotel.menucard.type", "menu_id", "Child Categories"
     )
 
+    # type_solicitation = fields.Selection([
+    #         ("breakfast", "Desayuno"),
+    #         ("lunch", "Almuerzo"),
+    #         ("dinner", "Cena"),
+    #         ("snack", "Merienda"),
+    #     ],"Tipo de Solicitud", required=True
+    # )
+
     def name_get(self):
         def get_names(cat):
             """ Return the list [cat.name, cat.menu_id.name, ...] """
@@ -91,3 +99,11 @@ class HotelMenucard(models.Model):
         "hotel.menucard.type", "Food Item Category", required=True
     )
     product_manager_id = fields.Many2one("res.users", "Product Manager")
+
+    type_solicitation = fields.Selection([
+            ("breakfast", "Desayuno"),
+            ("lunch", "Almuerzo"),
+            ("dinner", "Cena"),
+            ("snack", "Merienda"),
+        ],"Tipo de Solicitud", required=True
+    )

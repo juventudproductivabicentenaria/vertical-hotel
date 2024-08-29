@@ -9,3 +9,8 @@ access_product_product_manager,product.product.manager,product.model_product_pro
 access_h_activity_manager,h.activity.manager,model_hotel_activity,hotel.group_hotel_manager,1,1,1,1
 access_hotel_housekeeping_manager,hotel.housekeeping.manager,model_hotel_housekeeping,hotel.group_hotel_manager,1,1,1,1
 access_hotel_housekeeping_activities_manager,hotel.housekeeping.activities.manager,model_hotel_housekeeping_activities,hotel.group_hotel_manager,1,1,1,1
+
+access_clean_activity_line_manager,clean.activity.line.manager,model_clean_activity_line,hotel.group_hotel_manager,1,1,1,1
+access_clean_activity_line_user,clean.activity.line.user,model_clean_activity_line,hotel.group_hotel_user,1,0,0,0
+access_clean_type_manager,clean.access_clean_type_manager,model_clean_type,hotel.group_hotel_manager,1,1,1,1
+access_clean_type_user,clean.access_clean_type_user,model_clean_type,hotel.group_hotel_user,1,0,0,0

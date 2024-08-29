@@ -25,10 +25,9 @@
                                     t-att-data-id="status.data_id"
                                     style="text-align:center;"
                                 >
-                                    <t t-esc="status.status" />
+                                    Deposito
                                 </td>
                             </t>
-
                             <t t-elif="status.state == 'Free'">
                                 <td
                                     class="table_free"

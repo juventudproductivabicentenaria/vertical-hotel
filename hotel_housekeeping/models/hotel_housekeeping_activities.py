@@ -10,19 +10,25 @@ class HotelHousekeepingActivities(models.Model):
     _description = "Housekeeping Activities"
 
     housekeeping_id = fields.Many2one("hotel.housekeeping", "Reservation")
-    today_date = fields.Date("Today Date")
+    today_date = fields.Date("fecha de solicitud", related='housekeeping_id.current_date', readonly=True)
     activity_id = fields.Many2one("hotel.activity", "Housekeeping Activity")
-    housekeeper_id = fields.Many2one("res.users", "Housekeeper", required=True)
-    clean_start_time = fields.Datetime("Clean Start Time", required=True)
-    clean_end_time = fields.Datetime("Clean End Time", required=True)
-    is_dirty = fields.Boolean(
-        "Dirty",
-        help="Checked if the housekeeping activity" "results as Dirty.",
+    housekeeper_id = fields.Many2one("res.users", "Housekeeper", required=False)
+    clean_start_time = fields.Datetime("Clean Start Time", required=False)
+    clean_end_time = fields.Datetime("Clean End Time", required=False)
+    clean_type = fields.Many2one("clean.type", "Tipo de limpieza", required=False)
+    done_activity = fields.Boolean(
+        "Realizada",
+        help="Marcar como realizada la actividad",
     )
-    is_clean = fields.Boolean(
-        "Clean",
-        help="Checked if the housekeeping" "activity results as Clean.",
+    no_done_activity = fields.Boolean(
+        "No realizada",
+        help="Marcar como no realizada la actividad",
     )
+    state = fields.Selection([
+        ('draft', 'Sin verificar'),
+        ('done', 'verificado'),
+        ('cancel', 'Cancelado'),
+    ], string='Estado', readonly=True, default='draft')
 
     @api.constrains("clean_start_time", "clean_end_time")
     def _check_clean_start_time(self):
@@ -34,10 +40,11 @@ class HotelHousekeepingActivities(models.Model):
         @return: raise warning depending on the validation
         """
         for activity in self:
-            if activity.clean_start_time >= activity.clean_end_time:
-                raise ValidationError(
-                    _("Start Date Should be less than the End Date!")
-                )
+            if activity.clean_start_time and activity.clean_end_time:
+                if activity.clean_start_time >= activity.clean_end_time:
+                    raise ValidationError(
+                        _("Start Date Should be less than the End Date!")
+                    )
 
     @api.model
     def default_get(self, fields):

@@ -218,7 +218,7 @@ class FolioReservReport(models.AbstractModel):
             if record.hotel_restaurant_orders_ids:
                 order_data = []
                 for order in record.hotel_restaurant_orders_ids:
-                    order_date = order.o_date
+                    order_date = order.order_date
                     order_date = (
                         fields.Datetime.to_string(record.order_date),
                     )

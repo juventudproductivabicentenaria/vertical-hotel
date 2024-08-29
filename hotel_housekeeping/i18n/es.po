@@ -1377,12 +1377,12 @@ msgstr ""
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping_activities__today_date
 msgid "Today Date"
-msgstr "Fecha de hoy"
+msgstr "Fecha de solicitud"
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_housekeeping__current_date
 msgid "Today's Date"
-msgstr "Fecha de hoy"
+msgstr "Fecha de solicitud"
 
 #. module: hotel_housekeeping
 #: model:ir.model.fields,field_description:hotel_housekeeping.field_hotel_activity__service_type

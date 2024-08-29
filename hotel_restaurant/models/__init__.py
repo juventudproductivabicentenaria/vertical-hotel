@@ -3,4 +3,5 @@
 from . import hotel_restaurant
 from . import hotel_folio
 from . import hotel_menucard
-# from . import hotel_reservation
+from . import hotel_reservation
+

@@ -15,6 +15,7 @@
         "security/ir.model.access.csv",
         "views/report_hotel_housekeeping.xml",
         "views/hotel_housekeeping_view.xml",
+        "views/hotel_clean_type.xml",
         "report/hotel_housekeeping_report.xml",
         "wizard/hotel_housekeeping_wizard.xml",
     ],

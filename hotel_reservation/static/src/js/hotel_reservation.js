@@ -318,7 +318,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			container.innerHTML = `
 			<div id="upper_section" class="seccion-superior-children row mb-1">
 				<input size="40" id="first_last_name_children_input" type="text" placeholder="Nombre y Apellido" class="form-control children_input_class""></input>
-				<input id="phone_children" type="text" placeholder="Teléfono" class="form-control children_phone_class"></input>
+				<input id="phone_children" type="text" style="display: none;" placeholder="Cédula de Identidad" class="form-control children_phone_class"></input>
 				<button type="button" id="add_other_children_button" class="ml-2 btn bottom-type-1">+ </button>
 			</div>`
 		},
@@ -334,7 +334,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			container.insertAdjacentHTML("beforeend", `
 			<div class="another_seccion-superior-children row mb-1">
 				<input size="40" type="text" placeholder="Nombre y Apellido" class="form-control children_input_class"></input>
-				<input id="phone_children" type="text" placeholder="Teléfono" class="form-control children_phone_class"></input>
+				<input id="phone_children" style="display: none;" type="text" placeholder="Cédula de Identidad" class="form-control children_phone_class"></input>
 			</div>`)
 		},
 
@@ -408,8 +408,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				<input type="text" class="border rounded p-2" id="breakfastDate" name="request_breakfast_date_from" required="1"/>
 			</div>
 			`
-			
-
 			$(document).ready(function() {
 				$('#breakfastDate').datepicker({
 					startDate: new Date(),
@@ -763,11 +761,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 				for (let i = 0; i < childrenArray.length; i++) {
 					const nombre = childrenArray[i].value;
-					const telefono = childrenPhoneArray[i].value;
+					const vat = childrenPhoneArray[i].value;
 					console.log(nombre)
 					const objeto = {
 						nombre,
-						telefono,
+						vat,
 					};
 
 					children_objects.push(objeto);
@@ -1193,11 +1191,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				for (let i = 0; i < childrenArray.length; i++) {
 					console.log(childrenArray.length)
 					const nombre = childrenArray[i].value;
-					const telefono = childrenPhoneArray[i].value;
+					const vat = childrenPhoneArray[i].value;
 
 					const objeto = {
 						nombre,
-						telefono,
+						vat,
 					};
 					console.log(objeto)
 					children_objects.push(objeto);

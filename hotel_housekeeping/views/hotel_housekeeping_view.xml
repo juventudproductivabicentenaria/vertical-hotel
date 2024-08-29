@@ -68,21 +68,21 @@
                             </group>
                             <div class="oe_title">
                                 <div class="oe_edit_only">
-                                    <field name="is_dirty"/>
-                                    <label for="is_dirty" string="Is Dirty?"/>
-                                    <field name="is_clean"/>
-                                    <label for="is_clean" string="Is Clean?"/>
+                                    <field name="done_activity"/>
+                                    <label for="done_activity" string="Realizada?"/>
+                                    <field name="no_done_activity"/>
+                                    <label for="no_done_activity" string="No realizada?"/>
                                 </div>
                             </div>
                         </form>
                         <tree editable="buttom">
-                            <field name="activity_id"/>
+                            <field name="activity_id"  attrs="{'readonly':[('state','in',['done','cancel'])]}"/>
                             <field name="housekeeper_id"/>
                             <field name="today_date"/>
                             <field name="clean_start_time"/>
                             <field name="clean_end_time"/>
-                            <field name="is_dirty" readonly="1"/>
-                            <field name="is_clean" readonly="1"/>
+                            <field name="done_activity"  attrs="{'readonly':['|',('no_done_activity','=',True), ('state','in',['done','cancel'])]}"/>
+                            <field name="no_done_activity"  attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/>
                         </tree>
                     </field>
                     <newline/>

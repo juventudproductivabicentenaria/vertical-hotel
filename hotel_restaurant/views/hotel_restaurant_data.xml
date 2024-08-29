@@ -242,7 +242,7 @@
     <record id="hotel_restaurant_order_0" model="hotel.restaurant.order">
         <field name="table_nos_ids"
                eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table1'),ref('hotel_restaurant.hotel_restaurant_tables_table0')])]"/>
-        <field eval="(DateTime.today()+ timedelta(days=1))" name="o_date"/>
+        <field eval="(DateTime.today()+ timedelta(days=1))" name="order_date"/>
         <field name="customer_id" ref="base.res_partner_3"/>
         <field eval="&quot;OR/00001&quot;" name="order_no"/>
         <field name="room_id" ref="point_of_sale.wall_shelf"/>
@@ -259,7 +259,7 @@
     <record id="hotel_restaurant_order_1" model="hotel.restaurant.order">
         <field name="table_nos_ids"
                eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table2')])]"/>
-        <field eval="(DateTime.today()+ timedelta(days=2))" name="o_date"/>
+        <field eval="(DateTime.today()+ timedelta(days=2))" name="order_date"/>
         <field name="customer_id" ref="base.res_partner_4"/>
         <field eval="&quot;OR/00002&quot;" name="order_no"/>
         <field name="room_id" ref="point_of_sale.small_shelf"/>

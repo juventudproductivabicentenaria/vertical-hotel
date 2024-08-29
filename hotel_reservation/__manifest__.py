@@ -9,7 +9,7 @@
     "license": "AGPL-3",
     "summary": "Manages Guest Reservation & displays Reservation Summary",
     "website": "https://github.com/OCA/vertical-hotel/",
-    "depends": ["hotel", "stock", "mail", "website"],
+    "depends": ["hotel", "stock", "mail", "website", "hotel_restaurant"],
     "data": [
         "security/ir.model.access.csv",
         #data

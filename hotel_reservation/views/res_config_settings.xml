@@ -21,6 +21,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="pricelist_id">
+                        <div class="o_setting_right_pane">
+                            <label for="pricelist_id"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <field name="pricelist_id"/>
+                            <div class="text-muted">
+                                Hotel setup for website
+                            </div>
+                        </div>
+                    </div>
                 </xpath>
             </field>
         </record>

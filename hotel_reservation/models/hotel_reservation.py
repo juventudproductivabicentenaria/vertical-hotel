@@ -54,6 +54,7 @@ class HotelReservation(models.Model):
         "Scheme",
         required=False,
         readonly=True,
+        default=lambda self: self.env.user.company_id.pricelist_id.id,
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="Pricelist for current reservation.",
@@ -147,6 +148,12 @@ class HotelReservation(models.Model):
         "hotel.transport",
         "hotel_reservation",
         string="Transport"
+    )
+    
+    reservation_orders_lines_ids = fields.One2many(
+        "hotel.restaurant.order.list",
+        "reservation_room_id",
+        "Lines de pedido"
     )
     
     no_of_folio = fields.Integer("No. Folio", compute="_compute_folio_id")

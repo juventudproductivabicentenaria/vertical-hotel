@@ -9,6 +9,7 @@ from odoo.exceptions import ValidationError,UserError
 from datetime import date, timedelta, time, datetime
 from dateutil.relativedelta import relativedelta
 from ..models import tools
+from pytz import timezone, UTC
 
 
 _logger = logging.getLogger(__name__)
@@ -85,9 +86,14 @@ class Website(http.Controller):
         ResPartner = request.env['res.partner']
         HotelReservation = request.env['hotel.reservation'].sudo()
         HotelReservationLine = request.env['hotel_reservation.line'].sudo()
+        HotelReservationOrder = request.env['hotel.reservation.order'].sudo()
         HotelFood = request.env['hotel.foods'].sudo()
         HotelTransport = request.env['hotel.transport'].sudo()
         warehouse_id = user_id.company_id.warehouse_id.id
+        utc = timezone('UTC')
+        user_tz = user_id.tz or 'UTC'
+        today_date = utc.localize(datetime.now()).astimezone(timezone(user_tz))
+        new_reservation = False
         if warehouse_id == False:
             warehouse_id = 1
         hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, 0)
@@ -141,7 +147,8 @@ class Website(http.Controller):
                         for chil in data['childrens']:
                             new_children = ResPartner.create({
                                 "name": chil["nombre"],
-                                "phone": chil["telefono"],
+                                "vat": chil["vat"],
+                                "is_son": False if not chil["vat"] == "" else True,
                             })
                             children_ids.append(new_children.id)
                             total_children += 1
@@ -163,7 +170,8 @@ class Website(http.Controller):
                         for chil in data['childrens']:
                             new_children = ResPartner.create({
                                 "name": chil["nombre"],
-                                "phone": chil["telefono"],
+                                "vat": chil["vat"],
+                                "is_son": False if not chil["vat"] == "" else True,
                             })
                             children_ids.append(new_children.id)
                             total_children += 1
@@ -275,6 +283,12 @@ class Website(http.Controller):
                             
                     if data["include_food"]:
                         if data.get("breakfast"):
+                            from_break = []
+                            print('data["breakfast"]["from_break"]')
+                            print('data["breakfast"]["from_break"]')
+                            print(data["breakfast"]["from_break"])
+                            # print(sss)
+                            # for breakfast in data["breakfast"]["from_break"]:
                             HotelFood.create({
                                 "dates": data["breakfast"]["from_break"],
                                 "hotel_reservation": new_reservation.id,
@@ -310,7 +324,8 @@ class Website(http.Controller):
                         for chil in data['childrens']:
                             new_children = ResPartner.create({
                                 "name": chil["nombre"],
-                                "phone": chil["telefono"],
+                                "vat": chil["vat"],
+                                "is_son": False if not chil["vat"] == "" else True,
                             })
                             children_ids.append(new_children.id)
                             total_children += 1
@@ -331,7 +346,8 @@ class Website(http.Controller):
                         for chil in data['childrens']:
                             new_children = ResPartner.create({
                                 "name": chil["nombre"],
-                                "phone": chil["telefono"],
+                                "vat": chil["vat"],
+                                "is_son": False if not chil["vat"] == "" else True,
                             })
                             children_ids.append(new_children.id)
                             total_children += 1
@@ -446,6 +462,10 @@ class Website(http.Controller):
                             
                     if data["include_food"]:
                         if data.get("breakfast"):
+                            print('data["breakfast"]["from_break"]')
+                            print('data["breakfast"]["from_break"]')
+                            print(data["breakfast"]["from_break"])
+                            # print(sss)
                             HotelFood.create({
                                 "dates": data["breakfast"]["from_break"],
                                 "hotel_reservation": new_reservation.id,
@@ -502,7 +522,8 @@ class Website(http.Controller):
         for chil in kwargs['children_list']:
             new_children = ResPartner.create({
                 "name": chil["nombre"],
-                "phone": chil["telefono"],
+                "vat": chil["vat"],
+                "is_son": False if not chil["vat"] == "" else True,
             })
             children_ids.append(new_children.id)
             total_children += 1
@@ -527,7 +548,7 @@ class Website(http.Controller):
                     "email": kwargs["emails"][i],
                     "phone": kwargs["phones"][i],
                 }
-                new_partners = ResPartner.create({partner_vals})
+                new_partners = ResPartner.create(partner_vals)
                 reservation_partner_ids.append(partner_vals)
                 reservation_line_partners.append(new_partners)
         
@@ -588,8 +609,35 @@ class Website(http.Controller):
             })
             
         if kwargs["include_food"]:
+            # if kwargs.get("breakfast") or kwargs.get("lunch") or kwargs.get("dinner"):
+                # reservation_order = HotelReservationOrder.create({
+                #     "order_date": new_reservation.date_order if new_reservation else today_date.date(),
+                #     "reservation_id": new_reservation.id if new_reservation else False,
+                #     "is_folio": True if new_reservation else False,
+                #     "partner_id": user_id.partner_id.id,
+                #     "state": "draft",
+                # })
+            # if kwargs["breakfast"]:
+            #     print('data["breakfast"]["from_break"]')
+            #     print('data["breakfast"]["from_break"]')
+            #     print(kwargs["breakfast"]["from_break"])
+            #     # print(sss)
+            #     dates_breakfast = kwargs["breakfast"]["from_break"].split(",")
+         
+                # fechas = [datetime.strptime(fecha.strip(), "%d/%m/%Y") for fecha in fechas_list]
+
+                # Imprimir las fechas convertidas
+                # for date in dates_breakfast:
+                #     reservation_order.order_list_ids.append({
+                #         "date": datetime.strptime(date, "%d/%m/%Y"),
+                #         "hotel_reservation": new_reservation.id,
+                #         "state": "breakfast",
+                #         "partner_id": reservation_line_partners[0].id,
+                #         "room_id":False,
+                #         # "reservation_lin"
+                #     })
             if kwargs["breakfast"]:
-                HotelFood.create({
+                    HotelFood.create({
                     "dates": kwargs["breakfast"]["from_break"],
                     "hotel_reservation": new_reservation.id,
                     "state": "breakfast",

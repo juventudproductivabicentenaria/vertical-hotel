@@ -35,7 +35,7 @@
                         <tree string="Order"
                                decoration-success="state=='order'" decoration-info="state=='draft'">
                             <field name="order_no"/>
-                            <field name="o_date"/>
+                            <field name="order_date"/>
                             <field name="waiter_id"/>
                             <field name="table_nos_ids"/>
                             <field name="state"/>
@@ -280,7 +280,7 @@
                             <field name="is_folio"/>
                             <newline/>
                             <!-- <field name="reservation_id"/> -->
-                            <field name="reservation_room_id" attrs="{'invisible': [('is_folio','=',False)],'required':[('is_folio','=',True)]}"/>
+                            <field name="reservation_room_id" attrs="{'invisible': [('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
                             <field name="folio_id" domain="[('reservation_id','=',reservation_room_id)]" attrs="{'invisible': [('is_folio','=',False)]}"
                                 context="{
                                 'default_reservation_id': reservation_room_id
@@ -302,6 +302,8 @@
                             <tree string="Order List" editable="top">
                                 <field name="partner_id"/>
                                 <field name="menucard_id"/>
+                                <field name="type_solicitation"/>
+                                <field name="date_order"/>
                                 <field name="item_qty"/>
                                 <field name="item_rate"/>
                                 <field name="price_subtotal"/>
@@ -415,7 +417,7 @@
                     </h1>
                     <group>
                         <group colspan="2" col="2">
-                            <field name="o_date"/>
+                            <field name="order_date"/>
                             <field name="is_folio"/>
                         </group>
                         <group colspan="2" col="4">
@@ -440,6 +442,8 @@
                             <tree string="Order List" editable="top">
                                 <field name="partner_id"/>
                                 <field name="menucard_id"/>
+                                <field name="type_solicitation"/>
+                                <field name="date_order"/>
                                 <field name="item_qty"/>
                                 <field name="item_rate"/>
                                 <field name="price_subtotal"/>
@@ -469,7 +473,7 @@
             <tree string="Order"
                     decoration-success="state=='order'" decoration-info="state=='draft'" decoration-muted="state=='done'">
                 <field name="order_no"/>
-                <field name="o_date"/>
+                <field name="order_date"/>
                 <field name="table_nos_ids"/>
                 <field name="room_id"/>
                 <field name="waiter_id"/>
@@ -486,15 +490,15 @@
         <field name="arch" type="xml">
             <search string="Restaurant Order">
                 <filter name="today"
-                        domain="[('o_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('o_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]"
+                        domain="[('order_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('order_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]"
                         string="Today's Orders"/>
                 <field name="order_no"/>
                 <group expand="0" string="Group By">
                     <filter name="waiter_id" string="waiter name"
                             icon="terp-personal"
                             domain="[]" context="{'group_by':'waiter_id'}"/>
-                    <filter name="o_date" string="date" domain="[]"
-                            context="{'group_by':'o_date'}"/>
+                    <filter name="order_date" string="date" domain="[]"
+                            context="{'group_by':'order_date'}"/>
                 </group>
             </search>
         </field>
@@ -625,6 +629,7 @@
                     <group>
                         <field name="name" string="Food Item Name"/>
                         <field name="menu_id" string="Food Item Type"/>
+                        <!-- <field name="type_solicitation"  required="1" string="Tipo de Solicitud"/> -->
                         <field name="child_ids" invisible="1"/>
                     </group>
                 </sheet>
@@ -682,11 +687,12 @@
                             <group colspan="4" col="2">
                                 <group colspan="4" col="4">
                                     <field name="type" select="2"
-                                           string="Food Type"/>
+                                           string="Tipo"/>
                                     <field name="categ_id"
                                            string="Food Item Type"/>
                                     <field name="product_manager_id" select="2"
                                            string="Food Manager"/>
+                                    <field name="type_solicitation"/>
                                     <field name="uom_id"/>
                                     <field name="uom_po_id"/>
                                 </group>

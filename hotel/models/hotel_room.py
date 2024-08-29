@@ -63,6 +63,8 @@ class HotelRoom(models.Model):
 
     @api.model
     def create(self, vals):
+        if vals.get("is_deposit"):
+            vals.update({"status":  "deposit"})
         if "room_categ_id" in vals:
             room_categ = self.env["hotel.room.type"].browse(
                 vals.get("room_categ_id")

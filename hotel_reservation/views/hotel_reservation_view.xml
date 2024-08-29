@@ -8,36 +8,31 @@
         <field name="arch" type="xml">
             <form string="Reservation">
                 <header>
-                    <button
-                        name="action_send_reservation_mail"
+                    <button name="action_send_reservation_mail"
                         type="object"
                         string="Send Reservation Email"
                         states="confirm"
                         class="oe_highlight"
                     />
-                    <button
-                        name="confirm_reservation"
+                    <button name="confirm_reservation"
                         string="Confirm"
                         states="draft"
                         class="oe_highlight"
                         type="object"
                     />
-                    <button
-                        name="create_folio"
+                    <button name="create_folio"
                         string="Create Folio"
                         states="confirm"
                         class="oe_highlight"
                         type="object"
                     />
-                    <button
-                        name="cancel_reservation"
+                    <button name="cancel_reservation"
                         string="Cancel Reservation"
                         states="draft,confirm"
                         class="oe_highlight"
                         type="object"
                     />
-                    <button
-                        name="set_to_draft_reservation"
+                    <button name="set_to_draft_reservation"
                         string="Set to Draft"
                         states="cancel"
                         class="oe_highlight"
@@ -47,15 +42,13 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box">
-                        <button
-                            name="open_folio_view"
+                        <button name="open_folio_view"
                             type="object"
                             icon="fa-file-text-o"
                             class="oe_stat_button"
                             attrs="{'invisible': [('no_of_folio', '=', 0)]}"
                         >
-                            <field
-                                name="no_of_folio"
+                            <field name="no_of_folio"
                                 widget="statinfo"
                                 string="Folio"
                             />
@@ -68,28 +61,25 @@
                     <group>
                         <group colspan="4" col="4">
                             <field name="date_order" />
+                            <field name="partner_id" />
                             <field name="warehouse_id" />
                             <field name="token" invisible="1"/>
                         </group>
                         <separator />
                         <group colspan="4" col="4">
-                            <field
-                                name="partner_id"
+                            <field name="partner_id"
                                 domain="[('customer_rank','>', 0)]"
                                 context="{'default_customer_rank': 1}"
                             />
                             <field name="pricelist_id" required="1" col="2" />
-                            <field
-                                name="partner_order_id"
+                            <field name="partner_order_id"
                                 domain="[('parent_id','=',partner_id)]"
                             />
                             <newline />
-                            <field
-                                name="partner_invoice_id"
+                            <field name="partner_invoice_id"
                                 domain="[('parent_id','=',partner_id)]"
                             />
-                            <field
-                                name="partner_shipping_id"
+                            <field name="partner_shipping_id"
                                 domain="[('parent_id','=',partner_id)]"
                                 invisible="True"
                             />
@@ -119,15 +109,17 @@
                         <page name="history" string='History'>
                             <field name='folios_ids' readonly='1' />
                         </page>
-                        <page name="food" string='Comidas'>
-
-                            <field name='foods_ids'>
+                        <page name="lines_ids" string='Comidas'>
+                            <field name='reservation_orders_lines_ids'>
                                 <tree string="">
-                                    <field name="code"/>
-                                    <field name="dates"/>
+                                    <field name="partner_id" required="1"/>
+                                    <field name="reservation_order_id"/>
+                                    <field name="menucard_id"/>
+                                    <field name="type_solicitation"/>
+                                    <field name="type_solicitation"/>
+                                    <field name="date_order"/>
+                                    <field name="item_qty"/>
                                     <field name="state"/>
-                                    <field name="hotel_reservation"/>
-                                    <field name="partner_id"/>
                                 </tree>
                             </field>
 

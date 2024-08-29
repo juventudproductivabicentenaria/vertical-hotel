@@ -1,6 +1,6 @@
 # See LICENSE file for full copyright and licensing details.
 
-from odoo import _, fields, models
+from odoo import _, fields, models, api
 from odoo.exceptions import ValidationError
 
 
@@ -11,19 +11,14 @@ class HotelHousekeeping(models.Model):
     _rec_name = "room_id"
 
     current_date = fields.Date(
-        "Today's Date",
+        "Fecha de solicitud",
         required=True,
         index=True,
         states={"done": [("readonly", True)]},
         default=fields.Date.today,
     )
-    clean_type = fields.Selection(
-        [
-            ("daily", "Daily"),
-            ("checkin", "Check-In"),
-            ("checkout", "Check-Out"),
-        ],
-        "Clean Type",
+    clean_type = fields.Many2one('clean.type',
+        string="Clean Type",
         required=True,
         states={"done": [("readonly", True)]},
     )
@@ -81,6 +76,20 @@ class HotelHousekeeping(models.Model):
         default="inspect",
     )
 
+    @api.onchange('clean_type')
+    def onchange_clean_type(self):
+        if self.clean_type:
+            self.activity_line_ids.unlink()
+            if self.clean_type.clean_activity_line_ids:
+                print(self.clean_type.clean_activity_line_ids)
+                for line in self.clean_type.clean_activity_line_ids:
+                    self.activity_line_ids.create({
+                        'activity_id': line.clean_activity_id.id,
+                        'clean_type': self.clean_type.id,
+                        'housekeeping_id': self.id
+                        })
+                
+    
     def action_set_to_dirty(self):
         """
         This method is used to change the state
@@ -89,7 +98,7 @@ class HotelHousekeeping(models.Model):
         @param self: object pointer
         """
         self.write({"state": "dirty", "quality": False})
-        self.activity_line_ids.write({"is_clean": False, "is_dirty": True})
+        # self.activity_line_ids.write({"is_clean": False, "is_dirty": True})
 
     def room_cancel(self):
         """

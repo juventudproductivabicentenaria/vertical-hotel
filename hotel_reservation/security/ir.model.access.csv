@@ -22,3 +22,6 @@ access_hotel_transport_admin,hotel.transport.admin,model_hotel_transport,hotel.g
 access_hotel_transport_usuers,hotel.transport.admin,model_hotel_transport,base.group_portal,1,0,0,
 access_hotel_institucion_usuers,model_hotel_institution,model_hotel_institution,,1,1,1,1
 
+
+
+
