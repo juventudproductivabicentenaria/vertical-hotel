@@ -9,6 +9,7 @@
         <field name="arch" type="xml">
             <form string="Housekeeping">
                 <header>
+                    
                     <button string="Verificar actividades" name="verify_activitys" aria-label="Clean"
                             title="Clean" states="inspect,dirty" type="object"
                             confirm="Tenga en cuenta que marcara todas las actividades como verificadas, confirme para realizar"
