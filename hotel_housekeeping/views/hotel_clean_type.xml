@@ -30,7 +30,7 @@
                                 <field name="clean_activity_line_ids" >
                                     <tree  editable="bottom">
                                         <!-- <field name="name" /> -->
-                                        <field name="clean_activity_id" />
+                                        <field name="activity_id" />
                                         <field name="clean_type_id" readonly="1" />
                                     </tree>
                                 </field>
@@ -43,7 +43,7 @@
         </record>
 
         <record id="action_hotel_clean_type" model="ir.actions.act_window">
-            <field name="name">Tipos de limpieza</field>
+            <field name="name">Tipos de actividades</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">clean.type</field>
             <field name="view_mode">tree,form</field>
@@ -51,7 +51,7 @@
 
         
         <menuitem id="menu_hotel_clean_type"
-            name="Tipos de limpieza"
+            name="Tipos de actividades"
             parent="hotel_housekeeping.menu_hotel_activity"
             action="action_hotel_clean_type"
             sequence="10"
@@ -63,7 +63,7 @@
             <field name="arch" type="xml">
                 <tree>
                     <!-- <field name="name" /> -->
-                    <field name="clean_activity_id" />
+                    <field name="activity_id" />
                     <field name="clean_type_id" />
                 </tree>
             </field>
@@ -78,7 +78,7 @@
                         <group>
                             <!-- <field name="name" /> -->
                             <field name="clean_type_id" readonly="1" />
-                            <field name="clean_activity_id"/>
+                            <field name="activity_id"/>
                            
                         </group>
                     </sheet>

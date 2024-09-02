@@ -33,7 +33,7 @@ class ActivityReport(models.AbstractModel):
                 {
                     "current_date": activity.today_date,
                     "activity": (activity.activity_id.name or ""),
-                    "login": (activity.housekeeper_id.name or ""),
+                    "login": (activity.user_id.name or ""),
                     "clean_start_time": activity.clean_start_time,
                     "clean_end_time": activity.clean_end_time,
                     "duration": diff,

@@ -9,24 +9,26 @@
         <field name="arch" type="xml">
             <form string="Housekeeping">
                 <header>
-                    <button string="Clean" name="room_clean" aria-label="Clean"
+                    <button string="Verificar actividades" name="verify_activitys" aria-label="Clean"
                             title="Clean" states="inspect,dirty" type="object"
+                            confirm="Tenga en cuenta que marcara todas las actividades como verificadas, confirme para realizar"
                             class="btn btn-primary">
                         <i class="fa fa-paint-brush"></i>
                     </button>
-                    <button string="Dirty" name="action_set_to_dirty"
+                    <!-- <button string="Dirty" name="action_set_to_dirty"
                             aria-label="Dirty" title="Dirty"
                             states="inspect,clean" type="object"
                             class="btn btn-primary">
                         <i class="fa-pencil-square-o"></i>
-                    </button>
+                    </button> -->
                     <button string="Done" name="room_done" aria-label="Done"
                             title="Done" states="clean" type="object"
                             class="btn btn-primary">
                         <i class="fa-check"></i>
                     </button>
-                    <button string="Cancel" name="room_cancel"
+                    <button string="Cancelar actividades" name="cancel_activitys"
                             aria-label="Cancel" title="Cancel"
+                            confirm="Cancelara todas las actividades, confirme para realizar"
                             states="clean,dirty,inspect" type="object"
                             class="btn btn-primary">
                         <i class="fa-times-circle"></i>
@@ -39,15 +41,18 @@
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1><field name="code"/></h1>
+                    </div>
                     <group>
                         <group>
                             <field name="current_date"/>
                             <field name="clean_type"/>
-                            <field name="room_id"/>
+                            <field name="room_id" required="1"/>
                         </group>
                         <group>
-                            <field name="inspector_id"/>
-                            <field name="inspect_date_time"/>
+                            <field name="inspector_id" required="1"/>
+                            <field name="inspect_date_time" required="1"/>
                             <field name="quality"
                                    attrs="{'invisible':[('state','not in',['clean','done'])]}"/>
                         </group>
@@ -62,28 +67,36 @@
                             <group colspan="4" col="4">
                                 <field name="today_date"/>
                                 <field name="activity_id"/>
-                                <field name="housekeeper_id"/>
+                                <field name="user_id"/>
                                 <field name="clean_start_time"/>
                                 <field name="clean_end_time"/>
                             </group>
                             <div class="oe_title">
                                 <div class="oe_edit_only">
                                     <field name="done_activity"/>
-                                    <label for="done_activity" string="Realizada?"/>
+                                    <label for="done_activity" string="Realizada?" />
                                     <field name="no_done_activity"/>
-                                    <label for="no_done_activity" string="No realizada?"/>
+                                    <label for="no_done_activity" string="No realizada?" />
                                 </div>
                             </div>
                         </form>
                         <tree editable="buttom">
-                            <field name="state"  readonly="1"/>
                             <field name="activity_id"  attrs="{'readonly':[('state','in',['done','cancel'])]}"/>
-                            <field name="housekeeper_id"/>
-                            <field name="today_date"/>
+                            <field name="user_id"/>
+                            <field name="today_date"/>  
                             <field name="clean_start_time"/>
                             <field name="clean_end_time"/>
                             <field name="done_activity"  attrs="{'readonly':['|',('no_done_activity','=',True), ('state','in',['done','cancel'])]}"/>
                             <field name="no_done_activity"  attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/>
+                            <field name="state"  readonly="1"/>
+                            <button name="verifyActivity" type="object" string="Verificar" 
+                                title="Verificar actividad"
+                                attrs="{'invisible':[('state','!=','draft')]}" class="oe_stat_button" icon_only="1" icon="fa-check-circle-o">
+                            </button>
+                            <button name="cancleActivity" type="object" string="Cancelar" icon_only="1"
+                                title="Cancelar actividad"
+                                attrs="{'invisible':[('state','!=','draft')]}" class="oe_stat_button" icon="fa-times-circle-o">
+                            </button>
                         </tree>
                     </field>
                     <newline/>
@@ -98,6 +111,7 @@
         <field name="model">hotel.housekeeping</field>
         <field name="arch" type="xml">
             <tree>
+                <field name="code"/>
                 <field name="current_date"/>
                 <field name="clean_type"/>
                 <field name="room_id"/>
@@ -152,10 +166,15 @@
     <menuitem id="menu_housekeeping" name="Housekeeping Services"
               parent="hotel.hotel_management_menu" sequence="3"/>
 -->
-    <menuitem name="Housekeeping Services"
+    <menuitem name="Actividades"
+              id="menu_open_hotel_housekeeping"
+              parent="hotel.hotel_management_menu"
+              sequence="3"/>
+
+    <menuitem name="Registro de actividades"
               id="menu_open_hotel_housekeeping_form_tree"
               action="open_hotel_housekeeping_form_tree"
-              parent="hotel.hotel_management_menu"
+              parent="menu_open_hotel_housekeeping"
               sequence="3"/>
 
     <!-- ================ Activity Category================= -->

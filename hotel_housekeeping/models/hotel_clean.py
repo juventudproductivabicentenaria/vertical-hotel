@@ -44,7 +44,7 @@ class CleanType(models.Model):
         "Tipo de limpieza",
         index=True,
     )
-    clean_activity_id = fields.Many2one(
+    activity_id = fields.Many2one(
         "hotel.activity",
         "Actividad",
         required=True,

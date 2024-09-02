@@ -15,7 +15,7 @@ class TestHousekeeping(common.TransactionCase):
         self.housekeeping_obj = self.env["hotel.housekeeping"]
         self.hotel_act_obj = self.env["hotel.housekeeping.activities"]
         self.hotel_act_type_obj = self.env["hotel.housekeeping.activity.type"]
-        self.housekeeper_id = self.env.ref("base.user_root")
+        self.user_id = self.env.ref("base.user_root")
         self.inspector_id = self.env.ref("base.user_demo")
         self.act_type = self.env.ref(
             "hotel_housekeeping.hotel_housekeeping_activity_type_1"
@@ -49,7 +49,7 @@ class TestHousekeeping(common.TransactionCase):
                 "housekeeping_id": self.housekeeping.id,
                 "today_date": time.strftime("%Y-%m-%d"),
                 "activity_id": self.activity.id,
-                "housekeeper_id": self.housekeeper_id.id,
+                "user_id": self.user_id.id,
                 "clean_start_time": cur_date,
                 "clean_end_time": cur_date1,
             }

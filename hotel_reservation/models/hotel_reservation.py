@@ -622,7 +622,56 @@ class HotelReservationLine(models.Model):
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
   
+    @api.onchange('hotel_room_id')
+    def onchange_hotel_room_id(self):
+        if self.hotel_room_id and self.hotel_room_id.clean_type_ids:
+            print("self.hotel_room_id")
+            print("self.hotel_room_id")
+            print(self.hotel_room_id)
+            HotelHousekeeping = self.env["hotel.housekeeping"].sudo()
+            housekeeping_ids = HotelHousekeeping.search([
+                        ('room_id', '=', self.hotel_room_id.id), 
+                        ('reservation_id', '=', self.line_id.id),
+                    ])
+            if housekeeping_ids:
+                housekeeping_ids.activity_line_ids.unlink()
+                housekeeping_ids.unlink()
 
+
+            for line in self.hotel_room_id.clean_type_ids:
+                # housekeeping = HotelHousekeeping.search([
+                #         ('room_id', '=', self.hotel_room_id.id), 
+                #         ('reservation_id', '=', self.line_id.id),
+                #     ], limit=1)
+                # if housekeeping:
+                #     housekeeping.activity_line_ids.unlink()
+                #     housekeeping.write({
+                #         "current_date": self.line_id.date_order if self.line_id else fields.Date.today(),
+                #         "clean_type": line.id,
+                #         "inspector_id": self.env.user.id,
+                #         "reservation_id": self.line_id.id,
+                #     })
+                #     if line.clean_activity_line_ids:
+                #         for activity in line.clean_activity_line_ids:
+                #             housekeeping.activity_line_ids.create({
+                #                 "activity_id": activity.activity_id.id,
+                #                 "housekeeping_id": housekeeping.id,
+                #             })
+                # else:
+                housekeeping_id = HotelHousekeeping.create({
+                    "current_date": self.line_id.date_order if self.line_id else fields.Date.today(),
+                    "room_id": self.hotel_room_id.id,
+                    "clean_type": line.id,
+                    "inspector_id": self.env.user.id,
+                    "reservation_id": self.line_id.id,
+                })
+                if line.clean_activity_line_ids:
+                    for activity in line.clean_activity_line_ids:
+                        housekeeping_id.activity_line_ids.create({
+                            "activity_id": activity.activity_id.id,
+                            "housekeeping_id": housekeeping_id.id,
+                        })
+    
     @api.model
     def create(self, vals):
         vals["code"] = (

@@ -8,7 +8,11 @@ class HotelHousekeeping(models.Model):
 
     _name = "hotel.housekeeping"
     _description = "Hotel Housekeeping"
-    _rec_name = "room_id"
+    _rec_name = "code"
+    
+    code = fields.Char(string="Codigo", readonly=True, default="New")
+
+    reservation_id = fields.Many2one("hotel.reservation", "Reservation", readonly=True)
 
     current_date = fields.Date(
         "Fecha de solicitud",
@@ -25,7 +29,7 @@ class HotelHousekeeping(models.Model):
     room_id = fields.Many2one(
         "hotel.room",
         "Room No",
-        required=True,
+        # required=True,
         states={"done": [("readonly", True)]},
         index=True,
     )
@@ -40,12 +44,10 @@ class HotelHousekeeping(models.Model):
     inspector_id = fields.Many2one(
         "res.users",
         "Inspector",
-        required=True,
         states={"done": [("readonly", True)]},
     )
     inspect_date_time = fields.Datetime(
         "Inspect Date Time",
-        required=True,
         states={"done": [("readonly", True)]},
     )
     quality = fields.Selection(
@@ -75,6 +77,12 @@ class HotelHousekeeping(models.Model):
         readonly=True,
         default="inspect",
     )
+    
+    @api.model
+    def create(self, vals):
+        vals["code"] = self.env["ir.sequence"].next_by_code("hotel.housekeeping") or "New"
+        res = super(HotelHousekeeping, self).create(vals)
+        return res
 
     @api.onchange('clean_type')
     def onchange_clean_type(self):
@@ -84,7 +92,7 @@ class HotelHousekeeping(models.Model):
                 print(self.clean_type.clean_activity_line_ids)
                 for line in self.clean_type.clean_activity_line_ids:
                     self.activity_line_ids.create({
-                        'activity_id': line.clean_activity_id.id,
+                        'activity_id': line.activity_id.id,
                         'clean_type': self.clean_type.id,
                         'housekeeping_id': self.id
                         })
@@ -100,14 +108,12 @@ class HotelHousekeeping(models.Model):
         self.write({"state": "dirty", "quality": False})
         # self.activity_line_ids.write({"is_clean": False, "is_dirty": True})
 
-    def room_cancel(self):
-        """
-        This method is used to change the state
-        to cancel of the hotel housekeeping
-        ---------------------------------------
-        @param self: object pointer
-        """
-        self.write({"state": "cancel", "quality": False})
+    def cancel_activitys(self):
+        if self.inspector_id and self.env.user != self.inspector_id:
+            raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+        if self.activity_line_ids:
+            for activity in self.activity_line_ids:
+                activity.write({'state': 'cancel'})
 
     def room_done(self):
         """
@@ -129,12 +135,10 @@ class HotelHousekeeping(models.Model):
         """
         self.write({"state": "inspect", "quality": False})
 
-    def room_clean(self):
-        """
-        This method is used to change the state
-        to clean of the hotel housekeeping
-        ---------------------------------------
-        @param self: object pointer
-        """
-        self.write({"state": "clean", "quality": False})
-        self.activity_line_ids.write({"is_clean": True, "is_dirty": False})
+    def verify_activitys(self):
+        if self.inspector_id and self.env.user != self.inspector_id:
+            raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+            
+        if self.activity_line_ids:
+            for activity in self.activity_line_ids:
+                activity.write({'state': 'done'})

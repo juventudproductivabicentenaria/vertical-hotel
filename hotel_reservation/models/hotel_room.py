@@ -36,6 +36,12 @@ class HotelRoom(models.Model):
     )
     token = fields.Char(string="token", default=lambda self: self._has_default(), required=True)
 
+    clean_type_ids = fields.Many2many(
+        "clean.type",
+        string="Tipos de actividades",
+        help="Tipos de actividades",
+    )
+    _
     def unlink(self):
         """
         Overrides orm unlink method.
