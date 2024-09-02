@@ -33,7 +33,7 @@ class HotelFoods(models.Model):
 
     date = fields.Date(
         string="Fecha",
-        required=True,
+        required=False,
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
