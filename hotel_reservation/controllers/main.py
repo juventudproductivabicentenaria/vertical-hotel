@@ -125,6 +125,7 @@ class Website(http.Controller):
                 "partner_shipping_id": user_id.partner_id.id,
                 "checkin": utc.localize(date_from).astimezone(timezone(user_tz)).strftime("%Y-%m-%d %H:%M:%S"),
                 "checkout": utc.localize(date_until).astimezone(timezone(user_tz)).strftime("%Y-%m-%d %H:%M:%S"),
+                "date_order": today_date.strftime("%Y-%m-%d %H:%M:%S"),
                 "warehouse_id": warehouse_id,
                 "adults": adults,
                 "children": ninos,
@@ -294,10 +295,11 @@ class Website(http.Controller):
                         order_list_ids = []
                         if data.get("breakfast"):
                             from_break = []
-                            dates_list = data["breakfast"]["from_break"].split(",")
+                            dates_list = data["breakfast"]["from_break"].replace(" ", "").split(",")
                             for date_str in dates_list:
-                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                from_break.append(date)
+                                if date_str != "":
+                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                    from_break.append(date)
                             for breakfast in from_break:
                                 order_list_ids.append({
                                     "date_order": breakfast.date(),
@@ -308,10 +310,11 @@ class Website(http.Controller):
                                 })
                         if data.get("lunch"):
                             from_lunch = []
-                            dates_list = data["lunch"]["from_lunch"].split(",")
+                            dates_list = data["lunch"]["from_lunch"].replace(" ", "").split(",")
                             for date_str in dates_list:
-                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                from_lunch.append(date)
+                                if date_str != "":
+                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                    from_lunch.append(date)
                             for breakfast in from_lunch:
                                 order_list_ids.append({
                                     "date_order": breakfast.date(),
@@ -322,10 +325,11 @@ class Website(http.Controller):
                                 })
                         if data.get("dinner"):
                             from_dinner = []
-                            dates_list = data["dinner"]["from_dinner"].split(",")
+                            dates_list = data["dinner"]["from_dinner"].replace(" ", "").split(",")
                             for date_str in dates_list:
-                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                from_dinner.append(date)
+                                if date_str != "":
+                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                    from_dinner.append(date)
                             for breakfast in from_dinner:
                                 order_list_ids.append({
                                     "date_order": breakfast.date(),
@@ -509,10 +513,11 @@ class Website(http.Controller):
                         order_list_ids = []
                         if data.get("breakfast"):
                             from_break = []
-                            dates_list = data["breakfast"]["from_break"].split(",")
+                            dates_list = data["breakfast"]["from_break"].replace(" ", "").split(",")
                             for date_str in dates_list:
-                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                from_break.append(date)
+                                if date_str != "":
+                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                    from_break.append(date)
                             for breakfast in from_break:
                                 order_list_ids.append({
                                     "date_order": breakfast.date(),
@@ -523,10 +528,11 @@ class Website(http.Controller):
                                 })
                         if data.get("lunch"):
                             from_lunch = []
-                            dates_list = data["lunch"]["from_lunch"].split(",")
+                            dates_list = data["lunch"]["from_lunch"].replace(" ", "").split(",")
                             for date_str in dates_list:
-                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                from_lunch.append(date)
+                                if date_str != "":
+                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                    from_lunch.append(date)
                             for breakfast in from_lunch:
                                 order_list_ids.append({
                                     "date_order": breakfast.date(),
@@ -537,10 +543,12 @@ class Website(http.Controller):
                                 })
                         if data.get("dinner"):
                             from_dinner = []
-                            dates_list = data["dinner"]["from_dinner"].split(",")
+                            dates_list = data["dinner"]["from_dinner"].replace(" ", "").split(",")
                             for date_str in dates_list:
-                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                from_dinner.append(date)
+                                if date_str != "":
+                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                    from_dinner.append(date)
+
                             for breakfast in from_dinner:
                                 order_list_ids.append({
                                     "date_order": breakfast.date(),
@@ -593,6 +601,8 @@ class Website(http.Controller):
             # date_from = tz.normalize(tz.localize(date_from)).astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
             "checkin": date_from,
             "checkout":  date_until,
+            "date_order": today_date.strftime("%Y-%m-%d %H:%M:%S"),
+
             "warehouse_id": warehouse_id,
             "adults": adults,
             "children": ninos,
@@ -651,10 +661,11 @@ class Website(http.Controller):
             order_list_ids = []
             if kwargs.get("breakfast"):
                 from_break = []
-                dates_list = kwargs["breakfast"]["from_break"].split(",")
+                dates_list = kwargs["breakfast"]["from_break"].replace(" ", "").split(",")
                 for date_str in dates_list:
-                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                    from_break.append(date)
+                    if date_str != "":
+                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                        from_break.append(date)
                 for breakfast in from_break:
                     order_list_ids.append({
                         "date_order": breakfast.date(),
@@ -665,10 +676,11 @@ class Website(http.Controller):
                     })
             if kwargs.get("lunch"):
                 from_lunch = []
-                dates_list = kwargs["lunch"]["from_lunch"].split(",")
+                dates_list = kwargs["lunch"]["from_lunch"].replace(" ", "").split(",")
                 for date_str in dates_list:
-                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                    from_lunch.append(date)
+                    if date_str != "":
+                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                        from_lunch.append(date)
                 for breakfast in from_lunch:
                     order_list_ids.append({
                         "date_order": breakfast.date(),
@@ -679,10 +691,11 @@ class Website(http.Controller):
                     })
             if kwargs.get("dinner"):
                 from_dinner = []
-                dates_list = kwargs["dinner"]["from_dinner"].split(",")
+                dates_list = kwargs["dinner"]["from_dinner"].replace(" ", "").split(",")
                 for date_str in dates_list:
-                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                    from_dinner.append(date)
+                    if date_str != "":
+                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                        from_dinner.append(date)
                 for breakfast in from_dinner:
                     order_list_ids.append({
                         "date_order": breakfast.date(),
