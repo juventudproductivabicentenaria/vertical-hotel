@@ -110,19 +110,15 @@
                             <field name='folios_ids' readonly='1' />
                         </page>
                         <page name="lines_ids" string='Comidas'>
-                            <field name='reservation_orders_lines_ids'>
+                            <field name='foods_ids'>
                                 <tree string="">
-                                    <field name="partner_id" required="1"/>
-                                    <field name="reservation_order_id"/>
-                                    <field name="menucard_id"/>
-                                    <field name="type_solicitation"/>
-                                    <field name="type_solicitation"/>
-                                    <field name="date_order"/>
-                                    <field name="item_qty"/>
+                                    <field name="code"/>
+                                    <field name="dates"/>
                                     <field name="state"/>
+                                    <field name="hotel_reservation"/>
+                                    <field name="partner_id"/>
                                 </tree>
                             </field>
-
                         </page>
                         <page name="transport" string='Transporte'>
 
