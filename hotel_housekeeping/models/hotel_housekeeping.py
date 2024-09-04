@@ -12,7 +12,6 @@ class HotelHousekeeping(models.Model):
     
     code = fields.Char(string="Codigo", readonly=True, default="New")
 
-    reservation_id = fields.Many2one("hotel.reservation", "Reservation", readonly=True)
 
     current_date = fields.Date(
         "Fecha de solicitud",
@@ -41,6 +40,7 @@ class HotelHousekeeping(models.Model):
         help="Detail of housekeeping \
                                         activities",
     )
+
     inspector_id = fields.Many2one(
         "res.users",
         "Inspector",

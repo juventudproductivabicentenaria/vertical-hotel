@@ -138,10 +138,16 @@ class HotelReservation(models.Model):
         string="Folio",
     )
     
-    foods_ids = fields.One2many(
-        "hotel.foods",
-        "hotel_reservation",
-        string="Food"
+    # foods_ids = fields.One2many(
+    #     "hotel.foods",
+    #     "hotel_reservation",
+    #     string="Food"
+    # )
+
+    activities_ids = fields.One2many(
+        "hotel.housekeeping.activities",
+        "reservation_id",
+        string="Actividades"
     )
     
     transport_ids = fields.One2many(
@@ -624,6 +630,22 @@ class HotelReservationLine(models.Model):
   
     @api.onchange('hotel_room_id')
     def onchange_hotel_room_id(self):
+        if self.hotel_room_id:
+            reservation_line_ids = self.hotel_room_id.room_reservation_line_ids.search([
+                ('reservation_id', '=', self.line_id.id),
+                ('state', '=', 'assigned'),
+                ('room_id', '=', self.hotel_room_id.id),
+            ])
+            if reservation_line_ids:
+                reservation_line_ids.unlink()
+
+            self.hotel_room_id.room_reservation_line_ids.create({
+                "room_id": self.hotel_room_id.id,
+                "check_in": self.line_id.checkin,
+                "check_out": self.line_id.checkout,
+                "state": "assigned",
+                "reservation_id": self.line_id.id,
+            })
         if self.hotel_room_id and self.hotel_room_id.clean_type_ids:
             print("self.hotel_room_id")
             print("self.hotel_room_id")
@@ -670,6 +692,7 @@ class HotelReservationLine(models.Model):
                         housekeeping_id.activity_line_ids.create({
                             "activity_id": activity.activity_id.id,
                             "housekeeping_id": housekeeping_id.id,
+                            "reservation_id": self.line_id.id,
                         })
     
     @api.model

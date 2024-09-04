@@ -35,7 +35,7 @@ class ReserveRoom(models.TransientModel):
         domain = []
         # fecha_datetime = datetime.strptime(fecha_str, "%d-%m-%Y").replace(hour=0, minute=0, second=0)
         if date_from and date_until:
-            date_until = datetime.strptime(date_until, '%Y-%m-%d')
+            # date_until = datetime.strptime(date_until, '%Y-%m-%d')
             # date_until = datetime.strptime(date_until+' 23:59:59', '%Y-%m-%d')
             # date_until =    date_until.replace(hour=23, minute=59, second=59)
             # # date_until = datetime.strptime(date_until, '%Y-%m-%dT%H:%M:%S')

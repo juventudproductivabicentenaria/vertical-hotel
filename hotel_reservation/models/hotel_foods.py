@@ -18,28 +18,27 @@ except (ImportError, IOError) as err:
 class HotelFoods(models.Model):
     _name = "hotel.foods"
     _description = "Hotel Foods"
-    _rec_name = "code"
-    _order = "code"
+    _rec_name = "name"
+    _order = "date_start"
 
-    code = fields.Char(
-        string="Codigo",  
-    )
-    dates = fields.Char(
-        string="Fechas de comida",
+    # code = fields.Char(
+    #     string="Codigo",  
+    # )
+    name = fields.Char(
+        string="Nombre",
         required=True,
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
 
-    date = fields.Date(
+    date_start = fields.Date(
         string="Fecha",
         required=False,
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
-    hotel_reservation = fields.Many2one(
-        "hotel.reservation",
-        "Reservacion",
+    date_end = fields.Date(
+        string="Fecha",
         required=False,
         readonly=True,
         states={"draft": [("readonly", False)]}
@@ -47,37 +46,19 @@ class HotelFoods(models.Model):
     
     state = fields.Selection(
         [
-            ("breakfast", "Desayuno"),
-            ("lunch", "Almuerzo"),
-            ("dinner", "Cena"),
-            ("snack", "Merienda"),
-        ],
-        "Estado",
-        default="draft",
-    )
-    type = fields.Selection(
-        [
+            ("published", "Publicado"),
             ("draft", "Borrador"),
-            ("confirm", "Confirmar"),
-            ("cancel", "Cancelado"),
-            ("done", "Hecho"),
+            ("candela", "Cancelado"),
         ],
         "Estado",
         default="draft",
     )
 
-    partner_id = fields.Many2one(
-        "res.partner",
-        "Comensal",
-        required=True,
-        readonly=True,
-        states={"draft": [("readonly", False)]}
-    )
 
     @api.model
     def create(self, vals):
-        vals["code"] = (
-            self.env["ir.sequence"].next_by_code("hotel.foods") or "New"
-        )
+        # vals["code"] = (
+        #     self.env["ir.sequence"].next_by_code("hotel.foods") or "New"
+        # )
         res = super(HotelFoods, self).create(vals)
         return res

@@ -4,8 +4,8 @@ from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 
-class HotelHousekeepingActivities(models.Model):
 
+class HotelHousekeepingActivities(models.Model):
     _name = "hotel.housekeeping.activities"
     _description = "Housekeeping Activities"
     _rec_name = "code"

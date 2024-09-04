@@ -8,3 +8,4 @@ from . import res_company
 from . import hotel_foods
 from . import res_partner
 from . import hotel_transport
+from . import hotel_housekeeping

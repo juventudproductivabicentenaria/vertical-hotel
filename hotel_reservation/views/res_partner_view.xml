@@ -11,7 +11,7 @@
                         name="vat" 
                         attrs="{'required': [('is_son', '!=', True)]}"
                         string="Cedula identidad" 
-                        placeholder="V-12345678 o E-12345678"/> 
+                        placeholder="12345678"/> 
                 </xpath>
                 <xpath expr="//field[@name='vat']" position="after">
                     <field name="institution_id"/> 

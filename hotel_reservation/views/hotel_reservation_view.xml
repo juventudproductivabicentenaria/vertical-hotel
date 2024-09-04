@@ -68,9 +68,11 @@
                         <separator />
                         <group colspan="4" col="4">
                             <field name="partner_id"
-                                domain="[('customer_rank','>', 0)]"
                                 context="{'default_customer_rank': 1}"
                             />
+                                <!-- domain="[('customer_rank','>', 0)]"
+                                context="{'default_customer_rank': 1}"
+                            /> -->
                             <field name="pricelist_id" required="1" col="2" />
                             <field name="partner_order_id"
                                 domain="[('parent_id','=',partner_id)]"
@@ -116,7 +118,6 @@
                                     <field name="reservation_order_id"/>
                                     <field name="menucard_id"/>
                                     <field name="type_solicitation"/>
-                                    <field name="type_solicitation"/>
                                     <field name="date_order"/>
                                     <field name="item_qty"/>
                                     <field name="state"/>
@@ -136,6 +137,20 @@
                                 </tree>
                             </field>
 
+                        </page>
+                        <page name="activities_ids" string='Actividades'>
+                            <field name='activities_ids'>
+                                <tree string="">
+                                    <field name="code"/>
+                                    <field name="reservation_id"/>
+                                    <field name="room_id"/>
+                                    <field name="inspector_id"/>
+                                    <field name="activity_id"/>
+                                    <field name="done_activity"/>
+                                    <field name="no_done_activity"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </sheet>
