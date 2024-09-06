@@ -92,11 +92,11 @@
                             <field name="done_activity"  readonly="1" force_save="1"/>
                             <!-- <field name="no_done_activity"  attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/> -->
                             <field name="state"  readonly="1"/>
-                            <button name="doneActivity" type="object" string="Marcar como realizada" icon="fa-times-circle-o" icon_only="1"
+                            <button name="doneActivity" type="object" string="Marcar como realizada" icon="fa-check-circle-o" icon_only="1"
                                 title="Marcar como realizada"
                                 attrs="{'invisible':[('done_activity','!=',False)]}" class="oe_stat_button" >
                             </button>
-                            <button name="canceldoneActivity" type="object" string="Marcar como realizada" icon="fa-check-circle-o" icon_only="1"
+                            <button name="canceldoneActivity" type="object" string="Marcar como no realizada" icon="fa-times-circle-o" icon_only="1"
                                 title="Marcar como  no realizada"
                                 attrs="{'invisible':[('done_activity','!=',True)]}" class="oe_stat_button" >
                             </button>
@@ -187,6 +187,7 @@
     <menuitem name="Actividades"
               id="menu_open_hotel_housekeeping"
               parent="hotel.hotel_management_menu"
+              groups="hotel.group_hotel_user,hotel.group_hotel_manager,hotel.group_hotel_receptionist"
               sequence="3"/>
 
     <menuitem name="Registro de actividades"

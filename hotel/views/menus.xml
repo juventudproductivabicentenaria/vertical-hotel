@@ -12,6 +12,7 @@
         id="hotel_report_menu"
         name="Pdf Reports"
         sequence="6"
+        groups="hotel.group_hotel_user"
         parent="hotel_management_menu"
     />
     <menuitem
@@ -64,6 +65,7 @@
     <menuitem
         id="menu_all_folio"
         name="Folio"
+        groups="hotel.group_hotel_manager"
         action="open_hotel_folio1_form_tree_all"
         parent="hotel.hotel_management_menu"
         sequence="4"

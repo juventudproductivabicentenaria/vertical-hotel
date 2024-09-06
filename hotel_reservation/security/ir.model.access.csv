@@ -1,28 +1,40 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hotel_reservation_user,hotel.reservation.user,model_hotel_reservation,hotel.group_hotel_user,1,1,1,0
-access_hotel_reservation_user_portal,hotel.reservation.user.portal,model_hotel_reservation,base.group_portal,1,1,1,0
-access_hotel_room_user_portal,hotel.room.user.portal,model_hotel_room,base.group_portal,1,1,0,0
+access_hotel_foods_user,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_user,1,0,0,0
 access_hotel_reservation_line_user,hotel_reservation.line.user,model_hotel_reservation_line,hotel.group_hotel_user,1,1,1,0
-access_hotel_reservation_line_user_portal,hotel_reservation.line.user.portal,model_hotel_reservation_line,base.group_portal,1,1,1,0
 access_hotel_room_reservation_line_user,hotel_room_reservation.line.user,model_hotel_room_reservation_line,hotel.group_hotel_user,1,1,1,0
+access_hotel_transport_admin,hotel.transport.admin,model_hotel_transport,hotel.group_hotel_user,1,1,1,1
+access_hotel_reservation_user,hotel.reservation.user,model_hotel_reservation,hotel.group_hotel_user,1,1,1,0
+
+access_hotel_reservation_user_portal,hotel.reservation.user.portal,model_hotel_reservation,base.group_portal,1,1,1,0
+access_product_product_user_portal,product.product.user.portal,product.model_product_product,base.group_portal,1,1,0,0
+access_hotel_room_reservation_line_user_portal,hotel_room_reservation.line.user.portal,model_hotel_room_reservation_line,base.group_portal,1,1,1,1
+access_uom_uom_user_portal,uom.uom.user.portal,uom.model_uom_uom,base.group_portal,1,1,0,0
+access_ir_sequence_user_portal,ir.sequence.user.portal,base.model_ir_sequence,base.group_portal,1,0,0,0
+access_hotel_transport_usuers,hotel.transport.admin,model_hotel_transport,base.group_portal,1,0,0,0
+access_hotel_foods_usuers,hotel.foods.admin,model_hotel_foods,base.group_portal,1,0,0,0
+access_hotel_room_user_portal,hotel.room.user.portal,model_hotel_room,base.group_portal,1,1,0,0
+access_hotel_reservation_line_user_portal,hotel_reservation.line.user.portal,model_hotel_reservation_line,base.group_portal,1,1,1,0
+access_product_template_user_portal,product.template.user.portal,product.model_product_template,base.group_portal,1,1,0,0
+
 access_hotel_reservation_manager,hotel_reservation.manager,model_hotel_reservation,hotel.group_hotel_manager,1,1,1,1
 access_hotel_reservation_line_manager,hotel_reservation.line.manager,model_hotel_reservation_line,hotel.group_hotel_manager,1,1,1,1
 access_hotel_room_reservation_line_manager,hotel_room_reservation.line.manager,model_hotel_room_reservation_line,hotel.group_hotel_manager,1,1,1,1
-access_hotel_room_reservation_line_user_portal,hotel_room_reservation.line.user.portal,model_hotel_room_reservation_line,base.group_portal,1,1,1,1
-access_room_reservation_summary_manager,hotel_room_reservation_summary.manager,model_room_reservation_summary,hotel.group_hotel_manager,1,1,1,1
-access_product_product_user_portal,product.product.user.portal,product.model_product_product,base.group_portal,1,1,0,0
-access_product_template_user_portal,product.template.user.portal,product.model_product_template,base.group_portal,1,1,0,0
-access_uom_uom_user_portal,uom.uom.user.portal,uom.model_uom_uom,base.group_portal,1,1,0,0
-access_ir_sequence_user_portal,ir.sequence.user.portal,base.model_ir_sequence,base.group_portal,1,0,0,0
-
-
+access_room_reservation_summary_manager,hotel_room_reservation_summary.manager,model_room_reservation_summary,,1,1,1,1
 access_hotel_foods_admin,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_manager,1,1,1,1
-access_hotel_foods_user,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_user,1,0,0,0
-access_hotel_foods_usuers,hotel.foods.admin,model_hotel_foods,base.group_portal,1,0,0,0
-access_hotel_transport_admin,hotel.transport.admin,model_hotel_transport,hotel.group_hotel_user,1,1,1,1
-access_hotel_transport_usuers,hotel.transport.admin,model_hotel_transport,base.group_portal,1,0,0,
 access_hotel_institucion_usuers,model_hotel_institution,model_hotel_institution,,1,1,1,1
 
+
+
+access_hotel_reservation_user_receptionist,hotel.reservation.user.portal,model_hotel_reservation,hotel.group_hotel_receptionist,1,0,0,0
+access_product_product_user_receptionist,product.product.user.portal,product.model_product_product,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_room_reservation_line_user_portal,hotel_room_reservation.line.user.portal,model_hotel_room_reservation_line,hotel.group_hotel_receptionist,1,0,0,0
+access_uom_uom_user_receptionist,uom.uom.user.portal,uom.model_uom_uom,hotel.group_hotel_receptionist,1,0,0,0
+access_ir_sequence_user_receptionist,ir.sequence.user.portal,base.model_ir_sequence,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_transport__receptionist,hotel.transport.admin,model_hotel_transport,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_foods__receptionist,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_room_user_receptionist,hotel.room.user.portal,model_hotel_room,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_reservation_line_user__receptionist,hotel_reservation.line.user.portal,model_hotel_reservation_line,hotel.group_hotel_receptionist,1,0,0,0
+access_product_template_user_receptionist,product.template.user.portal,product.model_product_template,hotel.group_hotel_receptionist,1,0,0,0
 
 
 

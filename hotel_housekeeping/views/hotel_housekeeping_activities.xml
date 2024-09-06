@@ -52,21 +52,24 @@
         <field name="arch" type="xml">
             <form string="Housekeeping Activity Types">
                 <header>
-                    <button name="doneActivity" type="object" string="Marcar como realizada" icon="fa-times-circle-o" icon_only="1"
+                <button name="doneActivity" type="object" string="Marcar como realizada" icon="fa-check-circle-o" icon_only="1"
                     title="Marcar como realizada"
                     attrs="{'invisible':['|',
-                        ('state','in',['verify','cancel']),
-                        ('done_activity','!=',True),
+                        ('state','in',['verify','cancel','not_verify']),
+                        ('done_activity','!=',False)
                         ]}" class="oe_stat_button" >
                 </button>
-                <button name="canceldoneActivity" type="object" string="Marcar como realizada" icon="fa-check-circle-o" icon_only="1"
+                <button name="canceldoneActivity" type="object" string="Marcar como  no realizada" icon="fa-times-circle-o" icon_only="1"
                     title="Marcar como  no realizada"
-                    attrs="{'invisible':[('done_activity','!=',False),('state','in',['verify','cancel'])]}" class="oe_stat_button" >
+                    attrs="{'invisible':['|',
+                        ('state','in',['verify','cancel','not_verify']),
+                        ('done_activity','!=',True)
+                    ]}" class="oe_stat_button" >
                 </button>
                 <button name="verifyActivity" type="object" string="Verificar" 
                     title="Verificar"
                     groups="hotel.group_hotel_user"
-                    attrs="{'invisible':[('state','in',['cancel','verify'])]}" class="oe_highlight">
+                    attrs="{'invisible':[('state','in',['cancel','verify','not_verify'])]}" class="oe_highlight">
                 </button>
                 <button name="cancelActivity" type="object" string="Cancelar" 
                     title="Cancelar"
@@ -84,19 +87,19 @@
                 <sheet>
                     <div class="oe_title">
                         <h1><field name="code"/></h1>
+                        <h2><field name="housekeeping_id" readonly="1"/></h2>
                     </div>
                     <group>
                         <group>
                             <field name="done_activity" readonly="1" force_save="1"/>
                             <!-- <field name="no_done_activity" attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/> -->
-                            <field name="activity_id"/>
+                            <field name="activity_id" attrs="{'readonly':[('state','!=','draft')]}"/>
                             <field name="room_id" readonly="1"/>
-                            <field name="user_id"/>
-                            <field name="housekeeping_id"/>
+                            <field name="user_id" readonly="1"/>
                         </group>
                         <group>
                             <field name="inspector_id" readonly="1"/>
-                            <field name="today_date"/>
+                            <field name="today_date" string="Fecha" readonly="1"/>
                             <field name="clean_start_time"/>
                             <field name="clean_end_time"/>
                         </group>

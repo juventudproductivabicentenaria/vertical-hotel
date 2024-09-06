@@ -267,6 +267,7 @@
         id="menu_hotel_reservation"
         name="Reservaciones"
         parent="hotel.hotel_management_menu"
+        groups="hotel.group_hotel_user"
         sequence="2"
         />
 

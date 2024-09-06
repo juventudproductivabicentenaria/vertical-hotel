@@ -36,7 +36,7 @@ class HotelHousekeepingActivities(models.Model):
             ("inspect", "Inspect"),
             ("in_process", "En proceso"),
             # ("clean", "Clean"),
-            ("done", "Verificada"),
+            ("done", "Realizada"),
             ("cancel", "Cancelled"),
         ], "State",
         related='housekeeping_id.state'
@@ -45,7 +45,8 @@ class HotelHousekeepingActivities(models.Model):
     state = fields.Selection([
         ('draft', 'Sin verificar'),
         # ('done', 'Realizada'),
-        ('verify', 'verificado'),
+        ("not_verify", "No verificada"),
+        ('verify', 'Verificado'),
         ('cancel', 'Cancelado'),
     ], string='Estado', readonly=True, default='draft')
     
@@ -82,13 +83,13 @@ class HotelHousekeepingActivities(models.Model):
         for activity in self:
             if activity.inspector_id and self.env.user != activity.inspector_id and activity.user_id and self.env.user != activity.user_id:
                 raise ValidationError(_('Solo el asignado puede modificar la actividad o su Inspector'))
-            activity.write({'done_activity': False})
+            activity.sudo().write({'done_activity': True})
 
     def canceldoneActivity(self):
         for activity in self:
             if activity.inspector_id and self.env.user != activity.inspector_id and activity.user_id and self.env.user != activity.user_id:
                 raise ValidationError(_('Solo el asignado puede modificar la actividad o su Inspector'))
-            activity.write({'done_activity': True})
+            activity.sudo().write({'done_activity': False})
 
     def cancelActivity(self):
         for activity in self:

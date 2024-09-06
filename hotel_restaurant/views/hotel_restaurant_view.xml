@@ -3,7 +3,8 @@
 <odoo>
 
     <menuitem id="hotel_restaurant_menu" name="Restaurant"
-              parent="hotel.hotel_management_menu" sequence="3"/>
+            groups="hotel.group_hotel_user"
+            parent="hotel.hotel_management_menu" sequence="3"/>
 
     <record id="view_hotelfolio1_form1_inherited" model="ir.ui.view">
         <field name="name">hotel.folio1.form1.inherited</field>

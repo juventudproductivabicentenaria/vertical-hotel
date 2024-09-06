@@ -68,7 +68,7 @@ class HotelHousekeeping(models.Model):
             ("inspect", "Inspect"),
             ("in_process", "En proceso"),
             # ("clean", "Clean"),
-            ("done", "Verificada"),
+            ("done", "Realizada"),
             ("cancel", "Cancelled"),
         ],
         "State",
@@ -146,10 +146,19 @@ class HotelHousekeeping(models.Model):
         """
         self.write({"state": "inspect", "quality": False})
 
-    def verify_activitys(self):
+    def verify_all_activitys(self):
         if self.inspector_id and self.env.user != self.inspector_id:
             raise ValidationError(_('Solo el inspector puede realizar esta accion'))
         if self.activity_line_ids:
             for activity in self.activity_line_ids:
                 activity.write({'state': 'verify'})
+        self.write({'state': 'done'})
+        
+    def verify_activitys(self):
+        if self.inspector_id and self.env.user != self.inspector_id:
+            raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+        if self.activity_line_ids:
+            for activity in self.activity_line_ids:
+                if activity.state not in ('cancel', 'verify'):
+                    activity.write({'state': 'not_verify'})
         self.write({'state': 'done'})
