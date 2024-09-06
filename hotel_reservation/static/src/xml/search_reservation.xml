@@ -158,38 +158,20 @@
                     <input type="hidden" id="evaluar_lunch" value="0"/>
                     <input type="hidden" id="evaluar_dinner" value="0"/>
                 </div>
+                <t t-call="hotel_reservation.image_menu_foods"/>
             </div>
         </form>
     </div>
-    <!-- <div class="controls btn-group mb-2 mr-sm-2">
-        <button type="button" class="btn btn-primary">
-            <i class="fa fa-user"></i>
-        </button>
-        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                data-toggle="dropdown" href="#">
-            <span class="caret"></span>
-        </button>
-        <div class="dropdown-menu">
-            <span class="cantidad dropdown-item btn-group" href="#">
-                <a class="text_adult mb-2 mr-sm-2" href="#">Adultos</a>
-                <button id="incremento_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
-                    <i class="fa fa-plus-circle fa-2x"></i>
-                </button>
-                <p class="mr-sm-2" id="resultado_adults">0</p>
-                <button id="desminuir_adults" class="button_cantidad btn-sm mr-sm-2" type="button">
-                    <i class="fa fa-minus-circle fa-2x"></i>
-                </button>
-            </span>
-            <span class="cantidad dropdown-item btn-group" href="#">
-                <a class="text_adult mb-2 mr-sm-4"  href="#">Niños</a>
-                <button id="incremento_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
-                    <i class="fa fa-plus-circle fa-2x"></i>
-                </button>
-                <p id="resultado_ninos" class="mr-sm-2">0</p>
-                <button id="desminuir_ninos" class="button_cantidad btn-sm mr-sm-2" type="button">
-                    <i class="fa fa-minus-circle fa-2x"></i>
-                </button>
-            </span>
+    <t t-name="hotel_reservation.image_menu_foods">
+        <div  id="image_menu_foods">
+            <div class="row m-2">
+                    <t t-if="image_data">
+                        <img t-attf-src="#{image_data}"
+                            alt="Menu Foods" 
+                            style="width: 100%; height: auto;"
+                        />
+                    </t>
+            </div>
         </div>
-    </div> -->
+    </t>
 </templates>

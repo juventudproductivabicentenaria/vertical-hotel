@@ -20,26 +20,41 @@ class HotelHousekeepingActivities(models.Model):
     clean_start_time = fields.Datetime("Clean Start Time", required=False)
     clean_end_time = fields.Datetime("Clean End Time", required=False)
     clean_type = fields.Many2one("clean.type", "Tipo de limpieza", required=False)
+    
     done_activity = fields.Boolean(
         "Realizada",
+        readonly=True,
         help="Marcar como realizada la actividad",
     )
-    no_done_activity = fields.Boolean(
-        "No realizada",
-        help="Marcar como no realizada la actividad",
+   
+    # no_done_activity = fields.Boolean(
+    #     "No realizada",
+    #     help="Marcar como no realizada la actividad",
+    # )
+
+    parent_state = fields.Selection([
+            ("inspect", "Inspect"),
+            ("in_process", "En proceso"),
+            # ("clean", "Clean"),
+            ("done", "Verificada"),
+            ("cancel", "Cancelled"),
+        ], "State",
+        related='housekeeping_id.state'
     )
+
     state = fields.Selection([
         ('draft', 'Sin verificar'),
-        ('done', 'verificado'),
+        # ('done', 'Realizada'),
+        ('verify', 'verificado'),
         ('cancel', 'Cancelado'),
     ], string='Estado', readonly=True, default='draft')
     
-    @api.onchange('no_done_activity','done_activity')
-    def onchange_field(self):
-        if self.user_id or self.housekeeping_id.inspector_id:
-            if self.env.user != self.user_id and self.housekeeping_id.inspector_id != self.env.user:
-                raise ValidationError(_('Solo el asignado puede modificar la actividad o su Inspector'))
-        pass 
+
+    # @api.onchange('done_activity')
+    # def onchange_state_housekeeping_id(self):
+    #     if self.housekeeping_id and self.housekeeping_id.state == 'inspect':
+    #         self.housekeeping_id.state = 'in_process'
+    #     pass 
     
 
     @api.model
@@ -52,11 +67,34 @@ class HotelHousekeepingActivities(models.Model):
     
     def verifyActivity(self):
         for activity in self:
-            self.write({'state': 'done'})
+            if activity.inspector_id and self.env.user != activity.inspector_id:
+                raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+            activity.write({'state': 'verify'})
 
-    def cancleActivity(self):
+    def draftActivity(self):
         for activity in self:
-            self.write({'state': 'cancel'})
+            if activity.inspector_id and self.env.user != activity.inspector_id and activity.user_id and self.env.user != activity.user_id:
+                raise ValidationError(_('Solo el asignado puede modificar la actividad o su Inspector'))
+            activity.write({'state': 'draft'})
+            activity.write({'done_activity': 'False'})
+
+    def doneActivity(self):
+        for activity in self:
+            if activity.inspector_id and self.env.user != activity.inspector_id and activity.user_id and self.env.user != activity.user_id:
+                raise ValidationError(_('Solo el asignado puede modificar la actividad o su Inspector'))
+            activity.write({'done_activity': False})
+
+    def canceldoneActivity(self):
+        for activity in self:
+            if activity.inspector_id and self.env.user != activity.inspector_id and activity.user_id and self.env.user != activity.user_id:
+                raise ValidationError(_('Solo el asignado puede modificar la actividad o su Inspector'))
+            activity.write({'done_activity': True})
+
+    def cancelActivity(self):
+        for activity in self:
+            if activity.inspector_id and self.env.user != activity.inspector_id:
+                raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+            activity.write({'state': 'cancel'})
                 
 
     @api.constrains("clean_start_time", "clean_end_time")

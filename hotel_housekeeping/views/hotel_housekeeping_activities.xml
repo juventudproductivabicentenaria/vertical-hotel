@@ -52,13 +52,34 @@
         <field name="arch" type="xml">
             <form string="Housekeeping Activity Types">
                 <header>
-                    <button name="verifyActivity" type="object" string="Verificar" 
-                    attrs="{'invisible':[('state','!=','draft')]}" class="oe_stat_button" icon_only="1" icon="fa-check-circle-o">
-                    </button>
-                    <button name="cancleActivity" type="object" string="Cancelar" icon_only="1"
-                        attrs="{'invisible':[('state','!=','draft')]}" class="oe_stat_button" icon="fa-times-circle-o">
-                    </button>
+                    <button name="doneActivity" type="object" string="Marcar como realizada" icon="fa-times-circle-o" icon_only="1"
+                    title="Marcar como realizada"
+                    attrs="{'invisible':['|',
+                        ('state','in',['verify','cancel']),
+                        ('done_activity','!=',True),
+                        ]}" class="oe_stat_button" >
+                </button>
+                <button name="canceldoneActivity" type="object" string="Marcar como realizada" icon="fa-check-circle-o" icon_only="1"
+                    title="Marcar como  no realizada"
+                    attrs="{'invisible':[('done_activity','!=',False),('state','in',['verify','cancel'])]}" class="oe_stat_button" >
+                </button>
+                <button name="verifyActivity" type="object" string="Verificar" 
+                    title="Verificar"
+                    groups="hotel.group_hotel_user"
+                    attrs="{'invisible':[('state','in',['cancel','verify'])]}" class="oe_highlight">
+                </button>
+                <button name="cancelActivity" type="object" string="Cancelar" 
+                    title="Cancelar"
+                    groups="hotel.group_hotel_user"
+                    attrs="{'invisible':[('state','!=','draft')]}" class="oe_highlight" >
+                </button>
+                <button name="draftActivity" type="object" string="Restablecer a borrador" 
+                    title="Restablecer a borrador"
+                    groups="hotel.group_hotel_user"
+                    attrs="{'invisible':[('state','not in',('cancel','verify'))]}" class="oe_highlight" >
+                </button>
                     <field name="state" widget="statusbar"/>
+                    <field name="parent_state" invisible="1"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -66,8 +87,8 @@
                     </div>
                     <group>
                         <group>
-                            <field name="done_activity"  attrs="{'readonly':['|',('no_done_activity','=',True), ('state','in',['done','cancel'])]}"/>
-                            <field name="no_done_activity" attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/>
+                            <field name="done_activity" readonly="1" force_save="1"/>
+                            <!-- <field name="no_done_activity" attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/> -->
                             <field name="activity_id"/>
                             <field name="room_id" readonly="1"/>
                             <field name="user_id"/>

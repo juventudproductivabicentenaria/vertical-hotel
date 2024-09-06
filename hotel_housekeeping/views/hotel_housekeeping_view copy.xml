@@ -9,6 +9,7 @@
         <field name="arch" type="xml">
             <form string="Housekeeping">
                 <header>
+                    
                     <button string="Verificar actividades" name="verify_activitys" aria-label="Clean"
                             title="Marcar como realizado" states="inspect,in_process" type="object"
                             groups="hotel.group_hotel_user"
@@ -16,26 +17,30 @@
                             class="btn btn-primary">
                         <i class="fa fa-paint-brush"></i>
                     </button>
-                    <button string="Restablecer a borrador" name="action_set_to_draft"
-                            title="restrablecer a borrador"
-                            states="cancel,done" type="object"
+                    <!-- <button string="Dirty" name="action_set_to_dirty"
+                            aria-label="Dirty" title="Dirty"
+                            states="inspect,clean" type="object"
                             class="btn btn-primary">
                         <i class="fa-pencil-square-o"></i>
+                    </button> -->
+                    <button string="Done" name="room_done" aria-label="Done"
+                            title="Done" states="clean" type="object"
+                            class="btn btn-primary">
+                        <i class="fa-check"></i>
                     </button>
                     <button string="Cancelar actividades" name="cancel_activitys"
                             aria-label="Cancel" title="Cancel"
                             groups="hotel.group_hotel_user"
-                            confirm="Cancelara la el registro y cancelara todas las actividades, confirme para realizar"
-                            states="inspect,in_process" type="object"
+                            confirm="Cancelara la actividad y Cancelara todas las actividades, confirme para realizar"
+                            states="in_process,inspect" type="object"
                             class="btn btn-primary">
+                        <i class="fa-times-circle"></i>
                     </button>
-
-                    <!-- <button string="Cancelar" name="cancel_action"
-                            groups="hotel.group_hotel_user"
-                            aria-label="cancel" title="Cancelar"
-                            attrs="{'invisible':[('state','!=','cancel')]}" 
+                    <button string="Inspect" name="room_inspect"
+                            aria-label="Inspect" title="Inspect" states="cancel"
                             type="object" class="btn btn-primary">
-                    </button> -->
+                        <i class="fa-search"></i>
+                    </button>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -44,13 +49,13 @@
                     </div>
                     <group>
                         <group>
-                            <field name="current_date" attrs="{'readonly':[('state','in',['cancel','done'])]}"/>
-                            <field name="clean_type" attrs="{'readonly':[('state','in',['cancel','done'])]}"/>
-                            <field name="room_id" required="1" attrs="{'readonly':[('state','in',['cancel','done'])]}"  />
+                            <field name="current_date"/>
+                            <field name="clean_type"/>
+                            <field name="room_id" required="1"/>
                         </group>
                         <group>
-                            <field name="inspector_id" attrs="{'readonly':[('state','in',['cancel','done'])]}" required="1"/>
-                            <field name="inspect_date_time" attrs="{'readonly':[('state','in',['cancel','done'])]}" required="1"/>
+                            <field name="inspector_id" required="1"/>
+                            <field name="inspect_date_time" required="1"/>
                             <field name="quality"
                                    attrs="{'invisible':[('state','not in',['clean','done'])]}"/>
                         </group>
@@ -58,7 +63,7 @@
                     <newline/>
                     <newline/>
                     <separator string="Activity Lines" colspan="4"/>
-                    <field name="activity_line_ids" attrs="{'readonly':[('state','in',['cancel','done'])]}"
+                    <field name="activity_line_ids"
                            context="{'room_id':room_id, 'today_date':current_date}"
                            colspan="4" nolabel="1">
                         <form string="Activity Lines">
@@ -84,25 +89,21 @@
                             <field name="today_date"/>  
                             <field name="clean_start_time"/>
                             <field name="clean_end_time"/>
-                            <field name="parent_state" invisible="1"/>
                             <field name="done_activity"  readonly="1" force_save="1"/>
                             <!-- <field name="no_done_activity"  attrs="{'readonly':['|',('done_activity','=',True), ('state','in',['done','cancel'])]}"/> -->
                             <field name="state"  readonly="1"/>
                             <button name="doneActivity" type="object" string="Marcar como realizada" icon="fa-times-circle-o" icon_only="1"
                                 title="Marcar como realizada"
-                                attrs="{'invisible':['|',
-                                    ('state','in',['verify','cancel']),
-                                    ('done_activity','!=',True),
-                                    ]}" class="oe_stat_button" >
+                                attrs="{'invisible':[('done_activity','!=',False)]}" class="oe_stat_button" >
                             </button>
                             <button name="canceldoneActivity" type="object" string="Marcar como realizada" icon="fa-check-circle-o" icon_only="1"
                                 title="Marcar como  no realizada"
-                                attrs="{'invisible':[('done_activity','!=',False),('state','in',['verify','cancel'])]}" class="oe_stat_button" >
+                                attrs="{'invisible':[('done_activity','!=',True)]}" class="oe_stat_button" >
                             </button>
                             <button name="verifyActivity" type="object" string="Verificar" 
                                 title="Verificar"
                                 groups="hotel.group_hotel_user"
-                                attrs="{'invisible':[('state','in',['cancel','verify'])]}" class="oe_highlight">
+                                attrs="{'invisible':[('state','=','verify')]}" class="oe_highlight">
                             </button>
                             <button name="cancelActivity" type="object" string="Cancelar" 
                                 title="Cancelar"
@@ -112,7 +113,7 @@
                             <button name="draftActivity" type="object" string="Restablecer a borrador" 
                                 title="Restablecer a borrador"
                                 groups="hotel.group_hotel_user"
-                                attrs="{'invisible':[('state','not in',('cancel','verify'))]}" class="oe_highlight" >
+                                attrs="{'invisible':[('state','!=','draft'),('parent_state','not in',('',''))]}" class="oe_highlight">
                             </button>
                         </tree>
                     </field>
@@ -146,8 +147,8 @@
         <field name="arch" type="xml">
             <search string="Housekeeping">
                 <group string='Filters'>
-                    <filter domain="[('state','=','in_process')]" string="En Proceso"
-                            name="in_process"/>
+                    <filter domain="[('state','=','dirty')]" string="Dirty"
+                            name="dirty"/>
                     <filter domain="[('state','=','clean')]" string="Clean"
                             name="clean"/>
                     <filter domain="[('state','=','inspect')]" string="Inspect"

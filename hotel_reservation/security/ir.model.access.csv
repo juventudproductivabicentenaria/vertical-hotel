@@ -16,7 +16,8 @@ access_uom_uom_user_portal,uom.uom.user.portal,uom.model_uom_uom,base.group_port
 access_ir_sequence_user_portal,ir.sequence.user.portal,base.model_ir_sequence,base.group_portal,1,0,0,0
 
 
-access_hotel_foods_admin,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_user,1,1,1,1
+access_hotel_foods_admin,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_manager,1,1,1,1
+access_hotel_foods_user,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_user,1,0,0,0
 access_hotel_foods_usuers,hotel.foods.admin,model_hotel_foods,base.group_portal,1,0,0,0
 access_hotel_transport_admin,hotel.transport.admin,model_hotel_transport,hotel.group_hotel_user,1,1,1,1
 access_hotel_transport_usuers,hotel.transport.admin,model_hotel_transport,base.group_portal,1,0,0,

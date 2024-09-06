@@ -28,9 +28,9 @@ class ReserveRoom(models.TransientModel):
     boys = fields.Integer('Niños')
 
     def reservation_room(self, date_from, date_until, adults, ninos, rooms):
-        room_obj = self.env['hotel.room']
+        room_obj = self.env['hotel.room'].sudo()
         room_ids = room_obj.search([])
-        reservation_line_obj = self.env['hotel.room.reservation.line']
+        reservation_line_obj = self.env['hotel.room.reservation.line'].sudo()
         date_range_list = []
         domain = []
         # fecha_datetime = datetime.strptime(fecha_str, "%d-%m-%Y").replace(hour=0, minute=0, second=0)

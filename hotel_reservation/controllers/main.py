@@ -26,6 +26,35 @@ class Website(http.Controller):
     @http.route(['/'], type="http", auth="public", website=True,)
     def home_reservation(self, **post):
         return request.render('hotel_reservation.home_reservation')
+        
+    @http.route(['/reservation/search_menu_foods'], type="json", auth="public", website=True,)
+    def home_reservation(self, **post):
+        date_start = post['date_from']
+        date_end = post['date_until']
+        print("date 111")
+        print("date 111")
+        print(date_start)
+        print(date_end)
+        date_start = datetime.strptime(date_start, "%Y-%m-%d")
+        date_end = datetime.strptime(date_end, "%Y-%m-%d")
+        print("date 222")
+        print("date 222")
+        print(date_start)
+        print(date_end)
+        food_image = request.env['hotel.foods'].sudo().search([
+            ('date_start', '<=', date_start),
+            ('date_end', '>=', date_end),
+            ('state', '=', 'published'),
+        ])
+        url = False
+        if food_image:
+            print("food image")
+            print("food image")
+            print(food_image)
+            # = image_data_uri(food_image.data)
+            url= "web/image?model=hotel.foods&id=%s&field=data" % food_image.id
+        return {"image_data": url if food_image and url else False}
+
 
     @http.route(['/reservation'], type="http", auth="public", website=True,)
     def reservation(self, **post):
@@ -53,7 +82,7 @@ class Website(http.Controller):
     @http.route('/search_person', type='json', auth='public')
     def search_person(self, **kwargs):
         partner_ci = kwargs["partner_ci"]
-        ResPartner = request.env['res.partner']
+        ResPartner = request.env['res.partner'].sudo()
         if not partner_ci:
             return {'no_id': 'Falta la CI del partner'}
 
@@ -75,9 +104,6 @@ class Website(http.Controller):
         
     @http.route('/reservation/search_reservation', type='json', auth="public", website=True, sitemap=False)
     def search_reservation(self, access_token=None, revive='', **kwargs):
-        # main_ci = kwargs["main_ci"]
-        # main_email = kwargs["main_email"]
-        # main_phone = kwargs["main_phone"]
         print(kwargs)
         cheking_date = kwargs['date_from']
         chekout_date = kwargs['date_until']
@@ -95,7 +121,7 @@ class Website(http.Controller):
         print(date_until)
         adults = kwargs['adults']
         ninos = kwargs['ninos']
-        ResPartner = request.env['res.partner']
+        ResPartner = request.env['res.partner'].sudo()
         HotelReservation = request.env['hotel.reservation'].sudo()
         HotelReservationLine = request.env['hotel_reservation.line'].sudo()
         HotelReservationOrder = request.env['hotel.reservation.order'].sudo()
@@ -363,7 +389,7 @@ class Website(http.Controller):
                             
                     if data["include_transport"] == True:
                         HotelTransport.create({
-                            "reservation_room_id": new_reservation.id,
+                            "hotel_reservation": new_reservation.id,
                             "move_from": data["origen"],
                             "move_to": data["destiny"],
                             "partner_id": new_partner.id
@@ -575,7 +601,7 @@ class Website(http.Controller):
                     if data["include_transport"] == True:
                         
                         HotelTransport.create({
-                            "reservation_room_id": new_reservation.id,
+                            "hotel_reservation": new_reservation.id,
                             "move_from": data["origen"],
                             "move_to": data["destiny"],
                             "partner_id": partner.id
@@ -717,7 +743,7 @@ class Website(http.Controller):
                     reservation_order.order_list_ids = [(6, 0, lines_ids.ids)]
         if kwargs["include_transport"] == True:
             HotelTransport.create({
-                "reservation_room_id": new_reservation.id,
+                "hotel_reservation": new_reservation.id,
                 "move_from": kwargs["origen"],
                 "move_to": kwargs["destiny"],
                 "partner_id": reservation_line_partners[0].id

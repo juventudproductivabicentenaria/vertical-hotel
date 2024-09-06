@@ -60,7 +60,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
             var self = this;
             var def = this._super.apply(this, arguments);
 			this._fetch().then(this._render.bind(this));
-			
+			let image_menu_foods = $("#image_menu_foods")
+			image_menu_foods.hide()
             },
 			
            /**
@@ -348,45 +349,74 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 		_add_food: function(ev) {
+			let self = this;
 			let container = document.getElementById("breakfast_container")
+			let image_menu_foods = $("#image_menu_foods")
+			image_menu_foods.show()
 			let check = document.getElementById("food_check")
 			if (!check.checked) {
 				container.innerHTML = ""
+				var data = {"image_data":false }
+				image_menu_foods.replaceWith(qweb.render("hotel_reservation.image_menu_foods",
+					data
+				));
 				return
 			}
 			container.innerHTML = `<div class="container">
-			<div class="row">
-				<div class="col-sm-4 border border-primary" style="border-radius: 20px;">
+			<div class="row justify-content-around">
+				<div class="col-sm-3 m-2 border border-primary" style="border-radius: 20px;">
 					<ul class="list-group mb-3 mt-3">
 						<li class="list-group-item d-flex align-items-center bg-secondary text-light border border-primary">
 							<label class="form-check-label mr-2" for="breakfast_check">Desayuno</label>
 							<input value="Desayuno" class="form-check-input" type="checkbox" id="breakfast_check">
 						</li>
-						<div id="breakfast_date_container" class="d-flex align-items-center mb-5 mt-2 ml-5"></div>
+						<div id="breakfast_date_container" class="d-flex align-items-center "></div>
 					</ul>
 				</div>
 		
-				<div class="col-sm-4 border border-primary" style="border-radius: 20px;">
+				<div class="col-sm-3 m-2 border border-primary" style="border-radius: 20px;">
 					<ul class="list-group mb-3 mt-3">
 						<li class="list-group-item d-flex align-items-center bg-secondary text-light border border-primary">
 							<label class="form-check-label mr-2" for="lunch_check">Almuerzo</label>
 							<input value="Almuerzo" class="form-check-input" type="checkbox" id="lunch_check">
 						</li>
-						<div id="lunch_date_container" class="d-flex align-items-center mb-5 mt-2 ml-5"></div>
+						<div id="lunch_date_container" class="d-flex align-items-center "></div>
 					</ul>
 				</div>
 		
-				<div class="col-sm-4 border border-primary" style="border-radius: 20px;">
+				<div class="col-sm-3 m-2 border border-primary" style="border-radius: 20px;">
 					<ul class="list-group mb-3 mt-3">
 						<li class="list-group-item d-flex align-items-center bg-secondary text-light border border-primary">
 							<label class="form-check-label mr-2" for="dinner_check">Cena</label>
 							<input value="Cena" class="form-check-input" type="checkbox" id="dinner_check">
 						</li>
-						<div id="dinner_date_container" class="d-flex align-items-center mb-5 mt-2 ml-5"></div>
+						<div id="dinner_date_container" class="d-flex align-items-center"></div>
 					</ul>
 				</div>
 			</div>
 		</div>`
+		var date_from = $('#dateFrom').val();
+		var date_until = $('#date_until').val()
+		this._rpc({
+			route: '/reservation/search_menu_foods',
+			params: {
+				'date_from': date_from,
+				'date_until': date_until,
+			},
+		}).then(result => {
+			// self.unblockUI(ev);
+			console.log(result)
+			console.log(result.image_data)
+			
+			if (result.image_data) {
+				var data ={
+					"image_data":result.image_data
+				}
+				image_menu_foods.replaceWith(qweb.render("hotel_reservation.image_menu_foods",
+					data
+				));
+			};
+		});
 		},
 
 		_add_breakfast_date: function(ev) {
@@ -403,14 +433,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 			container.innerHTML = `
 			
-			<div class="">
-				<label class="text_adult" for="breakfastDate">Fechas para desayunar</label>
+			<div class="mt-2">
+				<span class="text-type-1" for="breakfastDate">Fechas para desayunar</span>
 				<input type="text" class="border rounded p-2" id="breakfastDate" name="request_breakfast_date_from" required="1"/>
 			</div>
 			`
 			$(document).ready(function() {
 				$('#breakfastDate').datepicker({
-					startDate: new Date(),
+					startDate: new Date(date_since.value),
 					endDate: newEndDate,
 					multidate: true,
 					format: "dd/mm/yyyy",
@@ -434,14 +464,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				return
 			}
 			container.innerHTML = `
-			<div class="">
-				<label class="text_adult" for="lunchDate">Fechas para Almorzar</label>
+			<div class="mt-2">
+				<span class="text-type-1" for="lunchDate">Fechas para Almorzar</span>
 				<input type="text" class="border rounded p-2" id="lunchDate" name="request_lunch_date_from" required="1"/>
 			</div>
 			`
 			$(document).ready(function() {
 				$('#lunchDate').datepicker({
-					startDate: new Date(),
+					startDate: new Date(date_since.value),
 					endDate: newEndDate,
 					multidate: true,
 					format: "dd/mm/yyyy",
@@ -460,14 +490,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				return
 			}
 			container.innerHTML = `
-			<div class="">
-				<label class="text_adult" for="dinnerDate">Fechas para Cenar</label>
+			<div class="mt-2">
+				<span class="text-type-1" for="dinnerDate">Fechas para Cenar</span>
 				<input type="text" class="border rounded p-2" id="dinnerDate" name="request_breakfast_date_from" required="1"/>
 			</div>
 			`
 			$(document).ready(function() {
 				$('#dinnerDate').datepicker({
-					startDate: new Date(),
+					startDate: new Date(date_since.value),
 					endDate: new Date(date_to.value),
 					multidate: true,
 					format: "dd/mm/yyyy",
@@ -704,6 +734,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 		__add_other_person: function(ev) {
+			let self = this;
+			self.verificationDataError(ev);
+			var $error_data = $("#error_data")
+			$error_data.hide();
+			var error = this.verificationDataError(ev);
+			if (error) {
+				$error_data.show();
+				return
+			}
 			let ci = document.getElementById("identification_VAT").value
 			let field_name = document.getElementById("first_last_name_input").value
 			let field_phone = document.getElementById("phone_input").value

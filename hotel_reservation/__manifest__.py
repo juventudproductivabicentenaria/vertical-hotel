@@ -23,7 +23,8 @@
         "views/res_config_settings.xml",
         "views/hotel_room.xml",
         "views/res_partner_view.xml",
-        "views/hotel_reservation_line_view .xml",
+        "views/hotel_reservation_line_view.xml",
+        "views/hotel_foods_view.xml",
         #template
         "template/main_layaout.xml",
         "template/home_reservation.xml",

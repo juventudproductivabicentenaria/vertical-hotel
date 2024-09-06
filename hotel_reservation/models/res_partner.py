@@ -27,7 +27,7 @@ class ResPartner(models.Model):
     @api.constrains('vat')
     def _check_already_vat(self):
         if self.vat:
-            value = self.search([('vat', 'ilike', self.vat), ('id', '<>', self.id)])
+            value = self.search([('vat', '=', self.vat), ('id', '<>', self.id)])
             if (value):
                 raise ValidationError(_("Ya existe un registro con este Cedula de identidad/CI: " + str(self.vat)))
             

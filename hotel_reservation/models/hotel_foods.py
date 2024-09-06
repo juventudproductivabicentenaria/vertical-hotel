@@ -21,24 +21,23 @@ class HotelFoods(models.Model):
     _rec_name = "name"
     _order = "date_start"
 
-    # code = fields.Char(
-    #     string="Codigo",  
-    # )
     name = fields.Char(
         string="Nombre",
         required=True,
+        
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
+    data = fields.Binary("Image", required=True, attachment=True)
 
     date_start = fields.Date(
-        string="Fecha",
+        string="Fecha de inicio",
         required=False,
         readonly=True,
         states={"draft": [("readonly", False)]}
     )
     date_end = fields.Date(
-        string="Fecha",
+        string="Fecha de finalización",
         required=False,
         readonly=True,
         states={"draft": [("readonly", False)]}
@@ -46,14 +45,22 @@ class HotelFoods(models.Model):
     
     state = fields.Selection(
         [
-            ("published", "Publicado"),
             ("draft", "Borrador"),
-            ("candela", "Cancelado"),
+            ("published", "Publicado"),
+            ("cancel", "Cancelado"),
         ],
         "Estado",
         default="draft",
     )
 
+    def action_set_to_draft(self):
+        self.write({"state": "draft"})
+    
+    def action_set_cancel(self):
+        self.write({"state": "cancel"})
+
+    def action_set_to_publish(self):
+        self.write({"state": "published"})
 
     @api.model
     def create(self, vals):

@@ -7,11 +7,11 @@ from odoo.osv import expression
 class HotelHousekeepingActivityType(models.Model):
 
     _name = "hotel.housekeeping.activity.type"
-    _description = "Activity Type"
+    _description = "Categorias de actividades"
 
     name = fields.Char("Name", required=True)
     activity_id = fields.Many2one(
-        "hotel.housekeeping.activity.type", "Activity Type"
+        "hotel.housekeeping.activity.type", "Categoria Padre"
     )
 
     def name_get(self):

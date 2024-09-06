@@ -5,6 +5,7 @@
         id="hotel_configuration_menu"
         name="Configuration"
         sequence="20"
+        groups="hotel.group_hotel_manager"
         parent="hotel_management_menu"
     />
     <menuitem

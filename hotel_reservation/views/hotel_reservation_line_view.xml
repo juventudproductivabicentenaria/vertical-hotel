@@ -33,6 +33,7 @@
                     <group>
                         <field name="children_ids" attrs="{'invisible': [('is_son', '!=', True)], 'required': [('is_son', '=', True)]}" />
                         <field name="name" string="Descripcion" />
+                        <!-- <field name="room_reservation_line" options="{'no_create': True, 'no_edit': True, 'no_open': True}" readonly="1"/> -->
                     </group>
                 </sheet>
                 <div class="oe_chatter">

@@ -122,7 +122,7 @@
                                             <tbody>
                                                 <t t-set="iterador" t-value="0"/>
                                                 <tr t-foreach="reservation.reservation_line_ids" t-as="reserve">
-                                                    <td colspan="5"><span t-esc="reserve.partner_id.name"/></td>
+                                                    <td colspan="5"><span t-esc="reserve.sudo().partner_id.name"/></td>
                                                     <td colspan="5"><span t-esc="reservation.adults"/></td>
                                                     <t t-set="iterador" t-value="iterador+1"/>
                                                 </tr>

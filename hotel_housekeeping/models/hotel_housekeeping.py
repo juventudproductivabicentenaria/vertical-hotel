@@ -66,9 +66,9 @@ class HotelHousekeeping(models.Model):
     state = fields.Selection(
         [
             ("inspect", "Inspect"),
-            ("dirty", "Dirty"),
-            ("clean", "Clean"),
-            ("done", "Done"),
+            ("in_process", "En proceso"),
+            # ("clean", "Clean"),
+            ("done", "Verificada"),
             ("cancel", "Cancelled"),
         ],
         "State",
@@ -78,11 +78,17 @@ class HotelHousekeeping(models.Model):
         default="inspect",
     )
     
+
     @api.model
     def create(self, vals):
         vals["code"] = self.env["ir.sequence"].next_by_code("hotel.housekeeping") or "New"
         res = super(HotelHousekeeping, self).create(vals)
         return res
+
+    def action_set_to_draft(self):
+        if self.inspector_id and self.env.user != self.inspector_id:
+            raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+        self.write({"state": "inspect"})
 
     @api.onchange('clean_type')
     def onchange_clean_type(self):
@@ -108,9 +114,14 @@ class HotelHousekeeping(models.Model):
         self.write({"state": "dirty", "quality": False})
         # self.activity_line_ids.write({"is_clean": False, "is_dirty": True})
 
+    def cancel_action(self):
+        if self.inspector_id and self.env.user != self.inspector_id:
+            raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+        self.write({'state': 'cancel'})
     def cancel_activitys(self):
         if self.inspector_id and self.env.user != self.inspector_id:
             raise ValidationError(_('Solo el inspector puede realizar esta accion'))
+        self.write({'state': 'cancel'})
         if self.activity_line_ids:
             for activity in self.activity_line_ids:
                 activity.write({'state': 'cancel'})
@@ -138,7 +149,7 @@ class HotelHousekeeping(models.Model):
     def verify_activitys(self):
         if self.inspector_id and self.env.user != self.inspector_id:
             raise ValidationError(_('Solo el inspector puede realizar esta accion'))
-            
         if self.activity_line_ids:
             for activity in self.activity_line_ids:
-                activity.write({'state': 'done'})
+                activity.write({'state': 'verify'})
+        self.write({'state': 'done'})
