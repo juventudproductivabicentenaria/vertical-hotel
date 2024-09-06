@@ -23,35 +23,24 @@ DEFAULT_TIME_FORMAT = '%H:%M:%S'
 
 class Website(http.Controller):
 
-    @http.route(['/'], type="http", auth="public", website=True,)
-    def home_reservation(self, **post):
-        return request.render('hotel_reservation.home_reservation')
+    # @http.route(['/'], type="http", auth="public", website=True,)
+    # def home_reservation(self, **post):
+    #     return request.render('hotel_reservation.home_reservation')
         
     @http.route(['/reservation/search_menu_foods'], type="json", auth="public", website=True,)
     def home_reservation(self, **post):
         date_start = post['date_from']
         date_end = post['date_until']
-        print("date 111")
-        print("date 111")
-        print(date_start)
-        print(date_end)
         date_start = datetime.strptime(date_start, "%Y-%m-%d")
         date_end = datetime.strptime(date_end, "%Y-%m-%d")
-        print("date 222")
-        print("date 222")
-        print(date_start)
-        print(date_end)
         food_image = request.env['hotel.foods'].sudo().search([
             ('date_start', '<=', date_start),
             ('date_end', '>=', date_end),
             ('state', '=', 'published'),
-        ])
+        ],limit=1)
+
         url = False
         if food_image:
-            print("food image")
-            print("food image")
-            print(food_image)
-            # = image_data_uri(food_image.data)
             url= "web/image?model=hotel.foods&id=%s&field=data" % food_image.id
         return {"image_data": url if food_image and url else False}
 

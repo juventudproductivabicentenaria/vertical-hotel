@@ -23,10 +23,10 @@
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/hotel_reservation.js"
             />
-            <script
+            <!-- <script
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/jquery_backstretch_min.js"
-                />
+                /> -->
             <!-- <script
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/home_reservation.js"
@@ -35,19 +35,19 @@
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/jquery-3.2.1.min.js.js"
             /> -->
-            <script
+            <!-- <script
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/bootstrap.min.js.js"
             />
             <script
                 type="text/javascript"
                 src="/hotel_reservation/static/src/js/bootstrap-datepicker.min.js.js"
-            />
+            /> -->
             <!-- <link
                 rel="stylesheet"
                 href="/hotel_reservation/static/src/css/bootstrap.min.css"
             /> -->
-            <link
+            <!-- <link
                 rel="stylesheet"
                 href="/hotel_reservation/static/src/css/bootstrap-theme.min.css"
             />
@@ -58,7 +58,7 @@
             <link
                 rel="stylesheet"
                 href="/hotel_reservation/static/src/css/font-awesome.min.css"
-            />
+            /> -->
             <link
                 rel="stylesheet"
                 href="/hotel_reservation/static/src/css/room_summary.css"
