@@ -440,7 +440,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			`
 			$(document).ready(function() {
 				$('#breakfastDate').datepicker({
-					startDate: new Date(date_since.value),
+					startDate: new Date(),
 					endDate: newEndDate,
 					multidate: true,
 					format: "dd/mm/yyyy",
@@ -471,7 +471,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			`
 			$(document).ready(function() {
 				$('#lunchDate').datepicker({
-					startDate: new Date(date_since.value),
+					startDate: new Date(),
 					endDate: newEndDate,
 					multidate: true,
 					format: "dd/mm/yyyy",
@@ -497,7 +497,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			`
 			$(document).ready(function() {
 				$('#dinnerDate').datepicker({
-					startDate: new Date(date_since.value),
+					startDate: new Date(),
 					endDate: new Date(date_to.value),
 					multidate: true,
 					format: "dd/mm/yyyy",

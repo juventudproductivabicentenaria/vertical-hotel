@@ -305,5 +305,5 @@
 
     <menuitem id="menu_open_h_activity_form" name="Activities"
               action="action_h_activity_form" parent="menu_hotel_activity"/>
-
+ 
 </odoo>
