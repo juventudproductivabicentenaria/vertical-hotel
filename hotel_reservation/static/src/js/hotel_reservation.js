@@ -427,14 +427,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let [endYear, endMonth, endDay] = date_to.split('-');
 			const startDate = new Date(startYear, startMonth, startDay);
 			const endDate = new Date(endYear, endMonth, endDay);
-
-			// const startDate = new Date(date_since);
-			// const endDate = new Date(date_to);
-			console.log('startDate');
-			console.log(startDate);
-			console.log("endDate");
-			console.log(endDate);
-		 
 			if (!check.checked) {
 			   container.innerHTML = "";
 			   return;
@@ -458,47 +450,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			   }
 			});
 		 },
-		
-		_add_dinner_date: function(ev) {
-			let container = document.getElementById("dinner_date_container")
-			let date_since = document.getElementById("dateFrom").value;
-			let date_to = document.getElementById("date_until").value;
-			let check = document.getElementById("dinner_check")
-			let [startYear, startMonth, startDay] = date_since.split('-');
-			let [endYear, endMonth, endDay] = date_to.split('-');
-			const startDate = new Date(startYear, startMonth, startDay);
-			const endDate = new Date(endYear, endMonth, endDay);
-			if (!check.checked) {
-				container.innerHTML = ""
-				return
-			}
-			container.innerHTML = `
-			<div class="mt-2">
-				<span class="text-type-1" for="dinnerDate">Fechas para Cenar</span>
-				<input type="text" class="border rounded p-2" id="dinnerDate" name="request_breakfast_date_from" required="1"/>
-			</div>
-			`
-			flatpickr("#dinnerDate", {
-				mode: "multiple",
-				dateFormat: "d/m/Y",
-				minDate: startDate,
-				maxDate: endDate,
-				onChange: function(selectedDates) {
-				   // Log the selected dates as a string
-				   const selectedDatesStr = selectedDates.map(date => flatpickr.formatDate(date, "d/m/Y")).join(',');
-				   console.log('Selected Dates:', selectedDatesStr);
-				}
-			});
-		},
+
 		_add_lunch_date: function(ev) {
 			let container = document.getElementById("lunch_date_container")
 			let date_since = document.getElementById("dateFrom").value;
 			let date_to = document.getElementById("date_until").value;
 			let [startYear, startMonth, startDay] = date_since.split('-');
+			let [endYear, endMonth, endDay] = date_to.split('-');
 			const startDate = new Date(startYear, startMonth, startDay);
-			const endDate = new Date(date_to);
-			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
-			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
+			const endDate = new Date(endYear, endMonth, endDay);
 			let check = document.getElementById("lunch_check");
 			if (!check.checked) {
 				container.innerHTML = ""
@@ -514,6 +474,40 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				mode: "multiple",
 				dateFormat: "d/m/Y",
 				minDate: startDate,
+				maxDate: endDate,
+				onChange: function(selectedDates) {
+				   // Log the selected dates as a string
+				   const selectedDatesStr = selectedDates.map(date => flatpickr.formatDate(date, "d/m/Y")).join(',');
+				   console.log('Selected Dates:', selectedDatesStr);
+				}
+			});
+		},
+		
+		_add_dinner_date: function(ev) {
+			let container = document.getElementById("dinner_date_container")
+			let date_since = document.getElementById("dateFrom").value;
+			let date_to = document.getElementById("date_until").value;
+			let check = document.getElementById("dinner_check")
+			let [startYear, startMonth, startDay] = date_since.split('-');
+			let [endYear, endMonth, endDay] = date_to.split('-');
+			const startDate = new Date(startYear, startMonth, startDay);
+			const endDate = new Date(endYear, endMonth, endDay);
+			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
+			if (!check.checked) {
+				container.innerHTML = ""
+				return
+			}
+			container.innerHTML = `
+			<div class="mt-2">
+				<span class="text-type-1" for="dinnerDate">Fechas para Cenar</span>
+				<input type="text" class="border rounded p-2" id="dinnerDate" name="request_breakfast_date_from" required="1"/>
+			</div>
+			`
+			flatpickr("#dinnerDate", {
+				mode: "multiple",
+				dateFormat: "d/m/Y",
+				minDate: startDate,
 				maxDate: newEndDate,
 				onChange: function(selectedDates) {
 				   // Log the selected dates as a string
@@ -522,6 +516,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 			});
 		},
+		
 
 		_add_room: function(ev) {
 			let counter = document.getElementById("counterRooms")
