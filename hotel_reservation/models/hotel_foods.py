@@ -69,3 +69,28 @@ class HotelFoods(models.Model):
         # )
         res = super(HotelFoods, self).create(vals)
         return res
+
+    def get_MenuHotelFoods(self, date_start, date_end):
+        # food_image = request.env['hotel.foods'].sudo().search([
+        #     ('state', '=', 'published'),
+        #     ('date_start', '<=', date_start),
+        #     ('date_end', '>=', date_end),
+        # ],limit=1
+        query = """ SELECT atl.id
+                FROM hotel_foods as atl
+                WHERE atl.state = 'published'  AND 
+                ((atl.date_start >= %s AND atl.date_end <= %s) OR 
+                (atl.date_start < %s AND atl.date_end <= %s AND atl.date_end >= %s) OR 
+                (atl.date_start >= %s AND atl.date_start <= %s AND atl.date_end > %s) OR
+                (atl.date_start < %s AND  atl.date_end > %s) 
+               );
+            """ 
+        params = [
+            date_start, date_end, 
+            date_start, date_end, date_start,
+            date_start, date_end, date_end,
+            date_start, date_end,
+        ]
+        self._cr.execute(query, params)
+        food_image = self._cr.dictfetchone()
+        return food_image

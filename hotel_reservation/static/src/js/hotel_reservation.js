@@ -418,73 +418,45 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			};
 		});
 		},
-
 		_add_breakfast_date: function(ev) {
-			let container = document.getElementById("breakfast_date_container")
-			let date_since = document.getElementById("dateFrom")
-			let date_to = document.getElementById("date_until")
-			const endDate = new Date(date_to.value);
-			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
-			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
-			let check = document.getElementById("breakfast_check")
+			let container = document.getElementById("breakfast_date_container");
+			let date_since = document.getElementById("dateFrom").value;
+			let date_to = document.getElementById("date_until").value;
+			let check = document.getElementById("breakfast_check");
+			const startDate = new Date(date_since);
+			const endDate = new Date(date_to);
+		 
 			if (!check.checked) {
-				container.innerHTML = ""
-				return
+			   container.innerHTML = "";
+			   return;
 			}
 			container.innerHTML = `
-			
-			<div class="mt-2">
-				<span class="text-type-1" for="breakfastDate">Fechas para desayunar</span>
-				<input type="text" class="border rounded p-2" id="breakfastDate" name="request_breakfast_date_from" required="1"/>
-			</div>
-			`
-			$(document).ready(function() {
-				$('#breakfastDate').datepicker({
-					startDate: new Date(),
-					endDate: newEndDate,
-					multidate: true,
-					format: "dd/mm/yyyy",
-					daysOfWeekHighlighted: "5,6",
-					language: 'es',
-				})
+			   <div class="mt-2">
+				  <span class="text-type-1">Fechas para desayunar</span>
+				  <input type="text" class="border rounded p-2" id="breakfastDate" name="request_breakfast_date_from" required="1"/>
+			   </div>`;
+		 
+			// Initialize Flatpickr with date range limitation
+			flatpickr("#breakfastDate", {
+			   mode: "multiple",
+			   dateFormat: "d/m/Y",
+			   minDate: startDate,
+			   maxDate: endDate,
+			   onChange: function(selectedDates) {
+				  // Log the selected dates as a string
+				  const selectedDatesStr = selectedDates.map(date => flatpickr.formatDate(date, "d/m/Y")).join(',');
+				  console.log('Selected Dates:', selectedDatesStr);
+			   }
 			});
-
-
-		},
-		_add_lunch_date: function(ev) {
-			let container = document.getElementById("lunch_date_container")
-			let date_since = document.getElementById("dateFrom")
-			let date_to = document.getElementById("date_until")
-			const endDate = new Date(date_to.value);
-			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
-			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
-			let check = document.getElementById("lunch_check")
-			if (!check.checked) {
-				container.innerHTML = ""
-				return
-			}
-			container.innerHTML = `
-			<div class="mt-2">
-				<span class="text-type-1" for="lunchDate">Fechas para Almorzar</span>
-				<input type="text" class="border rounded p-2" id="lunchDate" name="request_lunch_date_from" required="1"/>
-			</div>
-			`
-			$(document).ready(function() {
-				$('#lunchDate').datepicker({
-					startDate: new Date(),
-					endDate: newEndDate,
-					multidate: true,
-					format: "dd/mm/yyyy",
-					daysOfWeekHighlighted: "5,6",
-					language: 'es',
-				})
-			});
-		},
+		 },
+		
 		_add_dinner_date: function(ev) {
 			let container = document.getElementById("dinner_date_container")
-			let date_since = document.getElementById("dateFrom")
-			let date_to = document.getElementById("date_until")
+			let date_since = document.getElementById("dateFrom").value;
+			let date_to = document.getElementById("date_until").value;
 			let check = document.getElementById("dinner_check")
+			const startDate = new Date(date_since);
+			const endDate = new Date(date_to);
 			if (!check.checked) {
 				container.innerHTML = ""
 				return
@@ -495,15 +467,47 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				<input type="text" class="border rounded p-2" id="dinnerDate" name="request_breakfast_date_from" required="1"/>
 			</div>
 			`
-			$(document).ready(function() {
-				$('#dinnerDate').datepicker({
-					startDate: new Date(),
-					endDate: new Date(date_to.value),
-					multidate: true,
-					format: "dd/mm/yyyy",
-					daysOfWeekHighlighted: "5,6",
-					language: 'es',
-				})
+			flatpickr("#dinnerDate", {
+				mode: "multiple",
+				dateFormat: "d/m/Y",
+				minDate: startDate,
+				maxDate: endDate,
+				onChange: function(selectedDates) {
+				   // Log the selected dates as a string
+				   const selectedDatesStr = selectedDates.map(date => flatpickr.formatDate(date, "d/m/Y")).join(',');
+				   console.log('Selected Dates:', selectedDatesStr);
+				}
+			});
+		},
+		_add_lunch_date: function(ev) {
+			let container = document.getElementById("lunch_date_container")
+			let date_since = document.getElementById("dateFrom").value;
+			let date_to = document.getElementById("date_until").value;
+			const startDate = new Date(date_since);
+			const endDate = new Date(date_to);
+			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
+			let check = document.getElementById("lunch_check");
+			if (!check.checked) {
+				container.innerHTML = ""
+				return
+			};
+			container.innerHTML = `
+			<div class="mt-2">
+				<span class="text-type-1" for="lunchDate">Fechas para Almorzar</span>
+				<input type="text" class="border rounded p-2" id="lunchDate" name="request_lunch_date_from" required="1"/>
+			</div>
+			`;
+			flatpickr("#lunchDate", {
+				mode: "multiple",
+				dateFormat: "d/m/Y",
+				minDate: startDate,
+				maxDate: newEndDate,
+				onChange: function(selectedDates) {
+				   // Log the selected dates as a string
+				   const selectedDatesStr = selectedDates.map(date => flatpickr.formatDate(date, "d/m/Y")).join(',');
+				   console.log('Selected Dates:', selectedDatesStr);
+				}
 			});
 		},
 
@@ -1298,6 +1302,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				destiny = ""
 			}
 			if (add_food) {
+				
 				let breakfast = document.getElementById("breakfast_check").checked
 				let lunch = document.getElementById("lunch_check").checked
 				let dinner = document.getElementById("dinner_check").checked

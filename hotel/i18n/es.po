@@ -985,12 +985,12 @@ msgstr "Gestión del hotel"
 #. module: hotel
 #: model:res.groups,name:hotel.group_hotel_user
 msgid "Hotel Management / User"
-msgstr "Gestión del hotel"
+msgstr "Inspector del hotel"
 
 #. module: hotel
 #: model:res.groups,name:hotel.group_hotel_manager
 msgid "Hotel Management/ Manager"
-msgstr "Gestión del hotel"
+msgstr "Administador del hotel"
 
 #. module: hotel
 #: model:ir.model.fields,field_description:hotel.field_hotel_folio__hotel_policy

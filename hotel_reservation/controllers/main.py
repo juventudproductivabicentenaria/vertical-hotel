@@ -31,17 +31,13 @@ class Website(http.Controller):
     def home_reservation(self, **post):
         date_start = post['date_from']
         date_end = post['date_until']
+        HotelFoods = request.env['hotel.foods'].sudo()
         date_start = datetime.strptime(date_start, "%Y-%m-%d")
         date_end = datetime.strptime(date_end, "%Y-%m-%d")
-        food_image = request.env['hotel.foods'].sudo().search([
-            ('date_start', '<=', date_start),
-            ('date_end', '>=', date_end),
-            ('state', '=', 'published'),
-        ],limit=1)
-
+        food_image = HotelFoods.get_MenuHotelFoods(date_start, date_end)
         url = False
-        if food_image:
-            url= "web/image?model=hotel.foods&id=%s&field=data" % food_image.id
+        if food_image and food_image.get('id'):
+            url= "web/image?model=hotel.foods&id=%s&field=data" % food_image['id']
         return {"image_data": url if food_image and url else False}
 
 
