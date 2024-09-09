@@ -19,9 +19,9 @@
                 <xpath expr="//field[@name='product_manager']" position="after">
                     <field name="clean_type_ids" widget="many2many_tags"/>
                 </xpath>
-                <xpath expr="//field[@name='isroom']" position="attributes">
+                <!-- <xpath expr="//field[@name='isroom']" position="attributes">
                     <attribute name="attrs">{'invisible':[('is_deposit','=',True)]}</attribute>
-                </xpath>
+                </xpath> -->
             </field>
         </record>
     </data>

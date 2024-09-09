@@ -2,10 +2,10 @@
 <!DOCTYPE xml>
 <odoo noupdate="0">
     <!--Group for hotel user -->
+    
     <record id="hotel_category" model="ir.module.category">
-        <field name="name">Hostal</field>
+        <field name="name">Hoteleria</field>
         <field name="sequence">45</field>
-
     </record>
 
     <record id="group_hotel_user" model="res.groups">

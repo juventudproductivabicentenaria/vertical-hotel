@@ -32,7 +32,8 @@ class HotelRoom(models.Model):
         return tools.default_hash()
 
     room_reservation_line_ids = fields.One2many(
-        "hotel.room.reservation.line", "room_id", string="Room Reserve Line"
+        "hotel.room.reservation.line", "room_id", string="Room Reserve Line", 
+        ondelete='cascade'
     )
     token = fields.Char(string="token", default=lambda self: self._has_default(), required=True)
 

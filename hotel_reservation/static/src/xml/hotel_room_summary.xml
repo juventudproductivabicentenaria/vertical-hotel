@@ -28,37 +28,38 @@
                                     Deposito
                                 </td>
                             </t>
-                            <t t-elif="status.state == 'Free'">
-                                <td
-                                    class="table_free"
-                                    t-att-data="status.room_id"
-                                    t-att-date="status.date"
-                                    style="text-align:center;"
-                                >
-                                    <t t-esc="status.state" />
-                                </td>
+                            <t else="">
+                                <t t-if="status.state == 'Free'">
+                                    <td
+                                        class="table_free"
+                                        t-att-data="status.room_id"
+                                        t-att-date="status.date"
+                                        style="text-align:center;"
+                                    >
+                                        <t t-esc="status.state" />
+                                    </td>
+                                </t>
+                                <t t-elif="status.state != 'Free' and status.is_draft == 'No'" >
+                                    <td
+                                        class="table_reserved"
+                                        t-att-data-model="status.data_model"
+                                        t-att-data-id="status.data_id"
+                                        style="text-align:center;"
+                                    >
+                                        <t t-esc="status.state" />
+                                    </td>
+                                </t>
+                                <t t-elif="status.is_draft == 'Yes'">
+                                    <td
+                                        class="table_reserved1"
+                                        t-att-data-model="status.data_model"
+                                        t-att-data-id="status.data_id"
+                                        style="text-align:center;"
+                                    >
+                                        <t t-esc="status.state" />
+                                    </td>
+                                </t>
                             </t>
-                            <t t-elif="status.state != 'Free' and status.is_draft == 'No'" >
-                                <td
-                                    class="table_reserved"
-                                    t-att-data-model="status.data_model"
-                                    t-att-data-id="status.data_id"
-                                    style="text-align:center;"
-                                >
-                                    <t t-esc="status.state" />
-                                </td>
-                            </t>
-                            <t t-elif="status.is_draft == 'Yes'">
-                                <td
-                                    class="table_reserved1"
-                                    t-att-data-model="status.data_model"
-                                    t-att-data-id="status.data_id"
-                                    style="text-align:center;"
-                                >
-                                    <t t-esc="status.state" />
-                                </td>
-                            </t>
-                            
                         </t>
                     </tr>
                 </t>

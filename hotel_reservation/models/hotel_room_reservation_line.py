@@ -21,7 +21,7 @@ class HotelRoomReservationLine(models.Model):
     state = fields.Selection(
         [("assigned", "Assigned"), ("unassigned", "Unassigned")], "Room Status"
     )
-    reservation_id = fields.Many2one("hotel.reservation", "Reservation", required=True)
-    reservation_line_id = fields.Many2one("hotel_reservation.line", "Reservation", required=True)
+    reservation_id = fields.Many2one("hotel.reservation", "Reservation", required=False)
+    reservation_line_id = fields.Many2one("hotel_reservation.line", "Reservation", required=False)
     parnert_id = fields.Many2one("res.partner", "Partner", related='reservation_line_id.partner_id')
     status = fields.Selection(string="state", related="reservation_id.state")
