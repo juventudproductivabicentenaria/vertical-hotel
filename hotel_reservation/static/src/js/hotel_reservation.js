@@ -425,8 +425,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let check = document.getElementById("breakfast_check");
 			let [startYear, startMonth, startDay] = date_since.split('-');
 			let [endYear, endMonth, endDay] = date_to.split('-');
-			const startDate = new Date(startYear, startMonth, startDay);
-			const endDate = new Date(endYear, endMonth, endDay);
+			const startDate = new Date(startYear, startMonth - 1, startDay);
+			const endDate = new Date(endYear, endMonth -1 , endDay);
 			if (!check.checked) {
 			   container.innerHTML = "";
 			   return;
@@ -457,8 +457,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let date_to = document.getElementById("date_until").value;
 			let [startYear, startMonth, startDay] = date_since.split('-');
 			let [endYear, endMonth, endDay] = date_to.split('-');
-			const startDate = new Date(startYear, startMonth, startDay);
-			const endDate = new Date(endYear, endMonth, endDay);
+			const startDate = new Date(startYear, startMonth - 1, startDay);
+			const endDate = new Date(endYear, endMonth -1 , endDay);
 			let check = document.getElementById("lunch_check");
 			if (!check.checked) {
 				container.innerHTML = ""
@@ -490,8 +490,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let check = document.getElementById("dinner_check")
 			let [startYear, startMonth, startDay] = date_since.split('-');
 			let [endYear, endMonth, endDay] = date_to.split('-');
-			const startDate = new Date(startYear, startMonth, startDay);
-			const endDate = new Date(endYear, endMonth, endDay);
+			const startDate = new Date(startYear, startMonth - 1, startDay);
+			const endDate = new Date(endYear, endMonth -1 , endDay);
 			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
 			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
 			if (!check.checked) {
@@ -508,7 +508,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				mode: "multiple",
 				dateFormat: "d/m/Y",
 				minDate: startDate,
-				maxDate: newEndDate,
+				maxDate: endDate,
 				onChange: function(selectedDates) {
 				   // Log the selected dates as a string
 				   const selectedDatesStr = selectedDates.map(date => flatpickr.formatDate(date, "d/m/Y")).join(',');
