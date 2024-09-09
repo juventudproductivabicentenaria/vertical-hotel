@@ -115,6 +115,7 @@ class HotelReservation(models.Model):
         "line_id",
         "Reservation Line",
         help="Hotel room reservation details.",
+        ondelete='cascade',
         readonly=True,
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
