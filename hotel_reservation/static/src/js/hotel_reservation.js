@@ -423,8 +423,17 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let date_since = document.getElementById("dateFrom").value;
 			let date_to = document.getElementById("date_until").value;
 			let check = document.getElementById("breakfast_check");
-			const startDate = new Date(date_since);
-			const endDate = new Date(date_to);
+			let [startYear, startMonth, startDay] = date_since.split('-');
+			let [endYear, endMonth, endDay] = date_to.split('-');
+			const startDate = new Date(startYear, startMonth, startDay);
+			const endDate = new Date(endYear, endMonth, endDay);
+
+			// const startDate = new Date(date_since);
+			// const endDate = new Date(date_to);
+			console.log('startDate');
+			console.log(startDate);
+			console.log("endDate");
+			console.log(endDate);
 		 
 			if (!check.checked) {
 			   container.innerHTML = "";
@@ -455,8 +464,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let date_since = document.getElementById("dateFrom").value;
 			let date_to = document.getElementById("date_until").value;
 			let check = document.getElementById("dinner_check")
-			const startDate = new Date(date_since);
-			const endDate = new Date(date_to);
+			let [startYear, startMonth, startDay] = date_since.split('-');
+			let [endYear, endMonth, endDay] = date_to.split('-');
+			const startDate = new Date(startYear, startMonth, startDay);
+			const endDate = new Date(endYear, endMonth, endDay);
 			if (!check.checked) {
 				container.innerHTML = ""
 				return
@@ -483,7 +494,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let container = document.getElementById("lunch_date_container")
 			let date_since = document.getElementById("dateFrom").value;
 			let date_to = document.getElementById("date_until").value;
-			const startDate = new Date(date_since);
+			let [startYear, startMonth, startDay] = date_since.split('-');
+			const startDate = new Date(startYear, startMonth, startDay);
 			const endDate = new Date(date_to);
 			const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
 			const newEndDate = new Date(endDate.getTime() + oneDayInMilliseconds);
