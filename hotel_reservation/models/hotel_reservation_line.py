@@ -55,7 +55,7 @@ class HotelReservationLine(models.Model):
         related='line_id.state', store=True
     )
 
-    checkin = fields.Datetime(
+    checkin = fields.Date(
         "Fecha prevista de llegada",
         required=True,
         related='line_id.checkin',
@@ -64,7 +64,7 @@ class HotelReservationLine(models.Model):
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
-    checkout = fields.Datetime(
+    checkout = fields.Date(
         "Fecha prevista de salida",
         required=True,
         # readonly=True,

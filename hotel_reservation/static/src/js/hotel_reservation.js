@@ -1,5 +1,4 @@
 odoo.define('hotel_reservation.ReservationWebsite', function (require) {
-
 	"use strict";
 
 	//alert("Diomedes")
@@ -12,6 +11,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 	var childrens_counter = 0
 	console.log("Perfecto");
 	var Dialog = require('web.Dialog');
+
 	// var framework = require('web.framework');
 
 	
@@ -53,6 +53,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'change #dateFrom, #date_until': '_onChengeCalendar',
 			'click .addFoods': '_onClickAddFoods',
 			'click .selectDay': '_onClickSelectDay',
+			'click #reservation_button': '_onNextReservar',
+
     	},
 		
 		start: function () {
@@ -62,6 +64,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			this._fetch().then(this._render.bind(this));
 			let image_menu_foods = $("#image_menu_foods")
 			image_menu_foods.hide()
+			this._super.apply(this, arguments);
+            this.notification = new Notification(this);
             },
 			
            /**
@@ -92,6 +96,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			$("#foodContainer").slideToggle();
         },
 
+	
+
+		
 		_addEstructureCategories: function () {
 			console.log('_addEstructureCategories')
             var categoriesHtml = this.webProperty;
@@ -641,12 +648,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		_onChengeCalendar: function (ev){
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val();
-			var fromDate = new Date(date_from + "T00:00:00-04:00");
-			var untilDate = new Date(date_until + "T00:00:00-04:00");
+			
+			var fromDate = new Date(date_from + "T00:00:00");
+			var untilDate = new Date(date_until + "T00:00:00");
 			var calendar = $("#calendar");
 			calendar.empty();
 			// Iterar sobre las fechas y agregarlas al calendario
-			var currentDate = new Date(date_from + "T00:00:00-04:00");
+			var currentDate = new Date(date_from + "T00:00:00");
+			console.log(date_from, date_until, fromDate, untilDate, currentDate)
+
 			while (currentDate <= untilDate) {
 				var day = currentDate.getDate();
 				var month = currentDate.getMonth() + 1; // Los meses en JavaScript son indexados desde 0, por lo que se suma 1
@@ -1141,41 +1151,77 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 		verificationDataError: function (ev) {
 			var self = this;
-			var identification_vat = $('#identification_VAT').val()
-			var first_last_name_input = $('#first_last_name_input').val()
-			var phone_input = $('#phone_input').val()
-			var email_input = $('#email_input').val()
-			var room_check = $('#room_check').is(':checked')
-			var food_check = $('#food_check').is(':checked')
+			var identification_vat = $('#identification_VAT').val();
+			var first_last_name_input = $('#first_last_name_input').val();
+			var phone_input = $('#phone_input').val();
+			var email_input = $('#email_input').val();
+			var room_check = $('#room_check').is(':checked');
+			var food_check = $('#food_check').is(':checked');
 		
-			var $error_data = $('#error_data')
-			if (identification_vat == null || identification_vat == undefined || identification_vat == '') {
-				var data = {"title": "* Por favor, Introduzca la Cédula de Identidad / RIF."};
-				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-				return true
+			// Función para mostrar un diálogo de error
+			function alert(message) {
+				new Dialog(self, {
+					title: "Error de Validación",
+					size: 'medium',
+					buttons: [{
+						text: 'Aceptar',
+						close: true
+					}],
+					$content: $('<div>').html('<p>' + message + '</p>')
+				}).open();
 			}
-			if (first_last_name_input == null || first_last_name_input == undefined || first_last_name_input == '') {
-				var data = {"title": "* Por favor, Introduzca el Nombre y Apellido."};
-				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-				return true
+		
+			// Validación de la identificación
+			if (!identification_vat) {
+				alert("* Por favor, Introduzca la Cédula de Identidad / RIF.");
+				return true;
 			}
-			if (phone_input == null || phone_input == undefined || phone_input == '') {
-				var data = {"title": "* Por favor, Introduzca el teléfono."};
-				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-				return true
+			
+			// Validación de longitud de la cédula
+			if (identification_vat.length > 8) {
+				alert("* La Cédula de Identidad / RIF no puede tener más de 8 dígitos.");
+				return true;
 			}
-			if (email_input == null || email_input == undefined || email_input == '') {
-				var data = {"title": "* Por favor, Introduzca el correo electrónico."};
-				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-				return true
+		
+			// Validación de Nombre y Apellido
+			if (!first_last_name_input) {
+				alert("* Por favor, Introduzca el Nombre y Apellido.");
+				return true;
 			}
-			if (room_check == null && food_check == null || room_check == false && food_check == false) {
-				var data = {"title": "* Por favor, Seleccione al menos una opción de Comida o Habitación."};
-				$error_data.replaceWith(qweb.render("hotel_reservation.error_data",data));
-				return true
+		
+			// Validación del teléfono (debe tener 11 dígitos)
+			if (!/^\d{11}$/.test(phone_input)) {
+				alert("* Por favor, Introduzca un número de teléfono válido de 11 dígitos.");
+				return true;
 			}
-			return false
+		
+			// Validación del correo electrónico (debe contener el carácter @)
+			if (!/@/.test(email_input)) {
+				alert("* Por favor, Introduzca un correo electrónico válido que contenga '@'.");
+				return true;
+			}
+		
+			// Validación de la selección de comida o habitación
+			if (!room_check && !food_check) {
+				alert("* Por favor, Seleccione al menos una opción de Comida o Habitación.");
+				return true;
+			}
+		
+			return false;
 		},
+		
+
+        _onNextReservar: function (ev) {
+            ev.preventDefault();
+            if (!this.verificationDataError()) {
+                // Proceder con la siguiente acción si no hay errores
+                console.log('Datos validados correctamente');
+            }
+        },
+
+
+
+		
 		_onNextBlogClick: function (ev) {
 			var self = this;
 			var $error_data = $('#error_data')

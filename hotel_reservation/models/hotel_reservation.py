@@ -82,14 +82,14 @@ class HotelReservation(models.Model):
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
         help="Delivery address" "for current reservation. ",
     )
-    checkin = fields.Datetime(
+    checkin = fields.Date(
         "Fecha prevista de llegada",
         required=True,
         readonly=True,
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
-    checkout = fields.Datetime(
+    checkout = fields.Date(
         "Fecha prevista de salida",
         required=True,
         readonly=True,
