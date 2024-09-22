@@ -53,7 +53,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			'change #dateFrom, #date_until': '_onChengeCalendar',
 			'click .addFoods': '_onClickAddFoods',
 			'click .selectDay': '_onClickSelectDay',
-			'click #reservation_button': '_onNextReservar',
 
     	},
 		
@@ -241,6 +240,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 		_search_roommate: function(ev) {
 			let ci = document.getElementById("identification_VAT_partner").value;
+			
+			
 			this._rpc({
 				route: '/search_person',
 				params: {
@@ -250,6 +251,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let field_name = document.getElementById("first_last_name_roomMate_input")
 				let field_phone = document.getElementById("phone_input_roomMate")
 				let field_email = document.getElementById("email_input_roomMate")
+
 				if (result.missing) {
 					alert("No se encontraron datos con el documento proporcionado. Por favor, Introduzca los datos de la persona manualmente.")
 					field_name.value = ""
@@ -1157,68 +1159,57 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var email_input = $('#email_input').val();
 			var room_check = $('#room_check').is(':checked');
 			var food_check = $('#food_check').is(':checked');
-		
-			// Función para mostrar un diálogo de error
-			function alert(message) {
-				new Dialog(self, {
-					title: "Error de Validación",
-					size: 'medium',
-					buttons: [{
-						text: 'Aceptar',
-						close: true
-					}],
-					$content: $('<div>').html('<p>' + message + '</p>')
-				}).open();
-			}
-		
+			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
+
 			// Validación de la identificación
 			if (!identification_vat) {
-				alert("* Por favor, Introduzca la Cédula de Identidad / RIF.");
+				alert("Por favor, Introduzca la Cédula de Identidad / RIF.");
 				return true;
 			}
 			
 			// Validación de longitud de la cédula
-			if (identification_vat.length > 8) {
-				alert("* La Cédula de Identidad / RIF no puede tener más de 8 dígitos.");
+			if (identification_vat.length < 8) {
+				alert("La Cédula de Identidad debe tener al menos 8 dígitos.");
 				return true;
 			}
-		
+			if (identification_vat.length > 8) {
+				alert("La Cédula de Identidad no puede tener más de 8 dígitos.");
+				return true;
+			}
 			// Validación de Nombre y Apellido
 			if (!first_last_name_input) {
-				alert("* Por favor, Introduzca el Nombre y Apellido.");
+				alert("Por favor, Introduzca el Nombre y Apellido.");
+				return true;
+			}
+			if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_input)) {
+				alert("Por favor, Introduzca un Nombre y Apellido válido sin símbolos, caracteres especiales ni números.");
 				return true;
 			}
 		
-			// Validación del teléfono (debe tener 11 dígitos)
-			if (!/^\d{11}$/.test(phone_input)) {
-				alert("* Por favor, Introduzca un número de teléfono válido de 11 dígitos.");
+			 // Validación del teléfono (debe tener 11 dígitos y formato correcto)
+			 if (phone_input.length !== 11) {
+				alert("Por favor, Introduzca un número de teléfono venezolano válido con 11 dígitos.");
 				return true;
 			}
-		
+			if (!venezuelanPhoneNumberRegex.test(phone_input.replace(/-/g, ''))) {
+				alert("Por favor, Introduzca un número de teléfono venezolano válido con formato XXXX-XXX-XXXX.");
+				return true;
+			}
+
 			// Validación del correo electrónico (debe contener el carácter @)
 			if (!/@/.test(email_input)) {
-				alert("* Por favor, Introduzca un correo electrónico válido que contenga '@'.");
+				alert("Por favor, Introduzca un correo electrónico válido que contenga el simbolo '@'.");
 				return true;
 			}
 		
 			// Validación de la selección de comida o habitación
 			if (!room_check && !food_check) {
-				alert("* Por favor, Seleccione al menos una opción de Comida o Habitación.");
+				alert("Por favor, Seleccione al menos una opción de Comida o Habitación.");
 				return true;
 			}
 		
 			return false;
 		},
-		
-
-        _onNextReservar: function (ev) {
-            ev.preventDefault();
-            if (!this.verificationDataError()) {
-                // Proceder con la siguiente acción si no hay errores
-                console.log('Datos validados correctamente');
-            }
-        },
-
 
 
 		
@@ -1329,10 +1320,50 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 			var has_partner = false
 			var adults = 0
+			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
+
 			if (first_last_name_input.value != "") {
 				adults += 1
 			}
-			if (first_last_name_roomMate_input != null) {
+			// Validación del acompañante
+			if (first_last_name_roomMate_input != null && first_last_name_roomMate_input.value != "") {
+
+				// Validación de la cédula del acompañante
+				if (!second_ci.value) {
+					alert("Por favor, Introduzca la Cédula de Identidad del acompañante.");
+					return true;
+				}
+				if (second_ci.value.length < 8) {
+					alert("La Cédula de Identidad del acompañante debe tener al menos 8 dígitos.");
+					return true;
+				}
+				if (second_ci.value.length > 8) {
+					alert("La Cédula de Identidad del acompañante no puede tener más de 8 dígitos.");
+					return true;
+				}
+
+				// Validación de Nombre y Apellido del acompañante
+				if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_roomMate_input.value)) {
+					alert("Por favor, Introduzca un Nombre y Apellido del acompañante válido sin símbolos, caracteres especiales ni números.");
+					return true;
+				}
+
+				// Validación del teléfono del acompañante (debe tener 11 dígitos y formato correcto)
+				if (second_phone.value.length !== 11) {
+					alert("Por favor, Introduzca un número de teléfono del acompañante venezolano válido con 11 dígitos.");
+					return true;
+				}
+				if (!venezuelanPhoneNumberRegex.test(second_phone.value.replace(/-/g, ''))) {
+					alert("Por favor, Introduzca un número de teléfono venezolano válido con formato XXXX-XXX-XXXX para el acompañante.");
+					return true;
+				}
+
+				// Validación del correo electrónico del acompañante (debe contener el carácter @)
+				if (!/@/.test(second_email.value)) {
+					alert("Por favor, Introduzca un correo electrónico válido para el acompañante que contenga el simbolo '@'.");
+					return true;
+				}
+				
 				adults += 1
 				list_of_names.push(first_last_name_roomMate_input.value)
 				list_of_cis.push(second_ci.value)

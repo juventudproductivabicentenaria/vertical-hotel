@@ -30,7 +30,7 @@ class HotelReservationLine(models.Model):
     institution_from = fields.Char(string="Institución de donde nos visitan", readonly=False, required=False, default=None)
     couple_id = fields.Many2one(
         "res.partner",
-        "Pareja",
+        "Acompañante",
         track_visibility='always', )
     
     children_ids = fields.Many2many(
