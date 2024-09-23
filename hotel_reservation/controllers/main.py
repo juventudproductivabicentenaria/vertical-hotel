@@ -894,8 +894,8 @@ class Website(http.Controller):
         if reservation.token != token_hash:
             raise ValidationError(_('No puedes ver el registro'))
 
-        if reservation.state == 'draft':
-            reservation.confirm_reservation()
+        # if reservation.state == 'draft':
+        #     reservation.confirm_reservation()
 
         values ={
             'reservations': reservation,
