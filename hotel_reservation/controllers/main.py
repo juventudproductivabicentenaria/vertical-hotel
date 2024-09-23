@@ -901,11 +901,15 @@ class Website(http.Controller):
             'reservations': reservation,
             'reserve': kwargs.get('reserve'),
         }
-
         try:
             return request.render("hotel_reservation.room_reserved", values)
-        except:
-            pass
+        except Exception as e:
+            return request.make_response(
+                f"Ha ocurrido un error inesperado al procesar la reserva: {str(e)}",
+                headers=[('Content-Type', 'text/plain')],
+                status=500
+            )
+
 
     @http.route(['/reserve/list'], type="http", auth="public", website=True,)
     def reserve_list(self, **post):

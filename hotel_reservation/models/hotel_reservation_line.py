@@ -30,7 +30,7 @@ class HotelReservationLine(models.Model):
     institution_from = fields.Char(string="Institución de donde nos visitan", readonly=False, required=False, default=None)
     couple_id = fields.Many2one(
         "res.partner",
-        "Pareja",
+        "Acompañante",
         track_visibility='always', )
     
     children_ids = fields.Many2many(
@@ -55,7 +55,7 @@ class HotelReservationLine(models.Model):
         related='line_id.state', store=True
     )
 
-    checkin = fields.Datetime(
+    checkin = fields.Date(
         "Fecha prevista de llegada",
         required=True,
         related='line_id.checkin',
@@ -64,7 +64,7 @@ class HotelReservationLine(models.Model):
         track_visibility='always',
         states={"draft": [("readonly", False)], "confirm": [("readonly", False)]},
     )
-    checkout = fields.Datetime(
+    checkout = fields.Date(
         "Fecha prevista de salida",
         required=True,
         # readonly=True,
