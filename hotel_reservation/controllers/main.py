@@ -948,3 +948,8 @@ class Website(http.Controller):
                     raise ValidationError(_('No puedes cancelar la Reservación'))
 
         return self.reserve_list(message="Su cancelacion fue exitosa")
+
+    @http.route('/reservation/validation_user', type='json', auth="public")
+    def check_user(self, vat):
+        partner_id = request.env['res.partner'].sudo().search([('vat', '=', vat)], limit=1)
+        return {'exists': bool(partner_id.name)}
