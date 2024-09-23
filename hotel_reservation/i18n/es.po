@@ -1597,7 +1597,7 @@ msgstr "Contacto"
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation_line__couple_id
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_reservation_line__is_couple
 msgid "Pareja"
-msgstr ""
+msgstr "Acompañante"
 
 #. module: hotel_reservation
 #: model:ir.model.fields,field_description:hotel_reservation.field_hotel_room_reservation_line__parnert_id
