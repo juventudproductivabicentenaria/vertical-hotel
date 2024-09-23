@@ -265,7 +265,7 @@ class HotelReservationLine(models.Model):
         @param self: The object pointer
         @return: True/False.
         """
-        hotel_room_reserv_line_obj = self.env["hotel.room.reservation.line"]
+        hotel_room_reserv_line_obj = self.env["hotel.room.reservation.line"].sudo()
         for reserv_rec in self:
             if not reserv_rec.state == 'draft':
                 raise ValidationError(

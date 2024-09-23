@@ -292,7 +292,7 @@ class HotelReservation(models.Model):
         @param self: The object pointer
         @return: new record set for hotel room reservation line.
         """
-        reservation_line_obj = self.env["hotel.room.reservation.line"]
+        reservation_line_obj = self.env["hotel.room.reservation.line"].sudo()
         vals = {}
         
         for reservation in self:
@@ -384,7 +384,7 @@ class HotelReservation(models.Model):
         @param self: The object pointer
         @return: cancel record set for hotel room reservation line.
         """
-        room_res_line_obj = self.env["hotel.room.reservation.line"]
+        room_res_line_obj = self.env["hotel.room.reservation.line"].sudo()
         hotel_res_line_obj = self.env["hotel_reservation.line"]
         self.state = "cancel"
         room_reservation_line = room_res_line_obj.search(

@@ -24,17 +24,16 @@ access_hotel_foods_admin,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_m
 access_hotel_institucion_usuers,model_hotel_institution,model_hotel_institution,,1,1,1,1
 
 
-
-access_hotel_reservation_user_receptionist,hotel.reservation.user.portal,model_hotel_reservation,hotel.group_hotel_receptionist,1,0,0,0
-access_product_product_user_receptionist,product.product.user.portal,product.model_product_product,hotel.group_hotel_receptionist,1,0,0,0
-access_hotel_room_reservation_line_user_portal,hotel_room_reservation.line.user.portal,model_hotel_room_reservation_line,hotel.group_hotel_receptionist,1,0,0,0
-access_uom_uom_user_receptionist,uom.uom.user.portal,uom.model_uom_uom,hotel.group_hotel_receptionist,1,0,0,0
-access_ir_sequence_user_receptionist,ir.sequence.user.portal,base.model_ir_sequence,hotel.group_hotel_receptionist,1,0,0,0
-access_hotel_transport__receptionist,hotel.transport.admin,model_hotel_transport,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_reservation_receptionist,hotel.reservation.user.portal,model_hotel_reservation,hotel.group_hotel_receptionist,1,0,0,0
+access_product_product_receptionist,product.product.user.portal,product.model_product_product,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_room_reservation_line_receptionist,hotel_room_reservation.line.user.portal,model_hotel_room_reservation_line,hotel.group_hotel_receptionist,1,0,0,0
+access_uom_uom_receptionist,uom.uom.user.portal,uom.model_uom_uom,hotel.group_hotel_receptionist,1,0,0,0
+access_ir_sequence_receptionist,ir.sequence.user.portal,base.model_ir_sequence,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_transport_receptionist,hotel.transport.admin,model_hotel_transport,hotel.group_hotel_receptionist,1,0,0,0
 access_hotel_foods_receptionist,hotel.foods.admin,model_hotel_foods,hotel.group_hotel_receptionist,1,0,0,0
-access_hotel_room_user_receptionist,hotel.room.user.portal,model_hotel_room,hotel.group_hotel_receptionist,1,0,0,0
-access_hotel_reservation_line_user__receptionist,hotel_reservation.line.user.portal,model_hotel_reservation_line,hotel.group_hotel_receptionist,1,0,0,0
-access_product_template_user_receptionist,product.template.user.portal,product.model_product_template,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_room_receptionist,hotel.room.user.portal,model_hotel_room,hotel.group_hotel_receptionist,1,0,0,0
+access_hotel_reservation_line__receptionist,hotel_reservation.line.user.portal,model_hotel_reservation_line,hotel.group_hotel_receptionist,1,0,0,0
+access_product_template_receptionist,product.template.user.portal,product.model_product_template,hotel.group_hotel_receptionist,1,0,0,0
 
 
 

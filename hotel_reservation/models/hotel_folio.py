@@ -14,7 +14,7 @@ class HotelFolio(models.Model):
 
     def write(self, vals):
         res = super(HotelFolio, self).write(vals)
-        reservation_line_obj = self.env["hotel.room.reservation.line"]
+        reservation_line_obj = self.env["hotel.room.reservation.line"].sudo()
         for folio in self:
             reservations = reservation_line_obj.search(
                 [("reservation_id", "=", folio.reservation_id.id)]
@@ -72,7 +72,7 @@ class HotelFolioLine(models.Model):
         @param self: The object pointer
         @param vals: dictionary of fields value.
         Update Hotel Room Reservation line history"""
-        reservation_line_obj = self.env["hotel.room.reservation.line"]
+        reservation_line_obj = self.env["hotel.room.reservation.line"].sudo()
         room_obj = self.env["hotel.room"]
         prod_id = vals.get("product_id") or self.product_id.id
         chkin = vals.get("checkin_date") or self.checkin_date
