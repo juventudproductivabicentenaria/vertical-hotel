@@ -15,8 +15,8 @@ class HotelRoomReservationLine(models.Model):
     _rec_name = "room_id"
 
     room_id = fields.Many2one("hotel.room", string="Room id", required=False)
-    check_in = fields.Datetime("Check In Date", required=True)
-    check_out = fields.Datetime("Check Out Date", required=True)
+    check_in = fields.Date("Check In Date", required=True)
+    check_out = fields.Date("Check Out Date", required=True)
 
     state = fields.Selection(
         [("assigned", "Assigned"), ("unassigned", "Unassigned")], "Room Status"

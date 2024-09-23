@@ -330,10 +330,10 @@ class HotelReservation(models.Model):
                                     and reserv_checkout >= check_out
                                 ):
                                     room_bool = True
-                                r_checkin = (reservation.checkin).date()
-                                r_checkout = (reservation.checkout).date()
-                                check_intm = (reserv.check_in).date()
-                                check_outtm = (reserv.check_out).date()
+                                r_checkin = (reservation.checkin)
+                                r_checkout = (reservation.checkout)
+                                check_intm = (reserv.check_in)
+                                check_outtm = (reserv.check_out)
                                 range1 = [r_checkin, r_checkout]
                                 range2 = [check_intm, check_outtm]
                                 overlap_dates = self.check_overlap(
