@@ -420,7 +420,6 @@ class Website(http.Controller):
                                 "email": partner_2.email,
                                 "phone": partner_2.phone,
                             })
-                        
                         if not partner_2:
                             partner_vals = {
                                 "vat": data["second_vat"],
@@ -519,56 +518,69 @@ class Website(http.Controller):
                                 "institution_from": data["institution_name"],
                             })
                             children_ids = []
-                            
+
                     if data["include_food"]:
                         order_list_ids = []
-                        if data.get("breakfast"):
-                            from_break = []
-                            dates_list = data["breakfast"]["from_break"].replace(" ", "").split(",")
-                            for date_str in dates_list:
-                                if date_str != "":
-                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                    from_break.append(date)
-                            for breakfast in from_break:
-                                order_list_ids.append({
-                                    "date_order": breakfast.date(),
-                                    "reservation_room_id": new_reservation.id,
-                                    "type_solicitation": "breakfast",
-                                    "partner_id": new_partner.id,
-                                    "item_qty": 1
-                                })
-                        if data.get("lunch"):
-                            from_lunch = []
-                            dates_list = data["lunch"]["from_lunch"].replace(" ", "").split(",")
-                            for date_str in dates_list:
-                                if date_str != "":
-                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                    from_lunch.append(date)
-                            for breakfast in from_lunch:
-                                order_list_ids.append({
-                                    "date_order": breakfast.date(),
-                                    "reservation_room_id": new_reservation.id,
-                                    "type_solicitation": "lunch",
-                                    "partner_id": new_partner.id,
-                                    "item_qty": 1
-                                })
-                        if data.get("dinner"):
-                            from_dinner = []
-                            dates_list = data["dinner"]["from_dinner"].replace(" ", "").split(",")
-                            for date_str in dates_list:
-                                if date_str != "":
-                                    date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                                    from_dinner.append(date)
+                        partners_ids = [new_partner.id]  
 
-                            for breakfast in from_dinner:
-                                order_list_ids.append({
-                                    "date_order": breakfast.date(),
-                                    "reservation_room_id": new_reservation.id,
-                                    "type_solicitation": "dinner",
-                                    "partner_id": new_partner.id,
-                                    "item_qty": 1
-                                })
-                        if kwargs.get("breakfast") or kwargs.get("lunch") or kwargs.get("dinner"):
+                        if "full_data" in kwargs:
+                            for partner_data in kwargs["full_data"]:
+                                second_vat = partner_data.get("second_vat")
+                                if second_vat:
+                                    partner_2 = ResPartner.search([('vat', '=', second_vat)], limit=1)
+                                    if partner_2:
+                                        partners_ids.append(partner_2.id)
+
+                        for partner_id in partners_ids:
+                            if data.get("breakfast"):
+                                from_break = []
+                                dates_list = data["breakfast"]["from_break"].replace(" ", "").split(",")
+                                for date_str in dates_list:
+                                    if date_str != "":
+                                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                        from_break.append(date)
+                                for breakfast in from_break:
+                                    order_list_ids.append({
+                                        "date_order": breakfast.date(),
+                                        "reservation_room_id": new_reservation.id,
+                                        "type_solicitation": "breakfast",
+                                        "partner_id": partner_id, 
+                                        "item_qty": 1
+                                    })
+
+                            if data.get("lunch"):
+                                from_lunch = []
+                                dates_list = data["lunch"]["from_lunch"].replace(" ", "").split(",")
+                                for date_str in dates_list:
+                                    if date_str != "":
+                                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                        from_lunch.append(date)
+                                for lunch in from_lunch:
+                                    order_list_ids.append({
+                                        "date_order": lunch.date(),
+                                        "reservation_room_id": new_reservation.id,
+                                        "type_solicitation": "lunch",
+                                        "partner_id": partner_id,  
+                                        "item_qty": 1
+                                    })
+
+                            if data.get("dinner"):
+                                from_dinner = []
+                                dates_list = data["dinner"]["from_dinner"].replace(" ", "").split(",")
+                                for date_str in dates_list:
+                                    if date_str != "":
+                                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                        from_dinner.append(date)
+                                for dinner in from_dinner:
+                                    order_list_ids.append({
+                                        "date_order": dinner.date(),
+                                        "reservation_room_id": new_reservation.id,
+                                        "type_solicitation": "dinner",
+                                        "partner_id": partner_id, 
+                                        "item_qty": 1
+                                    })
+
+                        if order_list_ids:
                             reservation_order = HotelReservationOrder.create({
                                 "order_date": new_reservation.date_order if new_reservation else today_date.date(),
                                 "reservation_room_id": new_reservation.id if new_reservation else False,
@@ -576,25 +588,22 @@ class Website(http.Controller):
                                 "partner_id": user_id.partner_id.id,
                                 "state": "draft",
                             })
-                            if order_list_ids:
-                                lines_ids = lines_ids = reservation_order.order_list_ids.create(order_list_ids)
-                                reservation_order.order_list_ids = [(6, 0, lines_ids.ids)]
-                            print("reservation_order")
-                            print("reservation_order")
-                            print(reservation_order)
+
+                            lines_ids = reservation_order.order_list_ids.create(order_list_ids)
+                            reservation_order.order_list_ids = [(6, 0, lines_ids.ids)]
+
+                        print("reservation_order")
+                        print(reservation_order)
 
                     if data["include_transport"] == True:
-                        
                         HotelTransport.create({
                             "hotel_reservation": new_reservation.id,
                             "move_from": data["origen"],
                             "move_to": data["destiny"],
                             "partner_id": partner.id
                         })
-                        
-            return {"data": "ok"}
-        # institution_visit = kwargs["institution_name"]
-        # main_name = kwargs["main_name"]
+
+                    return {"data": "ok"}
         
         children_ids = []
         warehouse_id = user_id.company_id.warehouse_id.id
@@ -667,55 +676,50 @@ class Website(http.Controller):
                 'children_ids': children_ids if len(children_ids) > 0 else False,
                 # "hotel_room_id": room.id
             })
-            
+
         if kwargs.get("include_food"):
             order_list_ids = []
             if kwargs.get("breakfast"):
-                from_break = []
                 dates_list = kwargs["breakfast"]["from_break"].replace(" ", "").split(",")
-                for date_str in dates_list:
-                    if date_str != "":
-                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                        from_break.append(date)
-                for breakfast in from_break:
-                    order_list_ids.append({
-                        "date_order": breakfast.date(),
-                        "reservation_room_id": new_reservation.id,
-                        "type_solicitation": "breakfast",
-                        "partner_id": reservation_line_partners[0].id,
-                        "item_qty": 1
-                    })
+                for partner in reservation_line_partners:
+                    for date_str in dates_list:
+                        if date_str != "":
+                            date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                            order_list_ids.append({
+                                "date_order": date.date(),
+                                "reservation_room_id": new_reservation.id,
+                                "type_solicitation": "breakfast",
+                                "partner_id": partner.id,
+                                "item_qty": 1
+                            })
             if kwargs.get("lunch"):
-                from_lunch = []
                 dates_list = kwargs["lunch"]["from_lunch"].replace(" ", "").split(",")
-                for date_str in dates_list:
-                    if date_str != "":
-                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                        from_lunch.append(date)
-                for breakfast in from_lunch:
-                    order_list_ids.append({
-                        "date_order": breakfast.date(),
-                        "reservation_room_id": new_reservation.id,
-                        "type_solicitation": "lunch",
-                        "partner_id": reservation_line_partners[0].id,
-                        "item_qty": 1
-                    })
+                for partner in reservation_line_partners:
+                    for date_str in dates_list:
+                        if date_str != "":
+                            date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                            order_list_ids.append({
+                                "date_order": date.date(),
+                                "reservation_room_id": new_reservation.id,
+                                "type_solicitation": "lunch",
+                                "partner_id": partner.id,
+                                "item_qty": 1
+                            })
             if kwargs.get("dinner"):
-                from_dinner = []
                 dates_list = kwargs["dinner"]["from_dinner"].replace(" ", "").split(",")
-                for date_str in dates_list:
-                    if date_str != "":
-                        date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
-                        from_dinner.append(date)
-                for breakfast in from_dinner:
-                    order_list_ids.append({
-                        "date_order": breakfast.date(),
-                        "reservation_room_id": new_reservation.id,
-                        "type_solicitation": "dinner",
-                        "partner_id": reservation_line_partners[0].id,
-                        "item_qty": 1
-                    })
-            if kwargs.get("breakfast") or kwargs.get("lunch") or kwargs.get("dinner"):
+                for partner in reservation_line_partners:
+                    for date_str in dates_list:
+                        if date_str != "":
+                            date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                            order_list_ids.append({
+                                "date_order": date.date(),
+                                "reservation_room_id": new_reservation.id,
+                                "type_solicitation": "dinner",
+                                "partner_id": partner.id,
+                                "item_qty": 1
+                            })
+
+            if order_list_ids:
                 reservation_order = HotelReservationOrder.create({
                     "order_date": new_reservation.date_order if new_reservation else today_date.date(),
                     "reservation_room_id": new_reservation.id if new_reservation else False,
@@ -723,16 +727,25 @@ class Website(http.Controller):
                     "partner_id": user_id.partner_id.id,
                     "state": "draft",
                 })
-                if order_list_ids:
-                    lines_ids = reservation_order.order_list_ids.create(order_list_ids)
-                    reservation_order.order_list_ids = [(6, 0, lines_ids.ids)]
-        if kwargs["include_transport"] == True:
+                lines_ids = reservation_order.order_list_ids.create(order_list_ids)
+                reservation_order.order_list_ids = [(6, 0, lines_ids.ids)]
+        else:
+            reservation_order = HotelReservationOrder.create({
+                "order_date": new_reservation.date_order if new_reservation else today_date.date(),
+                "reservation_room_id": new_reservation.id if new_reservation else False,
+                "is_folio": True if new_reservation else False,
+                "partner_id": user_id.partner_id.id,
+                "state": "draft",
+            })
+            
+        if kwargs.get("include_transport"):
             HotelTransport.create({
                 "hotel_reservation": new_reservation.id,
                 "move_from": kwargs["origen"],
                 "move_to": kwargs["destiny"],
                 "partner_id": reservation_line_partners[0].id
             })
+
         # Reservation created successfully
         _logger.info("Reservation created!")
         _logger.info(new_reservation.id)

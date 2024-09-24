@@ -1151,7 +1151,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 
 		},
 
-		verificationDataError: function (ev, skipGuestValidation = false) {
+		verificationDataError(ev, skipGuestValidation = false) {
 			var identification_vat = $('#identification_VAT').val();
 			var first_last_name_input = $('#first_last_name_input').val();
 			var phone_input = $('#phone_input').val();
@@ -1160,38 +1160,24 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var food_check = $('#food_check').is(':checked');
 			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
 		
-			if (!skipGuestValidation) {
-				if (!identification_vat || identification_vat.length !== 8) {
-					alert("La Cédula de Identidad debe tener al menos 8 dígitos.");
-					return true;
-				}			
-				if (!first_last_name_input || !/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_input)) {
-					alert("Por favor, Introduzca un Nombre y Apellido válido, sin números ni caracteres especiales.");
-					return true;
-				}
-				if (phone_input.length !== 11 || !venezuelanPhoneNumberRegex.test(phone_input.replace(/-/g, ''))) {
-					alert("Por favor, Introduzca un número de teléfono venezolano válido con formato XXXX-XXX-XXXX.");
-					return true;
-				}
-				if (!/@/.test(email_input)) {
-					alert("Por favor, Introduzca un correo electrónico válido que contenga el símbolo '@'.");
-					return true;
-				}
-				if (!room_check && !food_check) {
-					alert("Por favor, Seleccione al menos una opción de Comida o Habitación.");
-					return true;
-				}
+			if (!skipGuestValidation && identification_vat && identification_vat.length === 7 &&
+				first_last_name_input && /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_input) &&
+				phone_input.length === 11 && venezuelanPhoneNumberRegex.test(phone_input.replace(/-/g, '')) &&
+				/@/.test(email_input) && 
+				(room_check || food_check)) {
+				alert("Por favor, Introduzca un Nombre y Apellido válido, sin números ni caracteres especiales.");
+				return true;
 			}
 		
-			// Validación del acompañante solo si se proporcionan datos
+			// Validaciones del acompañante si se proporcionan datos
 			var first_last_name_roomMate_input = document.getElementById("first_last_name_roomMate_input").value;
 			if (first_last_name_roomMate_input && first_last_name_roomMate_input !== "") {
 				var second_ci = document.getElementById("identification_VAT_partner").value;
 				var second_phone = document.getElementById("phone_input_roomMate").value;
 				var second_email = document.getElementById("email_input_roomMate").value;
 		
-				if (!second_ci || second_ci.length !== 8) {
-					alert("Por favor, Introduzca una Cédula igual o mayor a 8 dígitos para el acompañante.");
+				if (!second_ci || second_ci.length !== 7) {
+					alert("Por favor, Introduzca una Cédula igual o mayor a 7 dígitos para el acompañante.");
 					return true;
 				}
 				if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_roomMate_input)) {
@@ -1209,7 +1195,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 		
 			return false;
-		}, 
+		},
 		
 		
 		_onNextBlogClick: function (ev) {
