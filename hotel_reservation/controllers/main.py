@@ -637,6 +637,7 @@ class Website(http.Controller):
             })
             children_ids.append(new_children.id)
             total_children += 1
+            chil['partner_id'] = new_children.id  
             
         reservation_line_partners = []
 
@@ -692,6 +693,18 @@ class Website(http.Controller):
                                 "partner_id": partner.id,
                                 "item_qty": 1
                             })
+                for child in kwargs['children_list']:
+                    for date_str in dates_list:
+                        if date_str != "":
+                            date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                            order_list_ids.append({
+                                "date_order": date.date(),
+                                "reservation_room_id": new_reservation.id,
+                                "type_solicitation": "breakfast",
+                                "partner_id": child['partner_id'], 
+                                "item_qty": 1
+                            })
+
             if kwargs.get("lunch"):
                 dates_list = kwargs["lunch"]["from_lunch"].replace(" ", "").split(",")
                 for partner in reservation_line_partners:
@@ -705,6 +718,18 @@ class Website(http.Controller):
                                 "partner_id": partner.id,
                                 "item_qty": 1
                             })
+                for child in kwargs['children_list']:
+                    for date_str in dates_list:
+                        if date_str != "":
+                            date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                            order_list_ids.append({
+                                "date_order": date.date(),
+                                "reservation_room_id": new_reservation.id,
+                                "type_solicitation": "lunch",
+                                "partner_id": child['partner_id'], 
+                                "item_qty": 1
+                            })
+
             if kwargs.get("dinner"):
                 dates_list = kwargs["dinner"]["from_dinner"].replace(" ", "").split(",")
                 for partner in reservation_line_partners:
@@ -716,6 +741,17 @@ class Website(http.Controller):
                                 "reservation_room_id": new_reservation.id,
                                 "type_solicitation": "dinner",
                                 "partner_id": partner.id,
+                                "item_qty": 1
+                            })
+                for child in kwargs['children_list']:
+                    for date_str in dates_list:
+                        if date_str != "":
+                            date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                            order_list_ids.append({
+                                "date_order": date.date(),
+                                "reservation_room_id": new_reservation.id,
+                                "type_solicitation": "dinner",
+                                "partner_id": child['partner_id'], 
                                 "item_qty": 1
                             })
 

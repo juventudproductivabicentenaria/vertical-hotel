@@ -338,15 +338,21 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			let first_input = document.getElementById("upper_section")
 			let deleteButt = document.getElementById("delete_other_children_button")
 			if (!deleteButt) {
-			first_input.insertAdjacentHTML("beforeend", `
+			  first_input.insertAdjacentHTML("beforeend", `
 				<button type="button" id="delete_other_children_button" class="ml-2 btn bottom-type-1" >- </button>`)
 			}
 			container.insertAdjacentHTML("beforeend", `
 			<div class="another_seccion-superior-children row mb-1">
-				<input size="40" type="text" placeholder="Nombre y Apellido" class="form-control children_input_class"></input>
-				<input id="phone_children" style="display: none;" type="text" placeholder="Cédula de Identidad" class="form-control children_phone_class"></input>
+			  <input size="40" type="text" placeholder="Nombre y Apellido" class="form-control children_input_class"></input>
+			  <input id="phone_children" style="display: none;" type="text" placeholder="Cédula de Identidad" class="form-control children_phone_class"></input>
 			</div>`)
-		},
+		  
+			const childrenList = document.getElementById('children-list');
+			const newChild = document.createElement('li');
+			const newInput = container.querySelector('.another_seccion-superior-children:last-child .children_input_class');
+			newChild.textContent = newInput.value;
+			childrenList.appendChild(newChild);
+		  },
 
 		_delete_other_children: function(ev) {
 			let container = document.getElementById("container_children")
@@ -355,6 +361,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				deleteButt.remove()
 			}
 			container.removeChild(container.lastChild)
+			const childrenList = document.getElementById('children-list');
+  			childrenList.removeChild(childrenList.lastChild);
 		},
 
 		_add_food: function(ev) {
@@ -1148,7 +1156,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 
 			delete_data_form()
-
 		},
 
 		verificationDataError(ev, skipGuestValidation = false) {
@@ -1783,9 +1790,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 					}
 				});
-
 			}
-
+			// Mostrar la lista de niños agregados
+			const childrenList = document.getElementById('children-list');
+			childrenList.innerHTML = '';
+			children_objects.forEach((child) => {
+			const childElement = document.createElement('li');
+			childElement.textContent = child.nombre;
+			childrenList.appendChild(childElement);
+			});
 			} else {
 				// Cancelar la acción si el usuario hace clic en "Cancelar" o cierra el cuadro de diálogo
 				alert("La acción ha sido cancelada. Puede presionar el botón de nuevo cuando esté seguro.");
