@@ -69,17 +69,17 @@
                         <group colspan="4" col="4">
                             <field name="partner_id"
                                 context="{'default_customer_rank': 1}"
+                                invisible="1"
                             />
-                                <!-- domain="[('customer_rank','>', 0)]"
-                                context="{'default_customer_rank': 1}"
-                            /> -->
-                            <field name="pricelist_id" required="1" col="2" />
+                            <field name="pricelist_id" required="1" col="2"/>
                             <field name="partner_order_id"
+                                string="Solicitante"
                                 domain="[('parent_id','=',partner_id)]"
                             />
                             <newline />
                             <field name="partner_invoice_id"
                                 domain="[('parent_id','=',partner_id)]"
+                                invisible="True"
                             />
                             <field name="partner_shipping_id"
                                 domain="[('parent_id','=',partner_id)]"
