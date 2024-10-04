@@ -448,3 +448,23 @@ hr { border-top: 1px solid white; }
 	.tm-sitename {font-size: 1.8rem;}
 	.tm-slogon { font-size: 0.8rem; }
 }
+
+.custom-label {
+    border: 1px solid #ccc; 
+    border-radius: 6px; 
+    padding: 5px 10px;
+    background-color: transparent;
+    display: flex; 
+    align-items: center; 
+    width: 100%;
+    box-sizing: border-box; 
+}
+
+
+.custom-label i {
+    margin-right: 8px;
+}
+
+.custom-label span {
+    flex-grow: 1;
+}

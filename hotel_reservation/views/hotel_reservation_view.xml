@@ -126,17 +126,17 @@
 
                         </page>
                         <page name="transport" string='Transporte'>
-
                             <field name='transport_ids'>
                                 <tree string="">
                                     <field name="code"/>
                                     <field name="move_from"/>
                                     <field name="move_to"/>
+                                    <field name="contact_number"/>
+                                    <field name="departure_hour"/>
                                     <field name="hotel_reservation"/>
                                     <field name="partner_id"/>
                                 </tree>
                             </field>
-
                         </page>
                         <page name="activities_ids" string='Actividades'>
                             <field name='activities_ids'>

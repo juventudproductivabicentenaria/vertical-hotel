@@ -162,9 +162,10 @@ class HotelReservation(models.Model):
         "reservation_room_id",
         "Lines de pedido"
     )
-    
+
     no_of_folio = fields.Integer("No. Folio", compute="_compute_folio_id")
     token = fields.Char(string="token", default=lambda self: self._has_default(), required=True)
+
 
     def unlink(self):
         """

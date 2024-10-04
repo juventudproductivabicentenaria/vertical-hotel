@@ -1,12 +1,10 @@
-import logging
-from datetime import datetime, timedelta
-
-from dateutil.relativedelta import relativedelta
 from . import tools
-
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as dt
+import logging
 
 _logger = logging.getLogger(__name__)
 try:
@@ -38,6 +36,21 @@ class HotelTransport(models.Model):
         "Pasajero",
         required=True,
     )
+    departure_time = fields.Datetime(
+        string="Hora de Salida", 
+        required=True,
+        
+    )
+    contact_number = fields.Char(
+        string="Número de Contacto", 
+        required=True,
+        default=lambda self: self.partner_id.phone, 
+    )
+    
+    departure_hour = fields.Char(
+        string='Hora de Salida', 
+        compute='_compute_departure_hour'
+    )
 
     @api.model
     def create(self, vals):
@@ -46,3 +59,17 @@ class HotelTransport(models.Model):
         )
         res = super(HotelTransport, self).create(vals)
         return res
+
+    @api.onchange('partner_id')
+    def _onchange_partner_id(self):
+        """Al cambiar al partner, actualizar el número de contacto."""
+        if self.partner_id:
+            self.contact_number = self.partner_id.phone
+
+    def _compute_departure_hour(self):
+        for record in self:
+            if record.departure_time:
+                record.departure_hour = record.departure_time.strftime('%H:%M:%S')
+            else:
+                record.departure_hour = ''
+

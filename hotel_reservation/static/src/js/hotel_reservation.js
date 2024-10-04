@@ -95,9 +95,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			$("#foodContainer").slideToggle();
         },
 
-	
-
-		
 		_addEstructureCategories: function () {
 			console.log('_addEstructureCategories')
             var categoriesHtml = this.webProperty;
@@ -190,50 +187,45 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			};
 		},
 
-		_search_person: function (ev){
+		_search_person: function(ev) {
 			let ci = document.getElementById("identification_VAT").value;
+			let transportCheck = document.getElementById("transport_check");
+			
 			this._rpc({
 				route: '/search_person',
 				params: {
 					'partner_ci': ci,
 				},
 			}).then(result => {
-				let field_name = document.getElementById("first_last_name_input")
-				let field_phone = document.getElementById("phone_input")
-				let field_email = document.getElementById("email_input")
-				let institution = document.getElementById("institution")
+				let field_name = document.getElementById("first_last_name_input");
+				let field_phone = document.getElementById("phone_input");
+				let field_email = document.getElementById("email_input");
+				let institution = document.getElementById("institution");
+		
 				if (result.missing) {
-					alert("No se encontraron datos con el documento proporcionado. Por favor, Introduzca los datos de la persona manualmente.")
-					field_name.value = ""
-					field_phone.value = ""
-					field_email.value = ""
-					field_name.disabled = false
-					field_phone.disabled = false
-					field_email.disabled = false
-					institution.disabled = false
-				}
-				else if (result.no_id) {
-					console.log("No CI")
-					field_name.value = ""
-					field_phone.value = ""
-					field_email.value = ""
-					institution.value = ""
-				}
-				else {
-					field_name.disabled = true
-					field_phone.disabled = true
-					field_email.disabled = true
-					field_name.value = result.name
-					field_phone.value = result.phone
-					field_email.value = result.email
-					institution.disabled = false
-					institution.value = ""
-					const first_person = document.getElementById("first_person")
-					if (first_person == null) {
-					}
-					else {
-						// first_person.textContent = "Cambió"
-					}
+					alert("No se encontraron datos con el documento proporcionado. Por favor, introduzca los datos de la persona manualmente.");
+					field_name.value = "";
+					field_phone.value = "";
+					field_email.value = "";
+					field_name.disabled = false;
+					field_phone.disabled = false;
+					field_email.disabled = false;
+					institution.disabled = false;
+				} else if (result.no_id) {
+					console.log("No CI");
+					field_name.value = "";
+					field_phone.value = "";
+					field_email.value = "";
+					institution.value = "";
+				} else {
+					field_name.disabled = true;
+					field_phone.disabled = true;
+					field_email.disabled = true;
+					field_name.value = result.name;
+					field_phone.value = result.phone;
+					field_email.value = result.email;
+					institution.disabled = false;
+					institution.value = "";
 				}
 			});
 		},
@@ -738,426 +730,116 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		},
 
 		_add_transport: function(ev) {
-			let container = document.getElementById("container_transport")
-			let check = document.getElementById("transport_check")
-			if (!check.checked) {
-				container.innerHTML = ""
-				return
-			}
-			container.innerHTML = `
-			<div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
-                        Origen
-                        <select id="origen_select" class="mt-3 w-100">
-                            <option>
-                                Amazonas
-                            </option>
-                        </select>
-                    </div>
-                    <div class="border bg-light ml-3 mb-4 text-center" style="width: 100px; height: 30px;">
-                        Destino
-                        <select id="destino_select" class="mt-3 w-100">
-                            <option>
-                                Amazonas
-                            </option>
-                        </select>
-                    </div>
-			`
+			var transportCheckbox = document.getElementById("transport_check");
+			var container = document.getElementById("container_transport");
+		
+			transportCheckbox.addEventListener("change", function() {
+				if (transportCheckbox.checked) {
+					container.innerHTML = 
+					`<div class="row">
+						<div class="col-md-3"> 
+							<label for="origen_select" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
+								<i class="bi bi-house-fill" style="margin-right: 4px;"></i>
+								Origen
+							</label>
+							<select id="origen_select" class="form-control w-full w-100">
+								<option value="">Selecciona un origen</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label for="destino_select" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
+								<i class="bi bi-geo-alt-fill" style="margin-right: 4px;"></i>
+								Destino
+							</label>
+							<select id="destino_select" class="form-control w-full w-100">
+								<option value="">Selecciona un destino</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label for="departure_time" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
+								<i class="bi bi-clock-fill" style="margin-right: 4px;"></i>
+								Hora de Salida
+							</label> 
+							<input type="text" id="departure_time" name="departure_time" class="form-control w-full w-100" size="19" placeholder="Selecciona la hora" />
+						</div>
+						<div class="row col-md-3">
+							<label for="contact_number" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
+								<i class="bi bi-telephone-fill" style="margin-right: 4px;"></i>
+								Número de Contacto
+							</label>
+							<input type="text" id="contact_number" name="contact_number" class="form-control w-full w-100" size="19" placeholder="Ingresa el número de contacto" />
+						</div>
+					</div>`;
+		
+					// Inicializar Flatpickr para la hora de salida
+					flatpickr("#departure_time", {
+						enableTime: true,
+						noCalendar: true,
+						dateFormat: "H:i:S", 
+						time_24hr: true
+					});
+					var departureTimeInput = document.getElementById("departure_time");
+					var departureTime = this._convertDepartureTime(departureTimeInput.value);
+					this._get_contact_number();
+				} else {
+					container.innerHTML = "";
+				}
+			}.bind(this));
 		},
 
-		__add_other_person: function(ev) {
-			let self = this;
-			self.verificationDataError(ev);
-			var $error_data = $("#error_data")
-			$error_data.hide();
-			var error = this.verificationDataError(ev);
-			if (error) {
-				$error_data.show();
-				return
+		_convertDepartureTime: function(departureTime) {
+			if (!departureTime) {
+				console.error("No se ha seleccionado una hora.");
+				return;
 			}
-			let ci = document.getElementById("identification_VAT").value
-			let field_name = document.getElementById("first_last_name_input").value
-			let field_phone = document.getElementById("phone_input").value
-			let field_email = document.getElementById("email_input").value
-			try {
-				var ci_part = document.getElementById("identification_VAT_partner").value
+			var [hours, minutes] = departureTime.split(':').map(Number); 
+			var now = new Date();
+			var localDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+			var utcDateTime = new Date(localDateTime.getTime() + localDateTime.getTimezoneOffset() * 60000);
+			return utcDateTime.toISOString(); // Devuelve la marca de tiempo convertida como una cadena ISO
+		},
 	
-				var field_name_part = document.getElementById("first_last_name_roomMate_input").value
-				var field_phone_part = document.getElementById("phone_input_roomMate").value
-				var field_email_part = document.getElementById("email_input_roomMate").value
-			} catch(e){
-				var ci_part = ""
-	
-				var field_name_part = ""
-				var field_phone_part = ""
-				var field_email_part = ""
+
+		_get_contact_number: function() {
+			var ci = document.getElementById("identification_VAT").value;
+			if (!ci) {
+				console.error("El CI está vacío.");
+				return;  
 			}
-			const institution = document.getElementById("institution")
-			document.getElementById("par_list_persons").classList.remove("d-none")
-
-			const listaPadre = document.getElementById('list_ppl')
-			var childrens = document.getElementById("container_children").children.length
-			let html_children = document.getElementsByClassName("children_input_class")
-			let html_children_phone = document.getElementsByClassName("children_phone_class")
-			var children_objects = [];
-			var include_room = document.getElementById("room_check").checked
-			function delete_data_form() {
-				let form = document.getElementById("search_reservation_form")
-				let roomMate_check = document.getElementById("roomMate_check")
-				let children_check = document.getElementById("children_check")
-				let food_checked = document.getElementById("food_check")
-				if (roomMate_check.checked) {
-					roomMate_check.click()
-				}
-				if (children_check.checked) {
-					children_check.click()
-				}
-				if (food_checked.checked) {
-					food_checked.click()
-				}
-				const date_from_before = document.getElementById("dateFrom").value
-				const date_until_before = document.getElementById("date_until").value
-				form.reset()
-
-				document.getElementById("dateFrom").value = date_from_before
-				document.getElementById("date_until").value = date_until_before
-				
-				document.getElementById("dateFrom").disabled = true;
-				document.getElementById("date_until").disabled = true
-			}
-			if (html_children) {
-				const childrenArray = Array.from(html_children);
-				const childrenPhoneArray = Array.from(html_children_phone);
-
-
-				for (let i = 0; i < childrenArray.length; i++) {
-					const nombre = childrenArray[i].value;
-					const vat = childrenPhoneArray[i].value;
-					console.log(nombre)
-					const objeto = {
-						nombre,
-						vat,
-					};
-
-					children_objects.push(objeto);
-				}
-			}
-			const add_food = document.getElementById("food_check").checked
-			const add_transport = document.getElementById("transport_check").checked
-			if (add_transport) {
-				var origen = document.getElementById("origen_select").value;
-				var destiny = document.getElementById("destino_select").value;
-			}
-			else {
-				origen = ""
-				destiny = ""
-			}
-			if (add_food) {
-				let breakfast = document.getElementById("breakfast_check").checked
-				let lunch = document.getElementById("lunch_check").checked
-				let dinner = document.getElementById("dinner_check").checked
-				if (breakfast && lunch && dinner) {
-					let from_break = document.getElementById("breakfastDate").value
-					let from_lunch = document.getElementById("lunchDate").value
-					let from_dinner = document.getElementById("dinnerDate").value
-
-					const breakfast_dict = {
-						"from_break": from_break}
-						
-					
-					const lunch_dict = {
-						"from_lunch": from_lunch}
-					
-					const dinner_dict = {
-						"from_dinner": from_dinner}
-					
-					const ready_to_insert = {
-						"vat": ci,
-						"name": field_name,
-						"phone": field_phone,
-						"email": field_email,
-						"second_vat": ci_part,
-						"second_name": field_name_part,
-						"second_phone": field_phone_part,
-						"second_email": field_email_part,
-						"childrens": children_objects,
-						"include_room": include_room,
-						"include_food": true,
-						"breakfast": breakfast_dict,
-						"lunch": lunch_dict,
-						"dinner": dinner_dict,
-						"include_transport": add_transport,
-						"origen": origen,
-						"destiny": destiny,
-						'institution_name': institution.value,
+			console.log("Ejecutando _get_contact_number con CI:", ci);
+			this._rpc({
+				route: '/search_person',
+				params: {
+					'partner_ci': ci,
+				},
+			}).then(result => {
+				console.log("Resultado de _rpc:", result); 
+				var contactField = document.getElementById("contact_number");
+				if (contactField) {
+					if (result.phone) {
+						contactField.value = result.phone; 
+					} else {
+						contactField.value = ''; 
 					}
-					full_objects.push(ready_to_insert)
-					children_objects = []
+				} else {
+					console.error("El campo 'contact_number' no se encuentra.");
 				}
-				
-
-				else if (breakfast && lunch && !dinner) {
-					let from_break = document.getElementById("breakfastDate").value
-					let from_lunch = document.getElementById("lunchDate").value
-					const breakfast_dict = {
-						"from_break": from_break}
-						
-					
-					const lunch_dict = {
-						"from_lunch": from_lunch}
-					
-					
-					const ready_to_insert = {
-						"vat": ci,
-						"name": field_name,
-						"phone": field_phone,
-						"email": field_email,
-						"second_vat": ci_part,
-						"second_name": field_name_part,
-						"second_phone": field_phone_part,
-						"second_email": field_email_part,
-						"childrens": children_objects,
-						"include_room": include_room,
-						"include_food": true,
-						"breakfast": breakfast_dict,
-						"lunch": lunch_dict,
-						"include_transport": add_transport,
-						"origen": origen,
-						"destiny": destiny,
-						'institution_name': institution.value,
-					}
-					full_objects.push(ready_to_insert)
-					children_objects = []
-				}
-
-				else if (breakfast && !lunch && !dinner) {
-					let from_break = document.getElementById("breakfastDate").value
-					const breakfast_dict = {
-						"from_break": from_break}
-						
-
-					const ready_to_insert = {
-						"vat": ci,
-						"name": field_name,
-						"phone": field_phone,
-						"email": field_email,
-						"second_vat": ci_part,
-						"second_name": field_name_part,
-						"second_phone": field_phone_part,
-						"second_email": field_email_part,
-						"childrens": children_objects,
-						"include_room": include_room,
-						"include_food": true,
-						"breakfast": breakfast_dict,
-						"include_transport": add_transport,
-						"origen": origen,
-						"destiny": destiny,
-						'institution_name': institution.value,
-					}
-					full_objects.push(ready_to_insert)
-					children_objects = []
-				}
-
-				else if (!breakfast && lunch && !dinner) {
-					let from_lunch = document.getElementById("lunchDate").value
-
-					const lunch_dict = {
-						"from_lunch": from_lunch}
-						
-
-					const ready_to_insert = {
-						"vat": ci,
-						"name": field_name,
-						"phone": field_phone,
-						"email": field_email,
-						"second_vat": ci_part,
-						"second_name": field_name_part,
-						"second_phone": field_phone_part,
-						"second_email": field_email_part,
-						"childrens": children_objects,
-						"include_room": include_room,
-						"include_food": true,
-						"lunch": lunch_dict,
-						"include_transport": add_transport,
-						"origen": origen,
-						"destiny": destiny,
-						'institution_name': institution.value,
-					}
-					full_objects.push(ready_to_insert)
-					children_objects = []
-				}
-
-				else if (!breakfast && !lunch && dinner) {
-					let from_dinner = document.getElementById("dinnerDate").value
-
-					const dinner_dict = {
-						"from_dinner": from_dinner}
-						
-
-					const ready_to_insert = {
-						"vat": ci,
-						"name": field_name,
-						"phone": field_phone,
-						"email": field_email,
-						"second_vat": ci_part,
-						"second_name": field_name_part,
-						"second_phone": field_phone_part,
-						"second_email": field_email_part,
-						"childrens": children_objects,
-						"include_room": include_room,
-						"include_food": true,
-						"dinner": dinner_dict,
-						"include_transport": add_transport,
-						"origen": origen,
-						"destiny": destiny,
-						'institution_name': institution.value,
-					}
-					full_objects.push(ready_to_insert)
-					children_objects = []
-				}
-
-				else if (breakfast && !lunch && dinner) {
-					let from_break = document.getElementById("breakfastDate").value
-					let from_dinner = document.getElementById("dinnerDate").value
-
-					const breakfast_dict = {
-						"from_break": from_break}
-					
-					const dinner_dict = {
-						"from_dinner": from_dinner}
-
-					const ready_to_insert = {
-						"vat": ci,
-						"name": field_name,
-						"phone": field_phone,
-						"email": field_email,
-						"second_vat": ci_part,
-						"second_name": field_name_part,
-						"second_phone": field_phone_part,
-						"second_email": field_email_part,
-						"childrens": children_objects,
-						"include_room": include_room,
-						"include_food": true,
-						"breakfast": breakfast_dict,
-						"dinner": dinner_dict,
-						"include_transport": add_transport,
-						"origen": origen,
-						"destiny": destiny,
-						'institution_name': institution.value,
-					}
-					full_objects.push(ready_to_insert)
-					children_objects = []
-				}
-
-				else if (!breakfast && lunch && dinner) {
-					let from_lunch = document.getElementById("lunchDate").value
-					let from_dinner = document.getElementById("dinnerDate").value
-					
-					const lunch_dict = {
-						"from_lunch": from_lunch}
-					
-					const dinner_dict = {
-						"from_dinner": from_dinner}
-					
-					const ready_to_insert = {
-						"vat": ci,
-						"name": field_name,
-						"phone": field_phone,
-						"email": field_email,
-						"second_vat": ci_part,
-						"second_name": field_name_part,
-						"second_phone": field_phone_part,
-						"second_email": field_email_part,
-						"childrens": children_objects,
-						"include_room": include_room,
-						"include_food": true,
-						"lunch": lunch_dict,
-						"dinner": dinner_dict,
-						"include_transport": add_transport,
-						"origen": origen,
-						"destiny": destiny,
-						'institution_name': institution.value,
-					}
-					full_objects.push(ready_to_insert)
-					children_objects = []
-				}
-
-			}
-			else {
-				const ready_to_insert = {
-					"vat": ci,
-					"name": field_name,
-					"phone": field_phone,
-					"email": field_email,
-					"second_vat": ci_part,
-					"second_name": field_name_part,
-					"second_phone": field_phone_part,
-					"second_email": field_email_part,
-					"childrens": children_objects,
-					"include_food": false,
-					"include_room": include_room,
-					"include_transport": add_transport,
-					"origen": origen,
-					"destiny": destiny,
-					'institution_name': institution.value,
-				}
-				full_objects.push(ready_to_insert)
-				children_objects = []
-			}
-
-
-			if (ci_part && childrens > 0) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + "), " + "(Niños: " + childrens + ")";
-				nuevoElementoLi.classList.add('fade');
-
-				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
-				listaPadre.appendChild(nuevoElementoLi);
-				setTimeout(function() {
-					nuevoElementoLi.classList.add('show');
-				}, 100);
-				adults_counter += 2
-				childrens_counter = childrens + childrens_counter
-			}
-			else if (ci_part && childrens == 0) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name + " (Acompañante: " + field_name_part + ")";
-				nuevoElementoLi.classList.add('fade');
-
-				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
-				listaPadre.appendChild(nuevoElementoLi);
-				setTimeout(function() {
-					nuevoElementoLi.classList.add('show');
-				}, 100);
-				adults_counter += 2
-				childrens_counter = childrens + childrens_counter
-			}
-			else if (childrens > 0 && !ci_part) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name + " (Niños: " + childrens + ")";
-				nuevoElementoLi.classList.add('fade');
-
-				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
-				listaPadre.appendChild(nuevoElementoLi);
-				setTimeout(function() {
-					nuevoElementoLi.classList.add('show');
-				}, 100);
-				childrens_counter = childrens + childrens_counter
-			}
-			else if (childrens == 0 && !ci_part) {
-				const nuevoElementoLi = document.createElement('li');
-				nuevoElementoLi.textContent = field_name;
-				nuevoElementoLi.classList.add('fade');
-
-				// Agregar la clase 'show' después de un breve retraso para hacer que el elemento aparezca gradualmente
-				listaPadre.appendChild(nuevoElementoLi);
-				setTimeout(function() {
-					nuevoElementoLi.classList.add('show');
-				}, 100);
-			}
-
-			delete_data_form()
+			}).catch(error => {
+				console.error("Error al obtener el número de contacto: ", error);
+			});
 		},
 
+		_validateContactNumber: function() {
+			var contact_number = document.getElementById("contact_number").value;
+			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
+		
+			if (contact_number && (contact_number.length !== 11 || !venezuelanPhoneNumberRegex.test(contact_number.replace(/-/g, '')))) {
+				alert("Por favor, Introduzca un número de teléfono venezolano válido en el campo de número de contacto (transporte) con formato XXXX-XXX-XXXX.");
+				return false;
+			}
+			return true;
+		},
+		
 		verificationDataError(ev, skipGuestValidation = false) {
 			var identification_vat = $('#identification_VAT').val();
 			var first_last_name_input = $('#first_last_name_input').val();
@@ -1165,6 +847,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var email_input = $('#email_input').val();
 			var room_check = $('#room_check').is(':checked');
 			var food_check = $('#food_check').is(':checked');
+			var contact_number = $('#contact_number').val(); 
+
 			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
 		
 			if (!skipGuestValidation) {
@@ -1240,7 +924,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 		
 			return false;
-		},
+		}, 
 		
 		_onNextBlogClick: function (ev) {
 			var self = this;
@@ -1260,7 +944,12 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						params: { vat: second_ci }
 					}).then(resultCompanion => {
 						if (resultMain.exists && resultCompanion.exists) {
-							self._onReservar(ev, true);
+							if (this._validateContactNumber()){
+								self._onReservar(ev, true);
+							}else{
+								$error_data.show();        
+								return;                
+							}
 						} else {
 							var errorMain = self.verificationDataError(ev, false);
 							if (errorMain) {
@@ -1272,8 +961,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							if (errorCompanion) {
 								$error_data.show();
 								return;
-							}							
-							self._onReservar(ev, true);
+							}
+							if (this._validateContactNumber()){
+								self._onReservar(ev, true);
+							}else{
+								$error_data.show();        
+								return;                
+							}
 						}
 					}).catch(err => {
 						console.error("Error checking companion:", err);
@@ -1281,15 +975,25 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				} else {
 					// Si no hay acompañante, verificamos solo el huésped principal
 					if (resultMain.exists) {
-						self._onReservar(ev, true);
+						if (this._validateContactNumber()){
+							self._onReservar(ev, true);
+						}else{
+							$error_data.show();        
+							return;                
+						}
 					} else {
 						// Si el huésped principal no está registrado, realizamos la validación de los datos de entrada
 						var errorMain = self.verificationDataError(ev, false);
 						if (errorMain) {
 							$error_data.show();
 							return;
-						}						
-						self._onReservar(ev, true);
+						}                        
+						if (this._validateContactNumber()){
+							self._onReservar(ev, true);
+						}else{
+							$error_data.show();        
+							return;                
+						}
 					}
 				}
 			}).catch(err => {
@@ -1302,17 +1006,17 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			// var respuesta = confirm("Por favor, presione OK solo cuando esté seguro de que desea realizar la reservación.");
 			if (respuesta) {
 				// Ejecutar la acción si el usuario hace clic en "Aceptar"
-				let first_last_name_input = document.getElementById("first_last_name_input")
+				var first_last_name_input = document.getElementById("first_last_name_input")
 				
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val()
-			let counterRooms = document.getElementById("counterRooms")
+			var counterRooms = document.getElementById("counterRooms")
 
 			if (full_objects.length > 0) {
 				if (first_last_name_input.value != "") {
 					document.getElementById("add_other_person").click()
 				}
-
+			
 				this._rpc({
 					route: '/reservation/search_reservation',
 					params: {
@@ -1368,28 +1072,18 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				childrens = 0
 			}
 			let num_rooms = parseInt(counterRooms.textContent);
-
 			let main_ci = document.getElementById("identification_VAT")
 			list_of_cis.push(main_ci.value)
-
 			list_of_names.push(first_last_name_input.value)
-
 			let main_phone = document.getElementById("phone_input")
 			list_of_phones.push(main_phone.value)
-
 			let main_email = document.getElementById("email_input")
 			list_of_emails.push(main_email.value)
-
 			let institution = document.getElementById("institution")
-
 			let first_last_name_roomMate_input = document.getElementById("first_last_name_roomMate_input")
-			
 			let second_ci = document.getElementById("identification_VAT_partner")
-
 			let second_phone = document.getElementById("phone_input_roomMate")
-
 			let second_email = document.getElementById("email_input_roomMate")
-
 			var has_partner = false
 			var adults = 0
 
@@ -1406,18 +1100,22 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				has_partner = true
 			}
 			const include_room = document.getElementById("room_check").checked
-
 			const add_food = document.getElementById("food_check").checked
 			const add_transport = document.getElementById("transport_check").checked
+			var origen = "";
+			var destiny = "";
+			var contact_number = ""; 
+			var departure_time = "";
+			
 			if (add_transport) {
-				var origen = document.getElementById("origen_select").value;
-				var destiny = document.getElementById("destino_select").value;
-				console.log(origen)
-				console.log(destiny)
-			}
-			else {
-				origen = ""
-				destiny = ""
+				origen = document.getElementById("origen_select").value;
+				destiny = document.getElementById("destino_select").value;
+				contact_number = document.getElementById("contact_number").value;
+				departure_time = document.getElementById("departure_time").value;
+				
+			} else {
+				origen = "";
+				destiny = "";
 			}
 			if (add_food) {
 				
@@ -1429,6 +1127,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					let from_lunch = document.getElementById("lunchDate").value
 					let from_dinner = document.getElementById("dinnerDate").value
 
+					
 					const breakfast_dict = {
 						"from_break": from_break}
 						
@@ -1463,10 +1162,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
+							"contact_number": contact_number,
+							"departure_time": departure_time,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
+				
 					}).then(result => {
+						console.log(result)
 						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
@@ -1476,9 +1179,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
 						}
 					});
-				}
-				
 
+				}
 				else if (breakfast && lunch && !dinner) {
 					let from_break = document.getElementById("breakfastDate").value
 					let from_lunch = document.getElementById("lunchDate").value
@@ -1511,10 +1213,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
+							"contact_number": contact_number,
+							"departure_time": departure_time,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
+						
+
 					}).then(result => {
+						console.log(result)
 						self.unblockUI(ev);
 						if (result.error_validation) {
 							self.MessageDialog(result.title_error, result.content_error)
@@ -1554,6 +1261,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
+							"contact_number": contact_number,
+							"departure_time": departure_time,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1598,6 +1307,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
+							"contact_number": contact_number,
+							"departure_time": departure_time,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1641,6 +1352,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
+							"contact_number": contact_number,
+							"departure_time": departure_time,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1690,6 +1403,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
+							"contact_number": contact_number,
+							"departure_time": departure_time,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1740,6 +1455,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
+							"contact_number": contact_number,
+							"departure_time": departure_time,
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1778,6 +1495,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"include_transport": add_transport,
 						"origen": origen,
 						"destiny": destiny,
+						"contact_number": contact_number,
+						"departure_time": departure_time,
 						'showContainerRoom': document.getElementById('room_check').checked,
 						'showContainerFood': document.getElementById('food_check').checked,
 					},
@@ -1917,7 +1636,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 			});
 	    },
-
+ 
 		showerror: function (responseText) {
 			console.log('showerror')
             var self = this;
@@ -1926,6 +1645,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				responseText : responseText
 			}));
         },
+
+		
 
 	});
 });
