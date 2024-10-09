@@ -28,8 +28,10 @@ class HotelTransport(models.Model):
     )
     
     move_from = fields.Char(required=True, string="Transporte Desde")
-    
     move_to = fields.Char(required=True, string="Transporte Hacia")
+
+    move_from_2 =fields.Char(required=True, string="Transporte Desde(2)")
+    move_to_2 = fields.Char(required=True, string="Transporte Hacia(2)")
 
     partner_id = fields.Many2one(
         "res.partner",
@@ -44,12 +46,21 @@ class HotelTransport(models.Model):
     contact_number = fields.Char(
         string="Número de Contacto", 
         required=True,
-        default=lambda self: self.partner_id.phone, 
     )
     
     departure_hour = fields.Char(
         string='Hora de Salida', 
         compute='_compute_departure_hour'
+    )
+
+    departure_hour_2 = fields.Char(
+        string='Hora de Salida (2)', 
+        compute='_compute_departure_hour_2'
+    )
+
+    departure_time_2 = fields.Datetime(
+            string="Hora de Salida (2)", 
+            required=True,   
     )
 
     @api.model
@@ -73,3 +84,9 @@ class HotelTransport(models.Model):
             else:
                 record.departure_hour = ''
 
+    def _compute_departure_hour_2(self):
+        for record in self:
+            if record.departure_time_2:
+                record.departure_hour_2 = record.departure_time_2.strftime('%H:%M:%S')
+            else:
+                record.departure_hour_2 = ''

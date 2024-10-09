@@ -540,7 +540,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			counter.textContent = result.toString() + " Habitaciones"
 		},
 
-		_add_origen: function(ev) {
+		_add_origen: function(selectId) {
 			const estados = [
 				"Anzoátegui", "Apure", "Aragua", "Barinas", "Bolívar", "Carabobo",
 				"Cojedes", "Delta Amacuro", "Dependencias Federales", "Distrito Federal", "Falcón",
@@ -548,17 +548,23 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				"Sucre", "Táchira", "Trujillo", "Vargas", "Yaracuy", "Zulia"
 			];
 		
-			const select = document.getElementById("origen_select");
-			if (select.children.length > 1) {
-				return
+			const select = document.getElementById(selectId);
+			if (!select) {
+				return;
 			}
+			
+			if (select.children.length > 1) {
+				return;
+			}
+		
 			estados.forEach(estado => {
 				const option = document.createElement("option");
 				option.text = estado;
 				select.add(option);
 			});
 		},
-		_add_destino: function(ev) {
+		
+		_add_destino: function(selectId) {
 			const estados = [
 				"Anzoátegui", "Apure", "Aragua", "Barinas", "Bolívar", "Carabobo",
 				"Cojedes", "Delta Amacuro", "Dependencias Federales", "Distrito Federal", "Falcón",
@@ -566,16 +572,23 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				"Sucre", "Táchira", "Trujillo", "Vargas", "Yaracuy", "Zulia"
 			];
 		
-			const select = document.getElementById("destino_select");
-			if (select.children.length > 1) {
-				return
+			const select = document.getElementById(selectId);
+			if (!select) {
+				console.error(`El select con el ID ${selectId} no existe.`);
+				return;
 			}
+		
+			if (select.children.length > 1) {
+				return;
+			}
+		
 			estados.forEach(estado => {
 				const option = document.createElement("option");
 				option.text = estado;
 				select.add(option);
 			});
 		},
+		
 
 		_resta_adults: function(ev){
 			var number = Number(document.getElementById("evaluar_adults").value);
@@ -729,63 +742,129 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 		},
 
+		
 		_add_transport: function(ev) {
 			var transportCheckbox = document.getElementById("transport_check");
-			var container = document.getElementById("container_transport");
+			var containerTransport = document.getElementById("container_transport");
+			var containerOtherTransport = document.getElementById("container_other_transport");
 		
-			transportCheckbox.addEventListener("change", function() {
+			transportCheckbox.addEventListener("change", function() { 
 				if (transportCheckbox.checked) {
-					container.innerHTML = 
-					`<div class="row">
-						<div class="col-md-3"> 
-							<label for="origen_select" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
-								<i class="bi bi-house-fill" style="margin-right: 4px;"></i>
-								Origen
-							</label>
-							<select id="origen_select" class="form-control w-full w-100">
-								<option value="">Selecciona un origen</option>
-							</select>
-						</div>
-						<div class="col-md-3">
-							<label for="destino_select" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
-								<i class="bi bi-geo-alt-fill" style="margin-right: 4px;"></i>
-								Destino
-							</label>
-							<select id="destino_select" class="form-control w-full w-100">
-								<option value="">Selecciona un destino</option>
-							</select>
-						</div>
-						<div class="col-md-3">
-							<label for="departure_time" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
-								<i class="bi bi-clock-fill" style="margin-right: 4px;"></i>
-								Hora de Salida
-							</label> 
-							<input type="text" id="departure_time" name="departure_time" class="form-control w-full w-100" size="19" placeholder="Selecciona la hora" />
-						</div>
-						<div class="row col-md-3">
-							<label for="contact_number" class="custom-label align-items-center text-type-1" style="border: 1px solid #ccc; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; background-color: transparent;">
-								<i class="bi bi-telephone-fill" style="margin-right: 4px;"></i>
-								Número de Contacto
-							</label>
-							<input type="text" id="contact_number" name="contact_number" class="form-control w-full w-100" size="19" placeholder="Ingresa el número de contacto" />
-						</div>
-					</div>`;
+					if (!document.getElementById('origen_select')) {
+						let row = document.createElement('DIV');
+						let container = document.createElement('DIV');
+						let container2 = document.createElement('DIV');
 		
-					// Inicializar Flatpickr para la hora de salida
-					flatpickr("#departure_time", {
-						enableTime: true,
-						noCalendar: true,
-						dateFormat: "H:i:S", 
-						time_24hr: true
-					});
-					var departureTimeInput = document.getElementById("departure_time");
-					var departureTime = this._convertDepartureTime(departureTimeInput.value);
-					this._get_contact_number();
+						container.classList.add("col-9");
+						container2.classList.add("col-3", "d-flex", "justify-content-center", "align-items-center");
+						row.classList.add("row");
+		
+						container.innerHTML = 
+						`<div class="row w-100">
+							<div class="col"> 
+								<label for="origen_select" class="custom-label align-items-center text-type-1">
+									<i class="bi bi-house-fill" style="margin-right: 4px;"></i>
+									Origen
+								</label>
+								<select id="origen_select" class="form-control w-full w-100">
+									<option value="">Selecciona un origen</option>
+								</select>
+							</div>
+							<div class="col">
+								<label for="destino_select" class="custom-label align-items-center text-type-1">
+									<i class="bi bi-geo-alt-fill" style="margin-right: 4px;"></i>
+									Destino
+								</label>
+								<select id="destino_select" class="form-control w-full w-100">
+									<option value="">Selecciona un destino</option>
+								</select>
+							</div>
+							<div class="col">
+								<label for="departure_time" class="custom-label align-items-center text-type-1">
+									<i class="bi bi-clock-fill" style="margin-right: 4px;"></i>
+									Hora de Salida
+								</label> 
+								<input type="text" id="departure_time" name="departure_time" class="form-control w-full w-100" size="19" placeholder="Selecciona la hora" />
+							</div>
+						</div>`;
+		
+						container.innerHTML += 
+						`<div class="row w-100">
+							<div class="col">
+								<label for="destino_select_2" class="custom-label align-items-center text-type-1">
+									<i class="bi bi-geo-alt-fill" style="margin-right: 4px;"></i>
+									Destino 
+								</label>
+								<select id="destino_select_2" class="form-control w-full w-100">
+									<option value="">Selecciona un destino</option>
+								</select>
+							</div>
+							<div class="col"> 
+								<label for="origen_select_2" class="custom-label align-items-center text-type-1">
+									<i class="bi bi-house-fill" style="margin-right: 4px;"></i>
+									Origen 
+								</label>
+								<select id="origen_select_2" class="form-control w-full w-100">
+									<option value="">Selecciona un origen</option>
+								</select>
+							</div>
+							<div class="col">
+								<label for="departure_time_2" class="custom-label align-items-center text-type-1">
+									<i class="bi bi-clock-fill" style="margin-right: 4px;"></i>
+									Hora de Salida 
+								</label> 
+								<input type="text" id="departure_time_2" name="departure_time_2" class="form-control w-full w-100" size="19" placeholder="Selecciona la hora" />
+							</div>
+						</div>`;
+		
+						container2.innerHTML = `
+							<div class="">
+								<label for="contact_number" class="custom-label align-items-center text-type-1">
+									<i class="bi bi-telephone-fill" style="margin-right: 4px;"></i>
+									Número de Contacto
+								</label>
+								<input type="text" id="contact_number" name="contact_number" class="form-control w-full w-100" size="19" placeholder="Ingresa el número de contacto">
+							</div>`;
+		
+						row.appendChild(container);
+						row.appendChild(container2);
+						containerTransport.appendChild(row);
+
+						this._add_origen('origen_select');  
+						this._add_destino('destino_select'); 
+						this._add_origen('origen_select_2');  
+						this._add_destino('destino_select_2');  
+
+		
+						// Inicializar Flatpickr para ambas horas de salida
+						flatpickr("#departure_time", {
+							enableTime: true,
+							noCalendar: true,
+							dateFormat: "H:i:S", 
+							time_24hr: true
+						});
+						
+						flatpickr("#departure_time_2", {
+							enableTime: true,
+							noCalendar: true,
+							dateFormat: "H:i:S", 
+							time_24hr: true
+						});
+
+						var departureTimeInput = document.getElementById("departure_time");
+						var departureTime = this._convertDepartureTime(departureTimeInput.value);
+						var departureTimeInput2 = document.getElementById("departure_time_2"); 
+						var departureTime2 = this._convertDepartureTime(departureTimeInput2.value); 
+						this._get_contact_number();
+					}
 				} else {
-					container.innerHTML = "";
+					containerTransport.innerHTML = "";
+					containerOtherTransport.innerHTML = "";
 				}
 			}.bind(this));
 		},
+		
+		
 
 		_convertDepartureTime: function(departureTime) {
 			if (!departureTime) {
@@ -796,7 +875,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var now = new Date();
 			var localDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
 			var utcDateTime = new Date(localDateTime.getTime() + localDateTime.getTimezoneOffset() * 60000);
-			return utcDateTime.toISOString(); // Devuelve la marca de tiempo convertida como una cadena ISO
+			return utcDateTime.toISOString();
 		},
 	
 
@@ -848,7 +927,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var room_check = $('#room_check').is(':checked');
 			var food_check = $('#food_check').is(':checked');
 			var contact_number = $('#contact_number').val(); 
-
+		
 			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
 		
 			if (!skipGuestValidation) {
@@ -869,11 +948,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					alert("Por favor, Introduzca un correo electrónico válido que contenga el símbolo '@' para el huésped.");
 					return true;
 				}
-				if (!(room_check || food_check)) {
-					alert("Por favor, seleccione al menos una opción de habitación o comida.");
-					return true;
-				}
-		
+
 				// Validaciones del acompañante si se proporcionan datos
 				var first_last_name_roomMate_input = document.getElementById("first_last_name_roomMate_input");
 				if (first_last_name_roomMate_input !== null && first_last_name_roomMate_input.value !== "") {
@@ -890,11 +965,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						alert("Por favor, Introduzca un Nombre y Apellido válido para el acompañante, sin números ni caracteres especiales.");
 						return true;
 					}
-					if (!second_phone || second_phone.length !== 11 || !venezuelanPhoneNumberRegex.test(second_phone.replace(/-/g, ''))) {
-						alert("Por favor, Int roduzca un número de teléfono venezolano válido para el acompañante con formato XXXX-XXX-XXXX.");
+		
+					// Validación del teléfono del acompañante solo si se introduce
+					if (second_phone && (second_phone.length !== 11 || !venezuelanPhoneNumberRegex.test(second_phone.replace(/-/g, '')))) {
+						alert("Por favor, Introduzca un número de teléfono venezolano válido para el acompañante con formato XXXX-XXX-XXXX.");
 						return true;
 					}
-					if (!second_email || !/@/.test(second_email)) {
+		
+					// Validación del email del acompañante solo si se introduce
+					if (second_email && !/@/.test(second_email)) {
 						alert("Por favor, Introduzca un correo electrónico válido que contenga el símbolo '@' para el acompañante.");
 						return true;
 					}
@@ -917,14 +996,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					alert("Por favor, Introduzca un correo electrónico válido que contenga el símbolo '@' para el huésped.");
 					return true;
 				}
-				if (!(room_check || food_check)) {
-					alert("Por favor, seleccione al menos una opción de habitación o comida.");
-					return true;
-				}
 			}
 		
 			return false;
-		}, 
+		},
 		
 		_onNextBlogClick: function (ev) {
 			var self = this;
@@ -1106,16 +1181,25 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var destiny = "";
 			var contact_number = ""; 
 			var departure_time = "";
+			var origen_2 = ""; 
+			var destiny_2 = ""; 
+			var departure_time_2 = ""; 
 			
 			if (add_transport) {
 				origen = document.getElementById("origen_select").value;
 				destiny = document.getElementById("destino_select").value;
 				contact_number = document.getElementById("contact_number").value;
 				departure_time = document.getElementById("departure_time").value;
+				origen_2 = document.getElementById("origen_select_2").value;
+				destiny_2 = document.getElementById("destino_select_2").value; 
+				departure_time_2 = document.getElementById("departure_time_2").value; 
+				
 				
 			} else {
 				origen = "";
 				destiny = "";
+				origen_2 = "";
+				destiny_2 = "";
 			}
 			if (add_food) {
 				
@@ -1164,6 +1248,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
+							"origen_2": origen_2, 
+							"destiny_2": destiny_2,
+							"departure_time_2": departure_time_2, 
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1215,6 +1302,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
+							"origen_2": origen_2, 
+							"destiny_2": destiny_2,
+							"departure_time_2": departure_time_2, 
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1263,6 +1353,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
+							"origen_2": origen_2, 
+							"destiny_2": destiny_2,
+							"departure_time_2": departure_time_2, 
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1309,6 +1402,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
+							"origen_2": origen_2, 
+							"destiny_2": destiny_2,
+							"departure_time_2": departure_time_2, 
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1354,6 +1450,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
+							"origen_2": origen_2, 
+							"destiny_2": destiny_2,
+							"departure_time_2": departure_time_2, 
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1405,6 +1504,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
+							"origen_2": origen_2, 
+							"destiny_2": destiny_2,
+							"departure_time_2": departure_time_2, 
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1457,6 +1559,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
+							"origen_2": origen_2, 
+							"destiny_2": destiny_2,
+							"departure_time_2": departure_time_2, 
 							'showContainerRoom': document.getElementById('room_check').checked,
 							'showContainerFood': document.getElementById('food_check').checked,
 						},
@@ -1497,6 +1602,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						"destiny": destiny,
 						"contact_number": contact_number,
 						"departure_time": departure_time,
+						"origen_2": origen_2, 
+						"destiny_2": destiny_2,
+						"departure_time_2": departure_time_2, 
 						'showContainerRoom': document.getElementById('room_check').checked,
 						'showContainerFood': document.getElementById('food_check').checked,
 					},

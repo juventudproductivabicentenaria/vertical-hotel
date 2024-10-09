@@ -385,6 +385,9 @@ class Website(http.Controller):
                             "move_to": data["destiny"],
                             "contact_number": data["contact_number"],
                             "departure_time": data["departure_time"],
+                            "move_from_2": data["origen_2"], 
+                            "move_to_2": data["destiny_2"],
+                            "departure_time_2": data["departure_time_2"],
                             "partner_id": new_partner.id 
                         })
                 else:
@@ -610,6 +613,9 @@ class Website(http.Controller):
                             "move_to": data["destiny"],
                             "departure_time": data["departure_time"],
                             "contact_number": data ["contact_number"],
+                            "move_from_2": data["origen_2"], 
+                            "move_to_2": data["destiny_2"],
+                            "departure_time_2": data["departure_time_2"],
                             "partner_id": partner.id
                         })
 
@@ -783,26 +789,26 @@ class Website(http.Controller):
                 "partner_id": user_id.partner_id.id,
                 "state": "draft",
             })
-            
-        # if kwargs.get("include_transport"):
-        #     HotelTransport.create({
-        #         "hotel_reservation": new_reservation.id,
-        #         "move_from": kwargs["origen"],
-        #         "move_to": kwargs["destiny"],
-        #         "departure_time": kwargs["departure_time"],
-        #         "contact_number": kwargs ["contact_number"],
-        #         "partner_id": reservation_line_partners[0].id
-        #     })
 
         if kwargs.get("include_transport"):
             departure_time_str = kwargs["departure_time"]
             departure_time = datetime.strptime(departure_time_str, "%H:%M:%S")
+            departure_time_2 = None 
+            departure_time_2_str = kwargs.get("departure_time_2") 
+            if departure_time_2_str:  
+                try:
+                    departure_time_2 = datetime.strptime(departure_time_2_str, "%H:%M:%S")
+                except ValueError:
+                    raise ValueError("El formato de la segunda hora de salida no es correcto")
             HotelTransport.create({
                 "hotel_reservation": new_reservation.id,
                 "move_from": kwargs["origen"],
                 "move_to": kwargs["destiny"],
                 "departure_time": departure_time,
                 "contact_number": kwargs ["contact_number"],
+                "move_from_2": kwargs["origen_2"], 
+                "move_to_2": kwargs["destiny_2"],
+                "departure_time_2": departure_time_2,
                 "partner_id": reservation_line_partners[0].id
             })
 
