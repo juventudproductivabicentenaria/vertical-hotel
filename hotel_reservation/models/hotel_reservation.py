@@ -1,9 +1,7 @@
 # See LICENSE file for full copyright and licensing details.
 
 from datetime import timedelta
-
 from dateutil.relativedelta import relativedelta
-
 from odoo import _, api, fields, models
 from . import tools
 from odoo.exceptions import ValidationError
@@ -279,7 +277,10 @@ class HotelReservation(models.Model):
         vals["reservation_no"] = (
             self.env["ir.sequence"].next_by_code("hotel.reservation") or "New"
         )
-        return super(HotelReservation, self).create(vals)
+        # return super(HotelReservation, self).create(vals) 
+        reservation = super(HotelReservation,self).create(vals)
+        reservation.action_send_reservation_mail()
+        return reservation 
 
     def check_overlap(self, date1, date2):
         delta = date2 - date1
@@ -374,6 +375,10 @@ class HotelReservation(models.Model):
                             "reservation_id": reservation.id,
                         }
                         reservation_line_obj.create(vals)
+
+            template_id = self.env.ref('hotel_reservation.email_templates_hotel_reservation') 
+            if template_id:
+                template_id.send_mail(reservation.id, force_send=True)
     
         return True
 
@@ -400,7 +405,13 @@ class HotelReservation(models.Model):
             reservation_line.hotel_room_id.write(
                 {"isroom": True, "status": "available"}
             )
-        return True
+
+            template_id = self.env.ref("hotel_reservation.email_templates_hotel_reservation_cancellation")  
+            if template_id:
+                template_id.send_mail(self.id, force_send=True)
+        
+        return True 
+
 
     def set_to_draft_reservation(self):
         self.update({"state": "draft"})
@@ -411,32 +422,16 @@ class HotelReservation(models.Model):
         template message loaded by default.
         @param self: object pointer
         """
-        self.ensure_one(), "This is for a single id at a time."
+        self.ensure_one() 
         template_id = self.env.ref(
-            "hotel_reservation.email_template_hotel_reservation"
-        ).id
-        compose_form_id = self.env.ref(
-            "mail.email_compose_message_wizard_form"
-        ).id
-        ctx = {
-            "default_model": "hotel.reservation",
-            "default_res_id": self.id,
-            "default_use_template": bool(template_id),
-            "default_template_id": template_id,
-            "default_composition_mode": "comment",
-            "force_send": True,
-            "mark_so_as_sent": True,
-        }
-        return {
-            "type": "ir.actions.act_window",
-            "view_mode": "form",
-            "res_model": "mail.compose.message",
-            "views": [(compose_form_id, "form")],
-            "view_id": compose_form_id,
-            "target": "new",
-            "context": ctx,
-            "force_send": True,
-        }
+            "hotel_reservation.email_templates_hotel_reservation_request", raise_if_not_found=False
+        )
+
+        if template_id:
+            template_id.send_mail(self.id, force_send=True)
+        else:
+            raise ValueError("No se pudo encontrar la plantilla de correo 'hotel_reservation.email_templates_hotel_reservation_request'.")
+        return True
 
     @api.model
     def _reservation_reminder_24hrs(self):

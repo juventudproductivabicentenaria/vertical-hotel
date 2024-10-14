@@ -886,6 +886,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				return;  
 			}
 			console.log("Ejecutando _get_contact_number con CI:", ci);
+		
 			this._rpc({
 				route: '/search_person',
 				params: {
@@ -893,13 +894,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				},
 			}).then(result => {
 				console.log("Resultado de _rpc:", result); 
+		
 				var contactField = document.getElementById("contact_number");
 				if (contactField) {
-					if (result.phone) {
-						contactField.value = result.phone; 
-					} else {
-						contactField.value = ''; 
-					}
+					contactField.value = result.phone ? result.phone : ''; 
 				} else {
 					console.error("El campo 'contact_number' no se encuentra.");
 				}
@@ -907,17 +905,25 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				console.error("Error al obtener el número de contacto: ", error);
 			});
 		},
-
-		_validateContactNumber: function() {
-			var contact_number = document.getElementById("contact_number").value;
-			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
 		
-			if (contact_number && (contact_number.length !== 11 || !venezuelanPhoneNumberRegex.test(contact_number.replace(/-/g, '')))) {
-				alert("Por favor, Introduzca un número de teléfono venezolano válido en el campo de número de contacto (transporte) con formato XXXX-XXX-XXXX.");
-				return false;
-			}
+		_validateContactNumber: function() {
+			var add_transport = document.getElementById("transport_check").checked;	
+			if (add_transport) {
+				var contactField = document.getElementById("contact_number");
+				if (!contactField) {
+					console.error("El campo 'contact_number' no se encuentra para validar, pero el transporte fue requerido.");
+					return false; 
+				}
+				var contact_number = contactField.value;
+				var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;		
+				if (contact_number && (contact_number.length !== 11 || !venezuelanPhoneNumberRegex.test(contact_number.replace(/-/g, '')))) {
+					alert("Por favor, introduzca un número de teléfono venezolano válido en el campo de número de contacto (transporte) con formato XXXX-XXX-XXXX.");
+					return false;
+				}
+			}		
 			return true;
 		},
+		
 		
 		verificationDataError(ev, skipGuestValidation = false) {
 			var identification_vat = $('#identification_VAT').val();
