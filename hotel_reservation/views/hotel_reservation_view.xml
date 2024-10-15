@@ -123,21 +123,38 @@
                                     <field name="state"/>
                                 </tree>
                             </field>
-
                         </page>
-                        <page name="transport" string='Transporte'>
-
-                            <field name='transport_ids'>
-                                <tree string="">
+                        <page name="transport" string="Transporte">
+                            <field name="transport_ids">
+                                <tree string="" domain="[('move_from', '!=', False), ('move_to', '!=', False), ('departure_hour', '!=', False), ('move_from_2', '!=', False), ('move_to_2', '!=', False), ('departure_hour_2', '!=', False)]">
                                     <field name="code"/>
                                     <field name="move_from"/>
                                     <field name="move_to"/>
+                                    <field name="contact_number"/>
+                                    <field name="departure_hour"/>
+                                    <field name="move_from_2"/>
+                                    <field name="move_to_2"/> 
+                                    <field name="departure_hour_2"/>
                                     <field name="hotel_reservation"/>
                                     <field name="partner_id"/>
                                 </tree>
+                                <form string="Detalle de Transporte">
+                                    <group>
+                                        <field name="code"/>
+                                        <field name="move_from" attrs="{'invisible': [('move_from', '=', False)]}"/>
+                                        <field name="move_to" attrs="{'invisible': [('move_to', '=', False)]}"/>
+                                        <field name="contact_number"/>
+                                        <field name="departure_hour" attrs="{'invisible': [('departure_hour', '=', False)]}"/>
+                                        <field name="move_from_2" attrs="{'invisible': [('move_from_2', '=', False)]}"/>
+                                        <field name="move_to_2" attrs="{'invisible': [('move_to_2', '=', False)]}"/> 
+                                        <field name="departure_hour_2" attrs="{'invisible': [('departure_hour_2', '=', False)]}"/>
+                                        <field name="hotel_reservation"/>
+                                        <field name="partner_id"/>
+                                    </group>
+                                </form>
                             </field>
-
                         </page>
+
                         <page name="activities_ids" string='Actividades'>
                             <field name='activities_ids'>
                                 <tree string="">
