@@ -4,7 +4,7 @@
             <field name="name">Hotel Reservation Confirm </field>
             <field name="email_from">${object.warehouse_id.partner_id.email or ''|safe}</field>
             <field name="subject">Confirmación de Reserva del Hotel</field>
-            <field name="partner_to">${object.partner_id.id or ''}</field>
+            <field name="partner_to">${object.get_guest_first_line().partner_id.id or ''}</field>
             <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -12,7 +12,7 @@
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
-                        <p>Estimado/a <strong>${object.partner_id.name}</strong>,</p>
+                        <p>Estimado/a <strong>${object.get_guest_first_line().partner_id.name}</strong>,</p>
                         <p>Nos complace confirmar su reserva de habitación en nuestras instalaciones
                             % if object.warehouse_id.partner_id.city:
                             <strong>${object.warehouse_id.partner_id.city}</strong>.
@@ -26,7 +26,7 @@
                         </p>
                         <strong>Detalles:</strong>
                         <br />
-                        Nombre del huésped: <strong>${object.partner_id.name}</strong><br />
+                        Nombre del huésped: <strong>${object.get_guest_first_line().partner_id.name}</strong><br />
                         Fecha de llegada: <strong>${object.checkin.strftime("%d-%m-%Y")}</strong><br />
                         Fecha de salida: <strong>${object.checkout.strftime("%d-%m-%Y")}</strong><br />
                         Número de reserva: <strong>${object.reservation_no}</strong><br />
@@ -52,8 +52,6 @@
                 </div>
             </field>
         </record>
-
-
 
 
     <!-- Email Template For Hotel Reservation Reminder Before 24 Hours -->
@@ -97,7 +95,7 @@
                     <br />
                     <strong>Details :</strong>
                     <br />
-                    <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                    <!-- <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
                         &amp;nbsp;&amp;nbsp;Name Of Guest :
                         <strong>${object.partner_id.name}</strong>
                         <br />
@@ -115,7 +113,7 @@
                     </strong> Adults and <strong>${object.children}</strong> Childrens
                         <br />
                     </p>
-                    &amp;nbsp;&amp;nbsp;
+                    &amp;nbsp;&amp;nbsp; -->
                     <strong>Room Rate Per Night:</strong>
                     <br />
                     <br />
@@ -179,7 +177,7 @@
             <field name="name">Hotel Reservation Request</field>
             <field name="email_from">${object.warehouse_id.partner_id.email or ''|safe}</field>
             <field name="subject">Solicitud de Reserva N° ${object.reservation_no}</field>
-            <field name="partner_to">${object.partner_id.id or ''}</field>
+            <field name="partner_to">${object.get_guest_first_line().partner_id.id or ''}</field>
             <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -187,7 +185,7 @@
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
-                        <p>Estimado/a <strong>${object.partner_id.name}</strong>,</p>
+                        <p>Estimado/a <strong>${object.get_guest_first_line().partner_id.name}</strong>,</p>
                         <p>Nos complace informarle que su solicitud de reserva ha sido recibida. A continuación, encontrará los detalles de su solicitud:</p>
                         <strong>Detalles de la Solicitud:</strong>
                         <br />
@@ -195,11 +193,11 @@
                         Fecha de pedido: <strong>${object.date_order.strftime("%d-%m-%Y %H:%M:%S")}</strong><br />
                         Fecha prevista de llegada: <strong>${object.checkin.strftime("%d-%m-%Y")}</strong><br />
                         Fecha prevista de salida: <strong>${object.checkout.strftime("%d-%m-%Y")}</strong><br />
-                        Huésped: <strong>${object.partner_id.name}</strong><br />
+                        Huésped: <strong>${object.get_guest_first_line().partner_id.name}</strong><br />
                         Capacidad (Adultos): <strong>${object.adults}</strong><br />
                         Capacidad (Niños): <strong>${object.children}</strong><br />
-                        ¿Habitaciones requeridas? <strong>${'Sí' if object.warehouse_id else 'No'}</strong><br />
-                        ¿Se requieren comidas? <strong>${'Sí' if object.date_order else 'No'}</strong><br />
+                        ¿Habitaciones requeridas? <strong>${'Sí' if object.get_guest_first_line().include_room else 'No'}</strong><br />
+                        ¿Comidas requeridas? <strong>${object.get_has_food()}</strong><br />
                         <br />
                         <p>Le agradecemos por elegirnos. Si tiene alguna pregunta o necesita más información, no dude en ponerse en contacto con nosotros.</p>
                         <br />
@@ -225,7 +223,7 @@
             <field name="name">Cancelación de Solicitud de Reserva de Hotel</field>
             <field name="email_from">${object.warehouse_id.partner_id.email or ''|safe}</field>
             <field name="subject">Notificacion de Cancelacion de Reserva N° ${object.reservation_no}</field>
-            <field name="partner_to">${object.partner_id.id or ''}</field>
+            <field name="partner_to">${object.get_guest_first_line().partner_id.id or ''}</field>
             <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -233,7 +231,7 @@
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
-                        <p>Estimado/a <strong>${object.partner_id.name}</strong>,</p>
+                        <p>Estimado/a <strong>${object.get_guest_first_line().partner_id.name}</strong>,</p>
                         <p>Le informamos que lamentablemente, su solicitud de reserva ha sido cancelada.</p>
                         <strong>Detalles de la Solicitud:</strong>
                         <br />

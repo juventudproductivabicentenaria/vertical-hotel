@@ -815,6 +815,7 @@ class Website(http.Controller):
         # Reservation created successfully
         _logger.info("Reservation created!")
         _logger.info(new_reservation.id)
+        new_reservation.action_send_reservation_mail()
         result = {
             "reserved": True,
             "reservation_id": new_reservation.id,

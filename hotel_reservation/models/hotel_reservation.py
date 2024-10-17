@@ -5,6 +5,13 @@ from dateutil.relativedelta import relativedelta
 from odoo import _, api, fields, models
 from . import tools
 from odoo.exceptions import ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
+try:
+    import pytz
+except (ImportError, IOError) as err:
+    _logger.debug(err)
 
 
 class HotelReservation(models.Model):
@@ -277,9 +284,7 @@ class HotelReservation(models.Model):
         vals["reservation_no"] = (
             self.env["ir.sequence"].next_by_code("hotel.reservation") or "New"
         )
-        # return super(HotelReservation, self).create(vals) 
         reservation = super(HotelReservation,self).create(vals)
-        reservation.action_send_reservation_mail()
         return reservation 
 
     def check_overlap(self, date1, date2):
@@ -432,6 +437,12 @@ class HotelReservation(models.Model):
         else:
             raise ValueError("No se pudo encontrar la plantilla de correo 'hotel_reservation.email_templates_hotel_reservation_request'.")
         return True
+
+    def get_guest_first_line(self): 
+        return  self.reservation_line_ids[0]
+    
+    def get_has_food(self):
+        return 'Si' if len(self.reservation_orders_lines_ids) > 0 else 'No'
 
     @api.model
     def _reservation_reminder_24hrs(self):
