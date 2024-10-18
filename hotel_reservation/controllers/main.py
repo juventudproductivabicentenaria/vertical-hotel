@@ -10,6 +10,7 @@ from datetime import date, timedelta, time, datetime
 from dateutil.relativedelta import relativedelta
 from ..models import tools
 from pytz import timezone, UTC
+from dateutil import parser
 
 
 _logger = logging.getLogger(__name__)
@@ -98,12 +99,16 @@ class Website(http.Controller):
         today_date = utc.localize(datetime.now()).astimezone(timezone(user_tz))
         date_from = datetime.strptime(cheking_date, "%Y-%m-%d")
         date_until = datetime.strptime(chekout_date, "%Y-%m-%d")
+        contact_number = kwargs.get('contact_number') 
+        departure_time = kwargs.get('departure_time')
+
         # date_from = datetime.strptime(date_from, '%Y-%m-%d')
         # date_to = datetime.strptime(date_to, '%Y-%m-%d')
         # date_from = tz.normalize(tz.localize(date_from)).astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
         # date_to = tz.normalize(tz.localize(date_to)).astimezone(pytz.utc).strftime("%Y-%m-%d %H:%M:%S")
         print(date_from)
         print(date_until)
+
         adults = kwargs['adults']
         ninos = kwargs['ninos']
         ResPartner = request.env['res.partner'].sudo()
@@ -144,6 +149,7 @@ class Website(http.Controller):
             })
 
             reservation_line_partners = []
+            
             for data in kwargs["full_data"]:
                 partner = ResPartner.search([('vat', '=', data["vat"])])
                 if partner:
@@ -377,7 +383,12 @@ class Website(http.Controller):
                             "hotel_reservation": new_reservation.id,
                             "move_from": data["origen"],
                             "move_to": data["destiny"],
-                            "partner_id": new_partner.id
+                            "contact_number": data["contact_number"],
+                            "departure_time": data["departure_time"],
+                            "move_from_2": data["origen_2"], 
+                            "move_to_2": data["destiny_2"],
+                            "departure_time_2": data["departure_time_2"],
+                            "partner_id": new_partner.id 
                         })
                 else:
                     if 'childrens' in data and data["second_vat"] == "":
@@ -600,6 +611,11 @@ class Website(http.Controller):
                             "hotel_reservation": new_reservation.id,
                             "move_from": data["origen"],
                             "move_to": data["destiny"],
+                            "departure_time": data["departure_time"],
+                            "contact_number": data ["contact_number"],
+                            "move_from_2": data["origen_2"], 
+                            "move_to_2": data["destiny_2"],
+                            "departure_time_2": data["departure_time_2"],
                             "partner_id": partner.id
                         })
 
@@ -773,18 +789,33 @@ class Website(http.Controller):
                 "partner_id": user_id.partner_id.id,
                 "state": "draft",
             })
-            
+
         if kwargs.get("include_transport"):
+            departure_time_str = kwargs["departure_time"]
+            departure_time = datetime.strptime(departure_time_str, "%H:%M:%S")
+            departure_time_2 = None 
+            departure_time_2_str = kwargs.get("departure_time_2") 
+            if departure_time_2_str:  
+                try:
+                    departure_time_2 = datetime.strptime(departure_time_2_str, "%H:%M:%S")
+                except ValueError:
+                    raise ValueError("El formato de la segunda hora de salida no es correcto")
             HotelTransport.create({
                 "hotel_reservation": new_reservation.id,
                 "move_from": kwargs["origen"],
                 "move_to": kwargs["destiny"],
+                "departure_time": departure_time,
+                "contact_number": kwargs ["contact_number"],
+                "move_from_2": kwargs["origen_2"], 
+                "move_to_2": kwargs["destiny_2"],
+                "departure_time_2": departure_time_2,
                 "partner_id": reservation_line_partners[0].id
             })
 
         # Reservation created successfully
         _logger.info("Reservation created!")
         _logger.info(new_reservation.id)
+        new_reservation.action_send_reservation_mail()
         result = {
             "reserved": True,
             "reservation_id": new_reservation.id,
