@@ -168,6 +168,11 @@ class HotelReservation(models.Model):
         "Lines de pedido"
     )
 
+    guest_first_line = fields.Char(
+        string="Guest First Line",
+        compute="_compute_guest_first_line"
+    )
+
     no_of_folio = fields.Integer("No. Folio", compute="_compute_folio_id")
     token = fields.Char(string="token", default=lambda self: self._has_default(), required=True)
 
@@ -444,6 +449,15 @@ class HotelReservation(models.Model):
     def get_has_food(self):
         return 'Si' if len(self.reservation_orders_lines_ids) > 0 else 'No'
 
+    @api.depends('reservation_line_ids')
+    def _compute_guest_first_line(self):
+        for reservation in self:
+            if reservation.reservation_line_ids:
+                # Accedemos al primer partner de la primera línea de la reserva
+                reservation.guest_first_line = reservation.get_guest_first_line().partner_id.name
+            else:
+                reservation.guest_first_line = ''
+                
     @api.model
     def _reservation_reminder_24hrs(self):
         """

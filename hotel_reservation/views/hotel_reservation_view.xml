@@ -128,12 +128,12 @@
                             <field name="transport_ids">
                                 <tree string="" domain="[('move_from', '!=', False), ('move_to', '!=', False), ('departure_hour', '!=', False), ('move_from_2', '!=', False), ('move_to_2', '!=', False), ('departure_hour_2', '!=', False)]">
                                     <field name="code"/>
-                                    <field name="move_from"/>
-                                    <field name="move_to"/>
+                                    <field name="move_from" string="Desde"/> 
+                                    <field name="move_to" string="Hacia"/>   
                                     <field name="contact_number"/>
                                     <field name="departure_hour"/>
-                                    <field name="move_from_2"/>
-                                    <field name="move_to_2"/> 
+                                    <field name="move_from_2" string="Desde(2)"/> 
+                                    <field name="move_to_2" string="Hacia(2)"/>   
                                     <field name="departure_hour_2"/>
                                     <field name="hotel_reservation"/>
                                     <field name="partner_id"/>
@@ -141,12 +141,12 @@
                                 <form string="Detalle de Transporte">
                                     <group>
                                         <field name="code"/>
-                                        <field name="move_from" attrs="{'invisible': [('move_from', '=', False)]}"/>
-                                        <field name="move_to" attrs="{'invisible': [('move_to', '=', False)]}"/>
+                                        <field name="move_from" string="Desde" attrs="{'invisible': [('move_from', '=', False)]}"/> 
+                                        <field name="move_to" string="Hacia" attrs="{'invisible': [('move_to', '=', False)]}"/>  
                                         <field name="contact_number"/>
                                         <field name="departure_hour" attrs="{'invisible': [('departure_hour', '=', False)]}"/>
-                                        <field name="move_from_2" attrs="{'invisible': [('move_from_2', '=', False)]}"/>
-                                        <field name="move_to_2" attrs="{'invisible': [('move_to_2', '=', False)]}"/> 
+                                        <field name="move_from_2" string="Desde(2)" attrs="{'invisible': [('move_from_2', '=', False)]}"/>
+                                        <field name="move_to_2" string="Hacia(2)" attrs="{'invisible': [('move_to_2', '=', False)]}"/>
                                         <field name="departure_hour_2" attrs="{'invisible': [('departure_hour_2', '=', False)]}"/>
                                         <field name="hotel_reservation"/>
                                         <field name="partner_id"/>
@@ -154,6 +154,7 @@
                                 </form>
                             </field>
                         </page>
+
 
                         <page name="activities_ids" string='Actividades'>
                             <field name='activities_ids'>
@@ -190,7 +191,8 @@
                 decoration-muted="state=='cancel'"
             >
                 <field name="reservation_no" />
-                <field name="partner_id" />
+                <!-- <field name="partner_id" /> -->
+                <field name = "guest_first_line" string= "Nombre del huesped"/>
                 <field name="checkin" />
                 <field name="checkout" />
                 <field name="state" />
