@@ -131,7 +131,10 @@ class Website(http.Controller):
         reservation_partner_ids = []
         total_children = 0
         if "full_data" in kwargs:
+            _logger.info(f"\n")
             _logger.info(kwargs["full_data"])
+            _logger.info("Aca estoy imprimiendo el array de full_data")
+            _logger.info(f"\n")
 
             
             new_reservation = HotelReservation.create({
@@ -179,7 +182,6 @@ class Website(http.Controller):
                             })
                             children_ids.append(new_children.id)
                             total_children += 1
-                            
                         reservation_line = HotelReservationLine.create({
                             "line_id": new_reservation.id,
                             "is_son": True if len(children_ids) > 0 else False,
@@ -366,6 +368,9 @@ class Website(http.Controller):
                                 "partner_id": user_id.partner_id.id,
                                 "state": "draft",
                             })
+                            _logger.info(f"\n")
+                            _logger.info("Esto es reservation_order")
+
                             print('reservation_order')
                             print('reservation_order')
                             print(reservation_order)
@@ -605,6 +610,7 @@ class Website(http.Controller):
 
                         print("reservation_order")
                         print(reservation_order)
+                        
 
                     if data["include_transport"] == True:
                         HotelTransport.create({
@@ -1012,7 +1018,7 @@ class Website(http.Controller):
     @http.route(['/reserve/list/<int:reserve_id>'], type="http", auth="public", website=True,)
     def cancel_reservation(self, reserve_id, **kwargs):
         hotel_reservation = request.env['hotel.reservation']
-        today = datetime.today()
+        today = datetime.now().date()
 
         if reserve_id:
             token_hash = kwargs['token']
