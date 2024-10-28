@@ -1026,14 +1026,12 @@ class Website(http.Controller):
 
             for reserva in reservation:
                 if reserva.token == token_hash:
-                    if today > reservation.checkout:
-                        raise ValidationError(_('No puedes cancelar la Reservación'))
                     reservation.cancel_reservation()
-                    continue
+                    return self.reserve_list(message="Su cancelación fue exitosa")
                 else:
                     raise ValidationError(_('No puedes cancelar la Reservación'))
 
-        return self.reserve_list(message="Su cancelacion fue exitosa")
+        return self.reserve_list(message="Error en la cancelación. Verifica los datos de la reserva.")
 
     @http.route('/reservation/validation_user', type='json', auth="public")
     def check_user(self, vat):
