@@ -223,7 +223,7 @@
             <field name="name">Cancelación de Solicitud de Reserva de Hotel</field>
             <field name="email_from">${object.warehouse_id.partner_id.email or ''|safe}</field>
             <field name="subject">Notificacion de Cancelacion de Reserva N° ${object.reservation_no}</field>
-            <field name="partner_to">${object.get_guest_first_line().partner_id.id or ''}</field>
+            <field name="email_to">${object.warehouse_id.partner_id.email or ''}</field>
             <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -231,8 +231,8 @@
             <field name="body_html" type="html">
                 <div style="margin: 0px; padding: 0px;">
                     <p style="margin: 0px; padding: 0px; font-size: 13px;">
-                        <p>Estimado/a <strong>${object.get_guest_first_line().partner_id.name}</strong>,</p>
-                        <p>Le informamos que lamentablemente, su solicitud de reserva ha sido cancelada.</p>
+                        <p>Estimado/a</p>
+                        <p>Le informamos que lamentablemente esta solicitud de reserva ha sido cancelada.</p>
                         <strong>Detalles de la Solicitud:</strong>
                         <br />
                         Número de reserva: <strong>${object.reservation_no}</strong><br />
