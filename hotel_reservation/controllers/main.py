@@ -1037,3 +1037,212 @@ class Website(http.Controller):
     def check_user(self, vat):
         partner_id = request.env['res.partner'].sudo().search([('vat', '=', vat)], limit=1)
         return {'exists': bool(partner_id.name)}
+
+    @http.route('/reservation/create_bulk_reservation', type='json', auth="public", website=True, sitemap=False)
+    def create_bulk_reservation(self, access_token=None, revive='', **kwargs): 
+        cheking_date = kwargs['date_from']
+        chekout_date = kwargs['date_until']
+        user_id = request.env.user
+        utc = timezone('UTC')
+        user_tz = user_id.tz or 'UTC'
+        today_date = utc.localize(datetime.now()).astimezone(timezone(user_tz))
+        date_from = datetime.strptime(cheking_date, "%Y-%m-%d")
+        date_until = datetime.strptime(chekout_date, "%Y-%m-%d")
+        contact_number = kwargs.get('contact_number') 
+        departure_time = kwargs.get('departure_time')
+        adults = kwargs['adults']
+        ninos = kwargs['ninos']
+        ResPartner = request.env['res.partner'].sudo()
+        HotelReservation = request.env['hotel.reservation'].sudo()
+        HotelReservationLine = request.env['hotel_reservation.line'].sudo()
+        HotelReservationOrder = request.env['hotel.reservation.order'].sudo()
+        HotelTransport = request.env['hotel.transport'].sudo()
+        warehouse_id = user_id.company_id.warehouse_id.id
+
+        new_reservation = False
+        if not warehouse_id:
+            warehouse_id = 1
+
+        hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, 0)
+        if not hotel_reservation:
+            return {
+                "error_validation": True,
+                "title_error": "Error al crear la reservación",
+                "content_error": "No se encontró ninguna habitación disponible entre las fechas seleccionadas.",
+            }
+
+        reservation_partner_ids = []
+        
+        if "full_data" in kwargs:
+            new_reservation = HotelReservation.create({
+                "partner_id": user_id.partner_id.id,
+                "partner_invoice_id": user_id.partner_id.id,
+                "partner_order_id": user_id.partner_id.id,
+                "partner_shipping_id": user_id.partner_id.id,
+                "checkin": utc.localize(date_from).astimezone(timezone(user_tz)).strftime("%Y-%m-%d %H:%M:%S"),
+                "checkout": utc.localize(date_until).astimezone(timezone(user_tz)).strftime("%Y-%m-%d %H:%M:%S"),
+                "date_order": today_date.strftime("%Y-%m-%d %H:%M:%S"),
+                "warehouse_id": warehouse_id,
+                "adults": adults,
+                "children": ninos,
+                "token": tools.default_hash()
+            })
+
+            # Iterar sobre cada huésped en full_data
+            for reservation in kwargs.get('full_data', []):
+                vat = reservation.get('vat')
+                name = reservation.get('name')
+                email = reservation.get('email')
+                phone = reservation.get('phone')
+                children_list = reservation.get('childrens', [])
+
+                partner = ResPartner.search([('vat', '=', vat)], limit=1)
+
+                if partner:
+                    reservation_partner_ids.append({
+                        "vat": partner.vat,
+                        "name": partner.name,
+                        "email": partner.email,
+                        "phone": partner.phone,
+                    })
+                else:
+                    partner_vals = {   
+                        "vat": vat,
+                        "name": name,
+                        "email": email,
+                        "phone": phone,
+                    }
+                    partner = ResPartner.create(partner_vals)
+                    reservation_partner_ids.append(partner_vals)
+
+                second_partner = None
+                if reservation.get('second_vat'):
+                    second_partner = ResPartner.search([('vat', '=', reservation['second_vat'])], limit=1)
+                    if not second_partner:
+                        second_partner = ResPartner.create({
+                            "vat": reservation.get('second_vat'),
+                            "name": reservation.get('second_name'),
+                            "email": reservation.get('second_email'),
+                            "phone": reservation.get('second_phone'),
+                        })
+
+                children_ids = []
+                for child in children_list:
+                    new_child = ResPartner.create({
+                        "name": child.get("nombre"),
+                        "vat": child.get("vat"),
+                        "is_son": bool(child.get("vat")),
+                    })
+                    children_ids.append(new_child.id)
+
+                reservation_line = HotelReservationLine.create({
+                    "line_id": new_reservation.id,
+                    "is_son": bool(children_ids),
+                    "partner_id": partner.id,
+                    "checkin": new_reservation.checkin,
+                    "checkout": new_reservation.checkout,
+                    "include_room": reservation.get("include_room"),
+                    "institution_from": reservation.get("institution_name"),
+                    "children_ids": children_ids if children_ids else False,
+                    "couple_id": second_partner.id if second_partner else False,
+                })
+
+                # Lógica para la creación de pedidos de comida, si se incluye en la reserva
+                if reservation.get("include_food"):
+                    order_list_ids = []
+                    
+                    def add_food_order(date, meal_type, partner_id):
+                        order_list_ids.append({
+                            "date_order": date.date(),
+                            "reservation_room_id": new_reservation.id,
+                            "type_solicitation": meal_type,
+                            "partner_id": partner_id,
+                            "item_qty": 1
+                        })
+
+                    if reservation.get("breakfast"):
+                        dates_list = reservation["breakfast"]["from_break"].replace(" ", "").split(",")
+                        for date_str in dates_list:
+                            if date_str:
+                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                add_food_order(date, "breakfast", partner.id)
+                                if second_partner:
+                                    add_food_order(date, "breakfast", second_partner.id)
+                                for child_id in children_ids:
+                                    add_food_order(date, "breakfast", child_id)
+
+                    if reservation.get("lunch"):
+                        dates_list = reservation["lunch"]["from_lunch"].replace(" ", "").split(",")
+                        for date_str in dates_list:
+                            if date_str:
+                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                add_food_order(date, "lunch", partner.id)
+                                if second_partner:
+                                    add_food_order(date, "lunch", second_partner.id)
+                                for child_id in children_ids:
+                                    add_food_order(date, "lunch", child_id)
+
+                    if reservation.get("dinner"):
+                        dates_list = reservation["dinner"]["from_dinner"].replace(" ", "").split(",")
+                        for date_str in dates_list:
+                            if date_str:
+                                date = datetime.strptime(date_str.strip(), "%d/%m/%Y")
+                                add_food_order(date, "dinner", partner.id)
+                                if second_partner:
+                                    add_food_order(date, "dinner", second_partner.id)
+                                for child_id in children_ids:
+                                    add_food_order(date, "dinner", child_id)
+
+                    if order_list_ids:
+                        reservation_order = HotelReservationOrder.create({
+                            "order_date": new_reservation.date_order if new_reservation else today_date.date(),
+                            "reservation_room_id": new_reservation.id if new_reservation else False,
+                            "is_folio": True if new_reservation else False,
+                            "partner_id": partner.id,
+                            "state": "draft",
+                        })
+                        lines_ids = reservation_order.order_list_ids.create(order_list_ids)
+                        reservation_order.order_list_ids = [(6, 0, lines_ids.ids)]
+                
+                # Lógica para crear transporte 
+                def parse_departure_time(time_str, label="hora de salida"):
+                    if time_str:
+                        try:
+                            return datetime.strptime(time_str, "%H:%M:%S")
+                        except ValueError:
+                            raise ValueError(f"El formato de {label} no es correcto")
+                    return None
+                    
+                if reservation.get("include_transport"):
+                    departure_time = reservation.get("departure_time")
+                    departure_time_2 = reservation.get("departure_time_2")
+
+                    HotelTransport.create({
+                        "hotel_reservation": new_reservation.id,
+                        "move_from": reservation.get("origen", ""),
+                        "move_to": reservation.get("destiny", ""),
+                        "departure_time": parse_departure_time(departure_time, ""),
+                        "contact_number": reservation.get("contact_number", ""),
+                        "move_from_2": reservation.get("origen_2", ""),
+                        "move_to_2": reservation.get("destiny_2", ""),
+                        "departure_time_2": parse_departure_time(departure_time_2, ""),
+                        "partner_id": partner.id,
+                    })
+                        
+            _logger.info("Reservation created!")
+            _logger.info(new_reservation.id)
+            result = {
+                "reserved": True,
+                "reservation_id": new_reservation.id,
+                "token": new_reservation.token,
+                "code": new_reservation.reservation_no,
+                "date_order": new_reservation.date_order.strftime("%d-%m-%Y %H:%M:%S"),
+                "checkin": new_reservation.checkin.strftime("%d-%m-%d %H:%M:%S"),
+                "checkout": new_reservation.checkout.strftime("%d-%m-%d %H:%M:%S"),
+                "partner_id": new_reservation.partner_id.name,
+                "reservation_partner_ids": reservation_partner_ids,
+            }
+            return result
+
+
+
