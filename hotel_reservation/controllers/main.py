@@ -1058,11 +1058,9 @@ class Website(http.Controller):
         HotelReservationOrder = request.env['hotel.reservation.order'].sudo()
         HotelTransport = request.env['hotel.transport'].sudo()
         warehouse_id = user_id.company_id.warehouse_id.id
-
         new_reservation = False
         if not warehouse_id:
             warehouse_id = 1
-
         hotel_reservation = request.env['reserve.room'].sudo().reservation_room(date_from, date_until, adults, ninos, 0)
         if not hotel_reservation:
             return {
@@ -1072,7 +1070,6 @@ class Website(http.Controller):
             }
 
         reservation_partner_ids = []
-        
         if "full_data" in kwargs:
             new_reservation = HotelReservation.create({
                 "partner_id": user_id.partner_id.id,
@@ -1088,7 +1085,7 @@ class Website(http.Controller):
                 "token": tools.default_hash()
             })
 
-            # Iterar sobre cada huésped en full_data
+            # Iterar sobre cada huésped 
             for reservation in kwargs.get('full_data', []):
                 vat = reservation.get('vat')
                 name = reservation.get('name')
@@ -1097,7 +1094,6 @@ class Website(http.Controller):
                 children_list = reservation.get('childrens', [])
 
                 partner = ResPartner.search([('vat', '=', vat)], limit=1)
-
                 if partner:
                     reservation_partner_ids.append({
                         "vat": partner.vat,
@@ -1147,10 +1143,9 @@ class Website(http.Controller):
                     "couple_id": second_partner.id if second_partner else False,
                 })
 
-                # Lógica para la creación de pedidos de comida, si se incluye en la reserva
+                # Lógica para la creación de pedidos de comida
                 if reservation.get("include_food"):
                     order_list_ids = []
-                    
                     def add_food_order(date, meal_type, partner_id):
                         order_list_ids.append({
                             "date_order": date.date(),
@@ -1159,7 +1154,6 @@ class Website(http.Controller):
                             "partner_id": partner_id,
                             "item_qty": 1
                         })
-
                     if reservation.get("breakfast"):
                         dates_list = reservation["breakfast"]["from_break"].replace(" ", "").split(",")
                         for date_str in dates_list:
@@ -1170,7 +1164,6 @@ class Website(http.Controller):
                                     add_food_order(date, "breakfast", second_partner.id)
                                 for child_id in children_ids:
                                     add_food_order(date, "breakfast", child_id)
-
                     if reservation.get("lunch"):
                         dates_list = reservation["lunch"]["from_lunch"].replace(" ", "").split(",")
                         for date_str in dates_list:
@@ -1181,7 +1174,6 @@ class Website(http.Controller):
                                     add_food_order(date, "lunch", second_partner.id)
                                 for child_id in children_ids:
                                     add_food_order(date, "lunch", child_id)
-
                     if reservation.get("dinner"):
                         dates_list = reservation["dinner"]["from_dinner"].replace(" ", "").split(",")
                         for date_str in dates_list:
@@ -1192,7 +1184,6 @@ class Website(http.Controller):
                                     add_food_order(date, "dinner", second_partner.id)
                                 for child_id in children_ids:
                                     add_food_order(date, "dinner", child_id)
-
                     if order_list_ids:
                         reservation_order = HotelReservationOrder.create({
                             "order_date": new_reservation.date_order if new_reservation else today_date.date(),
@@ -1212,7 +1203,6 @@ class Website(http.Controller):
                         except ValueError:
                             raise ValueError(f"El formato de {label} no es correcto")
                     return None
-                    
                 if reservation.get("include_transport"):
                     departure_time = reservation.get("departure_time")
                     departure_time_2 = reservation.get("departure_time_2")
@@ -1228,9 +1218,7 @@ class Website(http.Controller):
                         "departure_time_2": parse_departure_time(departure_time_2, ""),
                         "partner_id": partner.id,
                     })
-                        
-            _logger.info("Reservation created!")
-            _logger.info(new_reservation.id)
+
             result = {
                 "reserved": True,
                 "reservation_id": new_reservation.id,

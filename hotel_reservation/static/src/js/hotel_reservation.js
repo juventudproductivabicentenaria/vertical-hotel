@@ -743,7 +743,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 		},
 
-		
 		_add_transport: function(ev) {
 			var transportCheckbox = document.getElementById("transport_check");
 			var containerTransport = document.getElementById("container_transport");
@@ -830,13 +829,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						row.appendChild(container);
 						row.appendChild(container2);
 						containerTransport.appendChild(row);
-
 						this._add_origen('origen_select');  
 						this._add_destino('destino_select'); 
 						this._add_origen('origen_select_2');  
 						this._add_destino('destino_select_2');  
-
-		
 						// Inicializar Flatpickr para ambas horas de salida
 						flatpickr("#departure_time", {
 							enableTime: true,
@@ -864,8 +860,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				}
 			}.bind(this));
 		},
-		
-		
 
 		_convertDepartureTime: function(departureTime) {
 			if (!departureTime) {
@@ -941,13 +935,10 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			const departure_time_2 = departure_time_2_element ? departure_time_2_element.value : "";
 			const contact_number_element = document.getElementById("contact_number");
 			const contact_number = contact_number_element ? contact_number_element.value : "";
-
 			const origen_2_element = document.getElementById("origen_select_2");
 			const origen_2 = origen_2_element ? origen_2_element.value : "";
-		
 			const destiny_2_element = document.getElementById("destino_select_2");
 			const destiny_2 = destiny_2_element ? destiny_2_element.value : "";
-
 			let ci = document.getElementById("identification_VAT").value
 			let field_name = document.getElementById("first_last_name_input").value
 			let field_phone = document.getElementById("phone_input").value
@@ -967,7 +958,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			}
 			const institution = document.getElementById("institution")
 			document.getElementById("par_list_persons").classList.remove("d-none")
-
 			const listaPadre = document.getElementById('list_ppl')
 			var childrens = document.getElementById("container_children").children.length
 			let html_children = document.getElementsByClassName("children_input_class")
@@ -982,6 +972,8 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let roomMate_check = document.getElementById("roomMate_check")
 				let children_check = document.getElementById("children_check")
 				let food_checked = document.getElementById("food_check")
+				let transport_check = document.getElementById("transport_check");
+
 				if (roomMate_check.checked) {
 					roomMate_check.click()
 				}
@@ -991,13 +983,15 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				if (food_checked.checked) {
 					food_checked.click()
 				}
+				if (transport_check.checked) {
+					transport_check.click();
+				}
+
 				const date_from_before = document.getElementById("dateFrom").value
 				const date_until_before = document.getElementById("date_until").value
 				form.reset()
-
 				document.getElementById("dateFrom").value = date_from_before
 				document.getElementById("date_until").value = date_until_before
-				
 				document.getElementById("dateFrom").disabled = true;
 				document.getElementById("date_until").disabled = true
 			}
@@ -1373,9 +1367,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					nuevoElementoLi.classList.add('show');
 				}, 100);
 			}
-			console.log("Datos de acompañantes a enviar:", full_objects);
 			delete_data_form();
-			console.log(full_objects)
 
 		},
 
@@ -1383,11 +1375,9 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var identification_vat = $('#identification_VAT').val();
 			var first_last_name_input = $('#first_last_name_input').val();
 			var phone_input = $('#phone_input').val();
-			var email_input = $('#email_input').val();
-			
+			var email_input = $('#email_input').val();	
 			var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
 		
-			// Nuevo: verifica si los datos ya están almacenados y son válidos
 			const storedData = this.checkStoredData({
 				identification_vat,
 				phone_input,
@@ -1466,101 +1456,13 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		
 			return false;
 		},
-		
-		// Nuevo método auxiliar: verifica si los datos ya están almacenados
 		checkStoredData(data) {
-			// Aquí iría la lógica para consultar si los datos están en el sistema.
-			// Ejemplo de respuesta de datos almacenados válidos:
 			return {
 				validIdentification: data.identification_vat && data.identification_vat.length >= 7,
 				validPhone: data.phone_input && /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/.test(data.phone_input.replace(/-/g, '')),
 				validEmail: data.email_input && /@/.test(data.email_input)
 			};
 		},
-		
-
-		
-		// verificationDataError(ev, skipGuestValidation = false) {
-		// 	var identification_vat = $('#identification_VAT').val();
-		// 	var first_last_name_input = $('#first_last_name_input').val();
-		// 	var phone_input = $('#phone_input').val();
-		// 	var email_input = $('#email_input').val();
-		// 	var room_check = $('#room_check').is(':checked');
-		// 	var food_check = $('#food_check').is(':checked');
-		// 	var contact_number = $('#contact_number').val(); 
-		
-		// 	var venezuelanPhoneNumberRegex = /^(?:0414|0424|0412|0426|0416)(\d{3})(\d{4})$/;
-		
-		// 	if (!skipGuestValidation) {
-		// 		// Validación del huésped principal
-		// 		if (!identification_vat || identification_vat.length < 7) {
-		// 			alert("Por favor, Introduzca una Cédula igual o mayor a 7 dígitos para el huésped.");
-		// 			return true;
-		// 		}
-		// 		if (!first_last_name_input || !/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_input)) {
-		// 			alert("Por favor, Introduzca un Nombre y Apellido válido para el huésped, sin números ni caracteres especiales.");
-		// 			return true;
-		// 		}
-		// 		if (!phone_input || phone_input.length !== 11 || !venezuelanPhoneNumberRegex.test(phone_input.replace(/-/g, ''))) {
-		// 			alert("Por favor, Introduzca un número de teléfono venezolano válido para el huésped con formato XXXX-XXX-XXXX.");
-		// 			return true;
-		// 		}
-		// 		if (!email_input || !/@/.test(email_input)) {
-		// 			alert("Por favor, Introduzca un correo electrónico válido que contenga el símbolo '@' para el huésped.");
-		// 			return true;
-		// 		}
-
-		// 		// Validaciones del acompañante si se proporcionan datos
-		// 		var first_last_name_roomMate_input = document.getElementById("first_last_name_roomMate_input");
-		// 		if (first_last_name_roomMate_input !== null && first_last_name_roomMate_input.value !== "") {
-		// 			var second_ci = document.getElementById("identification_VAT_partner").value;
-		// 			var second_phone = document.getElementById("phone_input_roomMate").value;
-		// 			var second_email = document.getElementById("email_input_roomMate").value;
-		
-		// 			// Validación de la cédula del acompañante
-		// 			if (!second_ci || second_ci.length < 7) {
-		// 				alert("Por favor, Introduzca una Cédula igual o mayor a 7 dígitos para el acompañante.");
-		// 				return true;
-		// 			}
-		// 			if (!/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_roomMate_input.value)) {
-		// 				alert("Por favor, Introduzca un Nombre y Apellido válido para el acompañante, sin números ni caracteres especiales.");
-		// 				return true;
-		// 			}
-		
-		// 			// Validación del teléfono del acompañante solo si se introduce
-		// 			if (second_phone && (second_phone.length !== 11 || !venezuelanPhoneNumberRegex.test(second_phone.replace(/-/g, '')))) {
-		// 				alert("Por favor, Introduzca un número de teléfono venezolano válido para el acompañante con formato XXXX-XXX-XXXX.");
-		// 				return true;
-		// 			}
-		
-		// 			// Validación del email del acompañante solo si se introduce
-		// 			if (second_email && !/@/.test(second_email)) {
-		// 				alert("Por favor, Introduzca un correo electrónico válido que contenga el símbolo '@' para el acompañante.");
-		// 				return true;
-		// 			}
-		// 		}
-		// 	} else {
-		// 		// Solo valida datos del huésped principal
-		// 		if (!identification_vat || identification_vat.length < 7) {
-		// 			alert("Por favor, Introduzca una Cédula igual o mayor a 7 dígitos para el huésped.");
-		// 			return true;
-		// 		}
-		// 		if (!first_last_name_input || !/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/.test(first_last_name_input)) {
-		// 			alert("Por favor, Introduzca un Nombre y Apellido válido para el huésped, sin números ni caracteres especiales.");
-		// 			return true;
-		// 		}
-		// 		if (!phone_input || phone_input.length !== 11 || !venezuelanPhoneNumberRegex.test(phone_input.replace(/-/g, ''))) {
-		// 			alert("Por favor, Introduzca un número de teléfono venezolano válido para el huésped con formato XXXX-XXX-XXXX.");
-		// 			return true;
-		// 		}
-		// 		if (!email_input || !/@/.test(email_input)) {
-		// 			alert("Por favor, Introduzca un correo electrónico válido que contenga el símbolo '@' para el huésped.");
-		// 			return true;
-		// 		}
-		// 	}
-		
-		// 	return false;
-		// },
 		
 		_onNextBlogClick: function (ev,) {
 			var self = this;
@@ -2318,29 +2220,22 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 		sendReservationData: function(full_objects, adults_counter, childrens_counter, date_from, date_until) {
 			var self = this; 
 			console.log(full_objects);
-		
 			var departure_time_element = document.getElementById("departure_time");
 			var departure_time_2_element = document.getElementById("departure_time_2");
 			var contact_number_element = document.getElementById("contact_number");
 			var origen_2_element = document.getElementById("origen_select_2");
 			var destiny_2_element = document.getElementById("destino_select_2");
-
-
-		
 			var departure_time = departure_time_element ? departure_time_element.value : null; 
 			var departure_time_2 = departure_time_2_element ? departure_time_2_element.value : null; 
 			var contact_number = contact_number_element ? contact_number_element.value : null;
 			var origen_select_2 = origen_2_element ? origen_2_element.value : null;
 			var destino_select_2 = destiny_2_element ? destiny_2_element.value : null ; 
 
-
-		
 			if (!full_objects || !Array.isArray(full_objects) || full_objects.length === 0) {
 				console.error("No hay datos de acompañantes para enviar.");
 				return;
 			}
 		
-			// Parámetros a enviar
 			const params = {
 				full_data: full_objects,
 				date_from: date_from,
@@ -2352,11 +2247,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				departure_time_2: departure_time_2,
 				origen_2: origen_select_2,  
 				destiny_2: destino_select_2,
-			};
-		
-			console.log("Enviando los siguientes datos:", params);
-		
-			// Llamada RPC
+			};		
 			this._rpc({
 				route: '/reservation/create_bulk_reservation',
 				params: params,
@@ -2369,7 +2260,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 					}
 					return;
 				}
-		
 				if (result.reserved) {
 					window.location = '/reserved/' + `${result.reservation_id}` + '?reserve=True' + '&token=' + `${result.token}`;
 				}
