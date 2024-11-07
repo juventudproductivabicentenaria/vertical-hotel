@@ -115,6 +115,7 @@ class Website(http.Controller):
         HotelReservation = request.env['hotel.reservation'].sudo()
         HotelReservationLine = request.env['hotel_reservation.line'].sudo()
         HotelReservationOrder = request.env['hotel.reservation.order'].sudo()
+        HousekeepingActivity = request.env['hotel.housekeeping.activities'].sudo()
         HotelTransport = request.env['hotel.transport'].sudo()
         warehouse_id = user_id.company_id.warehouse_id.id
 
@@ -644,13 +645,14 @@ class Website(http.Controller):
             "checkin": date_from,
             "checkout":  date_until,
             "date_order": today_date.strftime("%Y-%m-%d %H:%M:%S"),
-
             "warehouse_id": warehouse_id,
             "adults": adults,
             "children": ninos,
             "token": tools.default_hash()
         })
-        
+
+        reservation_line = None  # Asegurarse de que la variable esté definida
+
         for chil in kwargs['children_list']:
             new_children = ResPartner.create({
                 "name": chil["nombre"],
@@ -699,7 +701,26 @@ class Website(http.Controller):
                 'children_ids': children_ids if len(children_ids) > 0 else False,
                 # "hotel_room_id": room.id
             })
+        
+        clean_type = request.env['clean.type'].search([], limit=1)
 
+        if reservation_line: 
+            housekeeping_record = request.env['hotel.housekeeping'].create({
+                'reservation_id': new_reservation.id,
+                'room_id': reservation_line.hotel_room_id.id,
+                'clean_type': clean_type.id,
+            })
+
+            for activity_line in clean_type.clean_activity_line_ids:
+                request.env['hotel.housekeeping.activities'].create({
+                    'housekeeping_id': housekeeping_record.id,
+                    'room_id': reservation_line.hotel_room_id.id,
+                    'reservation_id': new_reservation.id,
+                    'activity_id': activity_line.activity_id.id,
+                    'state': 'draft',  # Estado inicial
+                    'code': request.env["ir.sequence"].next_by_code("hotel.housekeeping.activities") or "New",
+                })
+        
         if kwargs.get("include_food"):
             order_list_ids = []
             if kwargs.get("breakfast"):
@@ -1056,6 +1077,7 @@ class Website(http.Controller):
         HotelReservation = request.env['hotel.reservation'].sudo()
         HotelReservationLine = request.env['hotel_reservation.line'].sudo()
         HotelReservationOrder = request.env['hotel.reservation.order'].sudo()
+        HousekeepingActivity = request.env['hotel.housekeeping.activities'].sudo()
         HotelTransport = request.env['hotel.transport'].sudo()
         warehouse_id = user_id.company_id.warehouse_id.id
         new_reservation = False
@@ -1141,7 +1163,28 @@ class Website(http.Controller):
                     "institution_from": reservation.get("institution_name"),
                     "children_ids": children_ids if children_ids else False,
                     "couple_id": second_partner.id if second_partner else False,
+                    "hotel_room_id": reservation.get("hotel_room_id"),
                 })
+
+                clean_type = request.env['clean.type'].search([], limit=1)
+
+                # Crear actividades
+                housekeeping_record = request.env['hotel.housekeeping'].create({
+                    'reservation_id': new_reservation.id,
+                    'room_id': reservation_line.hotel_room_id.id,
+                    'clean_type': clean_type.id, 
+                })
+
+                for line in [reservation_line]:
+                    for activity_line in clean_type.clean_activity_line_ids: 
+                        request.env['hotel.housekeeping.activities'].create({
+                            'housekeeping_id': housekeeping_record.id,
+                            'room_id': line.hotel_room_id.id,
+                            'reservation_id': new_reservation.id,
+                            'activity_id': activity_line.activity_id.id, 
+                            'state': 'draft',
+                            'code': request.env["ir.sequence"].next_by_code("hotel.housekeeping.activities") or "New",
+                        })
 
                 # Lógica para la creación de pedidos de comida
                 if reservation.get("include_food"):
