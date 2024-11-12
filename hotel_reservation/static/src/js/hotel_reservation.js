@@ -1463,33 +1463,42 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				validEmail: data.email_input && /@/.test(data.email_input)
 			};
 		},
-		
-		_onNextBlogClick: function (ev,) {
+
+		_onNextBlogClick: function (ev) {
 			var self = this;
 			var $error_data = $('#error_data');
 			$error_data.hide();
+		
 			var main_ci = $('#identification_VAT').val() || '';
 			var second_ci = $('#identification_VAT_partner').val() || '';
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val();
+			
+			// Verifica si hay acompañantes adicionales
+			var hasAdditionalCompanions = full_objects && Array.isArray(full_objects) && full_objects.length > 0;
 		
+			// Validación del usuario principal
 			this._rpc({
 				route: '/reservation/validation_user',
 				params: { vat: main_ci }
 			}).then(resultMain => {
+				// Si hay un acompañante, validar también
 				if (second_ci) {
-					// Si hay un acompañante, validar también
 					return this._rpc({
 						route: '/reservation/validation_user',
 						params: { vat: second_ci }
 					}).then(resultCompanion => {
 						if (resultMain.exists && resultCompanion.exists) {
+							// Validar número de contacto
 							if (this._validateContactNumber()) {
-								self._onReservar(ev, true);
-								self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until); 
+								if (!hasAdditionalCompanions) {
+									self._onReservar(ev, true);
+								} else {
+									self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until);
+								}
 							} else {
-								$error_data.show();        
-								return;                
+								$error_data.show();
+								return;
 							}
 						} else {
 							// Validación de datos si no están en el sistema
@@ -1503,28 +1512,32 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							if (errorCompanion) {
 								$error_data.show();
 								return;
-							}
-		
+							}		
 							if (this._validateContactNumber()) {
-								self._onReservar(ev, true);
-								self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until); 
+								if (!hasAdditionalCompanions) {
+									self._onReservar(ev, true);
+								} else {
+									self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until);
+								}
 							} else {
-								$error_data.show();        
-								return;                
+								$error_data.show();
+								return;
 							}
 						}
 					}).catch(err => {
 						console.error("Error checking companion:", err);
 					});
 				} else {
-					// Si no hay acompañante, validar solo el huésped principal
 					if (resultMain.exists) {
 						if (this._validateContactNumber()) {
-							self._onReservar(true);
-							self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until); 
+							if (!hasAdditionalCompanions) {
+								self._onReservar(ev, true);
+							} else {
+								self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until);
+							}
 						} else {
-							$error_data.show();        
-							return;                
+							$error_data.show();
+							return;
 						}
 					} else {
 						// Si no está registrado, validamos los datos de entrada
@@ -1535,11 +1548,14 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						}
 						
 						if (this._validateContactNumber()) {
-							self._onReservar(ev, true);
-							self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until); 
+							if (!hasAdditionalCompanions) {
+								self._onReservar(ev, true);
+							} else {
+								self.sendReservationData(full_objects, adults_counter, childrens_counter, date_from, date_until);
+							}
 						} else {
-							$error_data.show();        
-							return;                
+							$error_data.show();
+							return;
 						}
 					}
 				}
@@ -1547,6 +1563,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				console.error("Error checking user:", err);
 			});
 		},
+		
 
 	    _onReservar: function (ev, respuesta) {
 			var self = this;
@@ -1558,33 +1575,6 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			var date_from = $('#dateFrom').val();
 			var date_until = $('#date_until').val()
 			var counterRooms = document.getElementById("counterRooms")
-
-			// if (full_objects.length > 0) {
-			// 	if (first_last_name_input.value != "") {
-			// 		document.getElementById("add_other_person").click()
-			// 	}
-			
-			// 	this._rpc({
-			// 		route: '/reservation/search_reservation',
-			// 		params: {
-			// 			'full_data': full_objects,
-			// 			'date_from': date_from,
-			// 			'date_until': date_until,
-			// 			'adults': adults_counter,
-			// 			'ninos': childrens_counter
-			// 		},
-			// 	}).then(result => {
-			// 		self.unblockUI(ev);
-			// 		if (result.error_validation) {
-			// 			self.MessageDialog(result.title_error, result.content_error)
-			// 			return
-			// 		};
-			// 		if (result.reserved){
-			// 			window.location = '/reserved/' + `${result.reservation_id}`+ '?reserve=True'+'&token='+`${result.token}`
-			// 		}
-			// 	});
-			// 	return
-			// }
 
 			let list_of_names = []
 			let list_of_cis = []

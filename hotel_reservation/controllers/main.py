@@ -819,20 +819,24 @@ class Website(http.Controller):
 
         if kwargs.get("include_transport"):
             departure_time_str = kwargs["departure_time"]
-            departure_time = datetime.strptime(departure_time_str, "%H:%M:%S")
-            departure_time_2 = None 
-            departure_time_2_str = kwargs.get("departure_time_2") 
+            if departure_time_str:
+                departure_time = datetime.strptime(departure_time_str, "%H:%M:%S")
+            else:
+                departure_time = None 
+            departure_time_2_str = kwargs.get("departure_time_2")
             if departure_time_2_str:  
                 try:
                     departure_time_2 = datetime.strptime(departure_time_2_str, "%H:%M:%S")
                 except ValueError:
                     raise ValueError("El formato de la segunda hora de salida no es correcto")
+            else:
+                departure_time_2 = None 
             HotelTransport.create({
                 "hotel_reservation": new_reservation.id,
                 "move_from": kwargs["origen"],
                 "move_to": kwargs["destiny"],
                 "departure_time": departure_time,
-                "contact_number": kwargs ["contact_number"],
+                "contact_number": kwargs["contact_number"],
                 "move_from_2": kwargs["origen_2"], 
                 "move_to_2": kwargs["destiny_2"],
                 "departure_time_2": departure_time_2,
