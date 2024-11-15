@@ -717,7 +717,7 @@ class Website(http.Controller):
                     'room_id': reservation_line.hotel_room_id.id,
                     'reservation_id': new_reservation.id,
                     'activity_id': activity_line.activity_id.id,
-                    'state': 'draft',  # Estado inicial
+                    'state': 'draft', 
                     'code': request.env["ir.sequence"].next_by_code("hotel.housekeeping.activities") or "New",
                 })
         

@@ -198,9 +198,35 @@
                         Capacidad (Niños): <strong>${object.children}</strong><br />
                         ¿Habitaciones requeridas? <strong>${'Sí' if object.get_guest_first_line().include_room else 'No'}</strong><br />
                         ¿Comidas requeridas? <strong>${object.get_has_food()}</strong><br />
-                        <br />
+                        <div style="margin-top: 10px;"></div>
+                        <!-- Sección de Actividades de Limpieza en Tabla -->
+                        <strong>Actividades Programadas:</strong><br />
+                        <table border="1" cellspacing="0" cellpadding="5">
+                            <tr>
+                                <th>Code</th>
+                                <th>Actividad de la Limpieza</th>
+                                <th>Status</th>
+                            </tr>
+                            % for activity in object.activities_ids:
+                                <tr>
+                                    <td>${activity.code}</td>
+                                    <td>${activity.activity_id.name}</td>
+                                    <td>
+                                        % if activity.state == 'draft':
+                                            Borrador
+                                        % elif activity.state == 'done':
+                                            Realizada
+                                        % elif activity.state == 'cancel':
+                                            Cancelada
+                                        % else:
+                                            ${activity.state}
+                                        % endif
+                                    </td>
+                                </tr>
+                            % endfor
+                        </table>
+                        <div style="margin-top: 10px;"></div>
                         <p>Le agradecemos por elegirnos. Si tiene alguna pregunta o necesita más información, no dude en ponerse en contacto con nosotros.</p>
-                        <br />
                         <strong>Saludos cordiales</strong>
                         <br />
                         % if object.warehouse_id.partner_id.street:
