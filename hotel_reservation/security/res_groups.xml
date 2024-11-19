@@ -2,8 +2,14 @@
 <odoo>
     <data noupdate="0">
  
-        
-    
+    <record id="rule_mail_template_portal" model="ir.rule">
+        <field name="name">Portal Users: Access specific templates</field>
+        <field name="model_id" ref="mail.model_mail_template"/>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('model', '=', 'hotel.reservation')]</field>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
     </data>
     
 </odoo>

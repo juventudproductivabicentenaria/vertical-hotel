@@ -418,7 +418,7 @@ class HotelReservation(models.Model):
 
             template_id = self.env.ref("hotel_reservation.email_templates_hotel_reservation_cancellation")  
             if template_id:
-                template_id.send_mail(self.id, force_send=True)
+                template_id.sudo().send_mail(self.id, force_send=True)
         
         return True 
 
