@@ -55,122 +55,122 @@
 
 
     <!-- Email Template For Hotel Reservation Reminder Before 24 Hours -->
-    <record id="mail_template_reservation_reminder_24hrs" model="mail.template">
-        <field name="name">Reservation Reminder Before 24hrs</field>
-        <field name="email_from">${object.warehouse_id.partner_id.email or ''}
-        </field>
-        <field name="subject">Hotel Reservation Reminder</field>
-        <field name="partner_to">${object.partner_id.id or ''}</field>
-        <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
-        <field name="auto_delete" eval="True" />
-        <field name="lang">${object.partner_id.lang}</field>
-        <field name="user_signature" eval="False" />
-        <field name="body_html" type="html">
-            <div style="margin: 0px; padding: 0px;">
-                <p style="margin: 0px; padding: 0px; font-size: 13px;">
-                    <p>
-                        <left>Hello <strong>${object.partner_id.name}</strong>.
-                        </left>
-                    </p>
-                    <p>
-                        <left>Greetings from <strong>${object.warehouse_id.name}
-                            Hotel</strong>.
-                        </left>
-                    </p>
-                    <p>This email is for reminding you that the Reservation at
-                        the <strong>${object.warehouse_id.name} Hotel</strong>.
+        <record id="mail_template_reservation_reminder_24hrs" model="mail.template">
+            <field name="name">Reservation Reminder Before 24hrs</field>
+            <field name="email_from">${object.warehouse_id.partner_id.email or ''}
+            </field>
+            <field name="subject">Hotel Reservation Reminder</field>
+            <field name="partner_to">${object.partner_id.id or ''}</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="user_signature" eval="False" />
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <p>
+                            <left>Hello <strong>${object.partner_id.name}</strong>.
+                            </left>
+                        </p>
+                        <p>
+                            <left>Greetings from <strong>${object.warehouse_id.name}
+                                Hotel</strong>.
+                            </left>
+                        </p>
+                        <p>This email is for reminding you that the Reservation at
+                            the <strong>${object.warehouse_id.name} Hotel</strong>.
+                            % if object.warehouse_id.partner_id.city:
+                            <strong>${object.warehouse_id.partner_id.city}</strong>,
+                            % endif
+                            % if object.warehouse_id.partner_id.country_id.name:
+                            <strong>
+                                ${object.warehouse_id.partner_id.country_id.name}</strong>
+                            .
+                            % endif
+                            Your checkin has been confirmed on Date <strong>
+                                ${object.date_order}</strong>.
+                            Please find all the details regarding to the reservation
+                            as listed below:
+                        </p>
+                        <br />
+                        <strong>Details :</strong>
+                        <br />
+                        <!-- <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                            &amp;nbsp;&amp;nbsp;Name Of Guest :
+                            <strong>${object.partner_id.name}</strong>
+                            <br />
+                            &amp;nbsp;&amp;nbsp;Date Of Arrival :
+                            <strong>${object.checkin}</strong>
+                            <br />
+                            &amp;nbsp;&amp;nbsp;Date Of Departure :
+                            <strong>${object.checkout}</strong>
+                            <br />
+                            &amp;nbsp;&amp;nbsp;Reservation Number :
+                            <strong>${object.reservation_no}</strong>
+                            <br />
+                            &amp;nbsp;&amp;nbsp;Number Of Persons : <strong>
+                            ${object.adults}
+                        </strong> Adults and <strong>${object.children}</strong> Childrens
+                            <br />
+                        </p>
+                        &amp;nbsp;&amp;nbsp; -->
+                        <strong>Room Rate Per Night:</strong>
+                        <br />
+                        <br />
+                        <table border="1" cellpadding="4" style="margin-left: 30px;">
+                            <tr>
+                                <th>Room No</th>
+                                <th>Amount</th>
+                            </tr>
+                            %for line in object.reservation_line_ids:
+                            %for line2 in line.reserve:
+                            <tr>
+                                <td>${line2.product_id.name}</td>
+                                <td>${line2.product_id.list_price}</td>
+                            </tr>
+                            %endfor
+                            %endfor
+                        </table>
+                        <br />
+                        <p>We would appreciate it if you could let us know in case
+                            there are any changes in your schedule or program.
+                            Please inform us immediately, so that we can refund your
+                            money according to Hotel policies.
+                            We are sure that you will find our services
+                            satisfactory. We look forward to providing you quality
+                            services at our hotel.
+                        </p>
+                        <br />
+                        <strong>Best Regards</strong>,
+                        <br />
+                        <br />
+                        <strong>Reservations Team</strong>
+                        <br />
+                        [<strong>${object.warehouse_id.name} Hotel</strong>]
+                        <br />
+                        % if object.warehouse_id.partner_id.street:
+                        <strong>${object.warehouse_id.partner_id.street}</strong>
+                        <br />
+                        % endif
                         % if object.warehouse_id.partner_id.city:
                         <strong>${object.warehouse_id.partner_id.city}</strong>,
+                        <br />
                         % endif
                         % if object.warehouse_id.partner_id.country_id.name:
                         <strong>
                             ${object.warehouse_id.partner_id.country_id.name}</strong>
-                        .
+                        ,
+                        <br />
                         % endif
-                        Your checkin has been confirmed on Date <strong>
-                            ${object.date_order}</strong>.
-                        Please find all the details regarding to the reservation
-                        as listed below:
+                        <br />
+                        % if object.warehouse_id.partner_id.website:
+                        <strong>${object.warehouse_id.partner_id.website}</strong>
+                        <br />
+                        % endif
                     </p>
-                    <br />
-                    <strong>Details :</strong>
-                    <br />
-                    <!-- <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
-                        &amp;nbsp;&amp;nbsp;Name Of Guest :
-                        <strong>${object.partner_id.name}</strong>
-                        <br />
-                        &amp;nbsp;&amp;nbsp;Date Of Arrival :
-                        <strong>${object.checkin}</strong>
-                        <br />
-                        &amp;nbsp;&amp;nbsp;Date Of Departure :
-                        <strong>${object.checkout}</strong>
-                        <br />
-                        &amp;nbsp;&amp;nbsp;Reservation Number :
-                        <strong>${object.reservation_no}</strong>
-                        <br />
-                        &amp;nbsp;&amp;nbsp;Number Of Persons : <strong>
-                        ${object.adults}
-                    </strong> Adults and <strong>${object.children}</strong> Childrens
-                        <br />
-                    </p>
-                    &amp;nbsp;&amp;nbsp; -->
-                    <strong>Room Rate Per Night:</strong>
-                    <br />
-                    <br />
-                    <table border="1" cellpadding="4" style="margin-left: 30px;">
-                        <tr>
-                            <th>Room No</th>
-                            <th>Amount</th>
-                        </tr>
-                        %for line in object.reservation_line_ids:
-                        %for line2 in line.reserve:
-                        <tr>
-                            <td>${line2.product_id.name}</td>
-                            <td>${line2.product_id.list_price}</td>
-                        </tr>
-                        %endfor
-                        %endfor
-                    </table>
-                    <br />
-                    <p>We would appreciate it if you could let us know in case
-                        there are any changes in your schedule or program.
-                        Please inform us immediately, so that we can refund your
-                        money according to Hotel policies.
-                        We are sure that you will find our services
-                        satisfactory. We look forward to providing you quality
-                        services at our hotel.
-                    </p>
-                    <br />
-                    <strong>Best Regards</strong>,
-                    <br />
-                    <br />
-                    <strong>Reservations Team</strong>
-                    <br />
-                    [<strong>${object.warehouse_id.name} Hotel</strong>]
-                    <br />
-                    % if object.warehouse_id.partner_id.street:
-                    <strong>${object.warehouse_id.partner_id.street}</strong>
-                    <br />
-                    % endif
-                    % if object.warehouse_id.partner_id.city:
-                    <strong>${object.warehouse_id.partner_id.city}</strong>,
-                    <br />
-                    % endif
-                    % if object.warehouse_id.partner_id.country_id.name:
-                    <strong>
-                        ${object.warehouse_id.partner_id.country_id.name}</strong>
-                    ,
-                    <br />
-                    % endif
-                    <br />
-                    % if object.warehouse_id.partner_id.website:
-                    <strong>${object.warehouse_id.partner_id.website}</strong>
-                    <br />
-                    % endif
-                </p>
-            </div>
-        </field>
-    </record>
+                </div>
+            </field>
+        </record>
 
         <!-- Email Template For Hotel Reservation Request -->
         <record id="email_templates_hotel_reservation_request" model="mail.template">
@@ -197,34 +197,7 @@
                         Capacidad (Adultos): <strong>${object.adults}</strong><br />
                         Capacidad (Niños): <strong>${object.children}</strong><br />
                         ¿Habitaciones requeridas? <strong>${'Sí' if object.get_guest_first_line().include_room else 'No'}</strong><br />
-                        ¿Comidas requeridas? <strong>${object.get_has_food()}</strong><br />
-                        <div style="margin-top: 10px;"></div>
-                        <!-- Sección de Actividades de Limpieza en Tabla -->
-                        <strong>Actividades Programadas:</strong><br />
-                        <table border="1" cellspacing="0" cellpadding="5">
-                            <tr>
-                                <th>Code</th>
-                                <th>Actividad de la Limpieza</th>
-                                <th>Status</th>
-                            </tr>
-                            % for activity in object.activities_ids:
-                                <tr>
-                                    <td>${activity.code}</td>
-                                    <td>${activity.activity_id.name}</td>
-                                    <td>
-                                        % if activity.state == 'draft':
-                                            Borrador
-                                        % elif activity.state == 'done':
-                                            Realizada
-                                        % elif activity.state == 'cancel':
-                                            Cancelada
-                                        % else:
-                                            ${activity.state}
-                                        % endif
-                                    </td>
-                                </tr>
-                            % endfor
-                        </table>
+                        ¿Comidas requeridas? <strong>${object.get_has_food()}</strong><br />                        
                         <div style="margin-top: 10px;"></div>
                         <p>Le agradecemos por elegirnos. Si tiene alguna pregunta o necesita más información, no dude en ponerse en contacto con nosotros.</p>
                         <strong>Saludos cordiales</strong>
@@ -243,6 +216,75 @@
                 </div>
             </field>
         </record>
+
+        <record id="email_templates_hotel_activities" model="mail.template">
+            <field name="name">Hotel Activities</field>
+            <field name="email_from">${object.warehouse_id.partner_id.email or ''|safe}</field>
+            <field name="subject">Actividades Programadas - Reserva N° ${object.reservation_no}</field>
+            <field name="email_to">hostal.alcaravan@gmail.com</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="user_signature" eval="False" />
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        <p>Estimado/a,</p>
+                        <p>A continuación se presentan los detalles de la reserva y las actividades programadas para la Reserva N° <strong>${object.reservation_no}</strong>:</p>
+                        
+                        <strong>Detalles de la Reserva:</strong>
+                        <br />
+                        Nombre del huésped: <strong>${object.get_guest_first_line().partner_id.name}</strong><br />
+                        Fecha de llegada: <strong>${object.checkin.strftime("%d-%m-%Y")}</strong><br />
+                        Fecha de salida: <strong>${object.checkout.strftime("%d-%m-%Y")}</strong><br />
+                        Número de reserva: <strong>${object.reservation_no}</strong><br />
+                        <br />
+                        <strong>Actividades Programadas:</strong><br />
+                        <table border="1" cellspacing="0" cellpadding="5">
+                            <tr>
+                                <th>Code</th>
+                                <th>Actividad</th>
+                                <th>Status</th>
+                            </tr>
+                            % for activity in object.activities_ids:
+                                <tr>
+                                    <td>${activity.code}</td>
+                                    <td>${activity.activity_id.name}</td>
+                                    <td>
+                                        % if activity.state == 'draft':
+                                            Borrador
+                                        % elif activity.state == 'done':
+                                            Realizada
+                                        % elif activity.state == 'verify':
+                                            Verificada
+                                        % elif activity.state == 'cancel':
+                                            Cancelada
+                                        % else:
+                                            ${activity.state}
+                                        % endif
+                                    </td>
+                                </tr>
+                            % endfor
+                        </table>
+                        <br />
+                        <p>Si necesita más información o tiene alguna consulta, no dude en contactarnos.</p>
+                        <strong>Atentamente</strong><br />
+                        <br />
+                        % if object.warehouse_id.partner_id.street:
+                        <strong>${object.warehouse_id.partner_id.street}</strong><br />
+                        % endif
+                        % if object.warehouse_id.partner_id.city:
+                        <strong>${object.warehouse_id.partner_id.city}</strong>,<br />
+                        % endif
+                        % if object.warehouse_id.partner_id.country_id.name:
+                        <strong>${object.warehouse_id.partner_id.country_id.name}</strong>,<br />
+                        % endif
+                        <br />
+                    </p>
+                </div>
+            </field>
+        </record>
+
 
         <!-- Email Template  Hotel Reservation Cancellation -->
         <record id="email_templates_hotel_reservation_cancellation" model="mail.template">
