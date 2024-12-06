@@ -288,12 +288,40 @@ class HotelRestaurantOrderList(models.Model):
     
     month_year = fields.Char(string="Month and Year", compute="_compute_month_year", store=True)
 
+    type_solicitation_display = fields.Char(
+            string="Tipo de Solicitud (Texto)",
+            compute="_compute_type_solicitation_display",
+        )
+    
+    day_and_month = fields.Char(
+        string="Day and Month", 
+        compute="_compute_day_and_month", 
+        store=True  
+    )
+    partner_name = fields.Char(
+        string="Comensal",
+        compute="_compute_partner_name",
+        store=True
+        )
+
     @api.depends('date_order')
-    def _compute_month_year(self):
+    def _compute_day_and_month(self):
         for record in self:
             if record.date_order:
-                record.month_year = record.date_order.strftime("%B %Y") 
-                
+                record.day_and_month = record.date_order.strftime("%A, %d %B %Y")
+            else:
+                record.day_and_month = ""
+
+    @api.depends('type_solicitation')
+    def _compute_type_solicitation_display(self):
+        for record in self:
+            if record.type_solicitation:
+                record.type_solicitation_display = dict(self.fields_get(
+                    allfields=['type_solicitation'])['type_solicitation']['selection']
+                ).get(record.type_solicitation, "")
+            else:
+                record.type_solicitation_display = ""
+
     # @api.onchange('reservation_order_id')
     # def onchange_reservation_order_id(self):
     #     if self.reservation_order_id and self.reservation_order_id.reservation_room_id:

@@ -322,7 +322,7 @@ msgstr "Dirección"
 #: model:ir.model.fields.selection,name:hotel_restaurant.selection__hotel_menucard__type_solicitation__lunch
 #: model:ir.model.fields.selection,name:hotel_restaurant.selection__hotel_restaurant_order_list__type_solicitation__lunch
 msgid "Almuerzo"
-msgstr ""
+msgstr "Almuerzo"
 
 #. module: hotel_restaurant
 #: model:ir.model.fields,field_description:hotel_restaurant.field_hotel_menucard__message_attachment_count
@@ -431,7 +431,7 @@ msgstr "categoría"
 #: model:ir.model.fields.selection,name:hotel_restaurant.selection__hotel_menucard__type_solicitation__dinner
 #: model:ir.model.fields.selection,name:hotel_restaurant.selection__hotel_restaurant_order_list__type_solicitation__dinner
 msgid "Cena"
-msgstr ""
+msgstr "Cena"
 
 #. module: hotel_restaurant
 #: model:ir.model.fields,field_description:hotel_restaurant.field_hotel_menucard_type__child_ids
@@ -665,7 +665,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:hotel_restaurant.selection__hotel_menucard__type_solicitation__breakfast
 #: model:ir.model.fields.selection,name:hotel_restaurant.selection__hotel_restaurant_order_list__type_solicitation__breakfast
 msgid "Desayuno"
-msgstr ""
+msgstr "Desayuno"
 
 #. module: hotel_restaurant
 #: model:ir.model.fields,field_description:hotel_restaurant.field_hotel_menucard__description
@@ -2342,3 +2342,14 @@ msgstr "Nombre camarero"
 #: model:ir.model,name:hotel_restaurant.model_wizard_hotel_restaurant
 msgid "wizard.hotel.restaurant"
 msgstr "Hotel Restaurante"
+
+#. module: hotel_restaurant
+#: model:ir.model.fields,field_description:hotel_restaurant.field_hotel_restaurant_order_list__day_and_month
+msgid "Day and Month"
+msgstr "Dia y Mes"
+
+#. module: hotel_restaurant
+#: model:ir.actions.act_window,name:hotel_restaurant.action_hotel_reservation_order_list_kanban
+#: model:ir.ui.menu,name:hotel_restaurant.menu_hotel_restaurant_meals_attendance
+msgid "Meals Attendance"
+msgstr "Asistencia de Comidas"
