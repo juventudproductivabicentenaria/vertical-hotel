@@ -296,12 +296,12 @@ class HotelRestaurantOrderList(models.Model):
     day_and_month = fields.Char(
         string="Day and Month", 
         compute="_compute_day_and_month", 
-        store=True  
+        store=False
     )
     partner_name = fields.Char(
         string="Comensal",
         compute="_compute_partner_name",
-        store=True
+        store=False
         )
 
     @api.depends('date_order')
