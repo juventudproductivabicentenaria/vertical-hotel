@@ -858,6 +858,7 @@ class Website(http.Controller):
             "partner_id": new_reservation.partner_id.name,
             "reservation_partner_ids": reservation_partner_ids,
             "total_children": total_children,
+            "hotel_room_id": reservation_line.hotel_room_id.id if reservation_line else False, 
         }
         return result
 
@@ -1276,6 +1277,7 @@ class Website(http.Controller):
                 "checkout": new_reservation.checkout.strftime("%d-%m-%d %H:%M:%S"),
                 "partner_id": new_reservation.partner_id.name,
                 "reservation_partner_ids": reservation_partner_ids,
+                "hotel_room_id": reservation_line.hotel_room_id.id if reservation_line else False, 
             }
             return result
 
