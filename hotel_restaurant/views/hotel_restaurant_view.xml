@@ -837,4 +837,102 @@
               action="action_hotel_menucard_form"
               parent="menu_hotel_food_item"/>
 
+    <record id="view_hotel_restaurant_order_list_kanban" model="ir.ui.view">
+        <field name="name">hotel.restaurant.order.list.kanban</field>
+        <field name="model">hotel.restaurant.order.list</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="type_solicitation_display"/>
+                <field name="day_and_month"/>
+                <field name="attended"/>
+                <field name="partner_name"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click o_kanban_card">
+                            <div class="o_kanban_card_header">
+                                <strong><t t-esc="record.day_and_month.raw_value"/></strong>
+                            </div>
+                            <div class="o_kanban_card_body">
+                                <p>
+                                    <span class="fa fa-calendar"/> 
+                                    <t t-esc="record.day_and_month.raw_value"/>
+                                </p>
+                                <p>
+                                    <strong>Tipo:</strong> 
+                                    <t t-esc="record.type_solicitation_display.raw_value"/>
+                                </p>
+                                <p>
+                                    <strong>Comensal:</strong> 
+                                    <t t-esc="record.partner_name.raw_value"/>
+                                </p>
+                                <t t-if="record.attended.raw_value">
+                                    <span class="badge badge-success">Atendido</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge badge-danger">No Atendido</span>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_hotel_restaurant_order_form" model="ir.ui.view">
+        <field name="name">hotel.restaurant.order.list.form</field>
+        <field name="model">hotel.restaurant.order.list</field>
+        <field name="arch" type="xml">
+            <form string="Hotel Restaurant Order">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="restaurant_order_id" class="oe_edit_only"/>
+                        <h1>
+                            <field name="restaurant_order_id" widget="many2one" options="{'no_create': True}" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="restaurant_order_id"/>
+                            <field name="partner_id"/>
+                            <field name="reservation_order_id"/>
+                            <field name="reservation_room_id"/>
+                            <field name="date_order"/>
+                            <field name="type_solicitation"/>
+                            <field name="day_and_month"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                            <field name="attended"/>
+                            <field name="item_qty"/>
+                            <field name="item_rate"/>
+                            <field name="price_subtotal"/>
+                            <!-- <field name="menucard_id"/>
+                            <field name="kot_order_id"/> -->
+                        </group>
+                    </group>
+                    
+                    <field name="month_year" invisible="1"/>
+                    <field name="type_solicitation_display" invisible="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hotel_reservation_order_list_kanban" model="ir.actions.act_window">
+        <field name="name">Meals Attendance</field>
+        <field name="res_model">hotel.restaurant.order.list</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'group_by': ['month_year'], 'default_order': 'date_order desc'}</field>
+    </record>
+
+<menuitem name="Asistencia de Comidas"
+          id="menu_hotel_restaurant_meals_attendance"
+          parent="menu_open_view_hotel_restaurant_kitchen_order_tickets_form_tree"
+          sequence="13"
+          action="action_hotel_reservation_order_list_kanban"/>
+
+
 </odoo>

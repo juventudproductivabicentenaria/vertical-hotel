@@ -216,6 +216,7 @@ class HotelReservationOrder(models.Model):
 class HotelRestaurantOrderList(models.Model):
     _name = "hotel.restaurant.order.list"
     _description = "Includes Hotel Restaurant Order"
+    _order = "date_order desc" 
 
     @api.depends("item_qty", "item_rate")
     def _compute_price_subtotal(self):
@@ -272,7 +273,9 @@ class HotelRestaurantOrderList(models.Model):
             ("snack", "Merienda"),
         ],"Tipo de Solicitud"
     )
-    
+
+    attended = fields.Boolean(string="Attended")
+
     menucard_id = fields.Many2one("hotel.menucard", "Item Name",  
         required=False)
 
@@ -282,6 +285,43 @@ class HotelRestaurantOrderList(models.Model):
     price_subtotal = fields.Float(
         compute="_compute_price_subtotal", string="Subtotal"
     )
+    
+    month_year = fields.Char(string="Month and Year", compute="_compute_month_year", store=True)
+
+    type_solicitation_display = fields.Char(
+            string="Tipo de Solicitud (Texto)",
+            compute="_compute_type_solicitation_display",
+        )
+    
+    day_and_month = fields.Char(
+        string="Day and Month", 
+        compute="_compute_day_and_month", 
+        store=False
+    )
+    partner_name = fields.Char(
+        string="Comensal",
+        compute="_compute_partner_name",
+        store=False
+        )
+
+    @api.depends('date_order')
+    def _compute_day_and_month(self):
+        for record in self:
+            if record.date_order:
+                record.day_and_month = record.date_order.strftime("%A, %d %B %Y")
+            else:
+                record.day_and_month = ""
+
+    @api.depends('type_solicitation')
+    def _compute_type_solicitation_display(self):
+        for record in self:
+            if record.type_solicitation:
+                record.type_solicitation_display = dict(self.fields_get(
+                    allfields=['type_solicitation'])['type_solicitation']['selection']
+                ).get(record.type_solicitation, "")
+            else:
+                record.type_solicitation_display = ""
+
     # @api.onchange('reservation_order_id')
     # def onchange_reservation_order_id(self):
     #     if self.reservation_order_id and self.reservation_order_id.reservation_room_id:

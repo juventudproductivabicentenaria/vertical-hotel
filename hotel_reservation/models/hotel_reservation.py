@@ -386,10 +386,18 @@ class HotelReservation(models.Model):
                         }
                         reservation_line_obj.create(vals)
 
-            template_id = self.env.ref('hotel_reservation.email_templates_hotel_reservation') 
-            if template_id:
-                template_id.send_mail(reservation.id, force_send=True)
-    
+                if reservation.activities_ids:
+                    reservation.activities_ids.write({"state": "verify"})
+
+
+            template_user = self.env.ref('hotel_reservation.email_templates_hotel_reservation') 
+            if template_user:
+                template_user.send_mail(reservation.id, force_send=True)
+
+            template_activities = self.env.ref('hotel_reservation.email_templates_hotel_activities') 
+            if template_activities:
+                template_activities.send_mail(reservation.id, force_send=True)
+
         return True
 
 
@@ -418,7 +426,7 @@ class HotelReservation(models.Model):
 
             template_id = self.env.ref("hotel_reservation.email_templates_hotel_reservation_cancellation")  
             if template_id:
-                template_id.send_mail(self.id, force_send=True)
+                template_id.sudo().send_mail(self.id, force_send=True)
         
         return True 
 

@@ -20,6 +20,8 @@ class HotelHousekeepingActivities(models.Model):
     clean_start_time = fields.Datetime("Clean Start Time", required=False)
     clean_end_time = fields.Datetime("Clean End Time", required=False)
     clean_type = fields.Many2one("clean.type", "Tipo de limpieza", required=False)
+    reservation_id = fields.Many2one('hotel.reservation',string='Reservation',required=True)
+
     
     done_activity = fields.Boolean(
         "Realizada",
@@ -58,12 +60,22 @@ class HotelHousekeepingActivities(models.Model):
     #     pass 
     
 
+    # @api.model
+    # def create(self, vals):
+    #     if not vals.get("code") or vals.get("code") == "New":
+    #         vals["code"] = self.env["ir.sequence"].next_by_code("hotel.housekeeping.activities") or "New"
+    #     res = super(HotelHousekeepingActivities, self).create(vals)
+    #     return res
+
     @api.model
     def create(self, vals):
+        housekeeping_id = vals.get('housekeeping_id')
+        if housekeeping_id and not self.env['hotel.housekeeping'].browse(housekeeping_id).exists():
+            raise ValidationError(_('El registro de limpieza relacionado no existe.'))        
         if not vals.get("code") or vals.get("code") == "New":
             vals["code"] = self.env["ir.sequence"].next_by_code("hotel.housekeeping.activities") or "New"
-        res = super(HotelHousekeepingActivities, self).create(vals)
-        return res
+        
+        return super(HotelHousekeepingActivities, self).create(vals)
     
     
     def verifyActivity(self):
