@@ -22,4 +22,4 @@ access_h_activity_receptionist,h.activity.manager,model_hotel_activity,hotel.gro
 access_hotel_housekeeping__receptionist,hotel.housekeeping.manager,model_hotel_housekeeping,hotel.group_hotel_receptionist,1,0,0,0
 access_hotel_housekeeping_activities__receptionist,hotel.housekeeping.activities.manager,model_hotel_housekeeping_activities,hotel.group_hotel_receptionist,1,1,0,0
 access_clean_activity_line_receptionist,clean.activity.line.manager,model_clean_activity_line,hotel.group_hotel_receptionist,1,0,0,0
-access_clean_type_receptionist,clean.access_clean_type_manager,model_clean_type,hotel.group_hotel_receptionist,1,0,0,0
+access_clean_type_receptionist,clean.access_clean_type_manager,model_clean_type,hotel.group_hotel_receptionist,1,1,1,0
