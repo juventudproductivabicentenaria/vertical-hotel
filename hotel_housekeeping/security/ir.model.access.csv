@@ -30,6 +30,8 @@ access_clean_type_receptionist,clean.access_clean_type_manager,model_clean_type,
 
 access_clean_activity_line_user,clean.activity.line.user,model_clean_activity_line,base.group_portal,1,1,1,0
 access_hotel_housekeeping_user,hotel.housekeeping.user,model_hotel_housekeeping,base.group_portal,1,1,1,0
+access_clean_type_user,clean.type,model_clean_type,base.group_portal,1,1,1,0
+
 
 
 
