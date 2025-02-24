@@ -1025,6 +1025,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			if (add_food) {
 				let breakfast = document.getElementById("breakfast_check").checked
 				let lunch = document.getElementById("lunch_check").checked
+				let dinner_dict = {};
 				let dinner = document.getElementById("dinner_check").checked
 				if (breakfast && lunch && dinner) {
 					let from_break = document.getElementById("breakfastDate").value
@@ -1664,6 +1665,7 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 			if (add_food) {
 				
 				let breakfast = document.getElementById("breakfast_check").checked
+				let dinner_dict = {};
 				let lunch = document.getElementById("lunch_check").checked
 				let dinner = document.getElementById("dinner_check").checked
 				if (breakfast && lunch && dinner) {
