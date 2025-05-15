@@ -36,6 +36,7 @@ class CleanType(models.Model):
 class CleanType(models.Model):
     _name = "clean.activity.line"
     _description = "Clean Activity"
+    _rec_name = "activity_id"
 
     # name = fields.Char(required=True)
 
@@ -51,17 +52,29 @@ class CleanType(models.Model):
     )
     
     
-    @api.constrains('name')
+    @api.constrains('activity_id', 'clean_type_id')
     def _check_name(self):
+        # for record in self:
+        #     if record.name and record.clean_type_id:
+        #         result = self.search([
+        #             ('id', '!=', record.id),
+        #             ('name', '=', record.name),
+        #             ('clean_type_id', '=', record.clean_type_id.id),
+        #         ])
+        #         if result:
+        #             raise ValidationError(_('Nombre de la actividad de limpieza ya existe!'))
         for record in self:
-            if record.name and record.clean_type_id:
-                result = self.search([
+                if self.search_count([
                     ('id', '!=', record.id),
-                    ('name', '=', record.name),
                     ('clean_type_id', '=', record.clean_type_id.id),
-                ])
-                if result:
-                    raise ValidationError(_('Nombre de la actividad de limpieza ya existe!'))
+                    ('activity_id', '=', record.activity_id.id)
+                ]) > 0:
+                    raise ValidationError(_(
+                        "¡La actividad %s ya existe para este tipo de limpieza!"
+                    ) % record.activity_id.name)
 
-            
-    
+        
+
+
+
+       
