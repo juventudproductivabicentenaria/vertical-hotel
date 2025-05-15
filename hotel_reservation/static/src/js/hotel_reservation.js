@@ -1666,6 +1666,11 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 				let breakfast = document.getElementById("breakfast_check").checked
 				let lunch = document.getElementById("lunch_check").checked
 				let dinner = document.getElementById("dinner_check").checked
+
+				let breakfast_dict = {};
+				let lunch_dict = {};
+				let dinner_dict = {};
+				
 				if (breakfast && lunch && dinner) {
 					let from_break = document.getElementById("breakfastDate").value
 					let from_lunch = document.getElementById("lunchDate").value
@@ -1805,16 +1810,18 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_room': include_room,
 							'include_food': true,
 							"breakfast": breakfast_dict,
+							"lunch": lunch_dict,
+							"dinner": dinner_dict,
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
-							"origen_2": origen_2, 
+							"origen_2": origen_2,
 							"destiny_2": destiny_2,
-							"departure_time_2": departure_time_2, 
+							"departure_time_2": departure_time_2,
 							'showContainerRoom': document.getElementById('room_check').checked,
-							'showContainerFood': document.getElementById('food_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,	
 						},
 					}).then(result => {
 						self.unblockUI(ev);
@@ -1853,17 +1860,19 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'rooms': num_rooms,
 							'include_room': include_room,
 							'include_food': true,
+							"breakfast": breakfast_dict,
 							"lunch": lunch_dict,
+							"dinner": dinner_dict,
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
-							"origen_2": origen_2, 
+							"origen_2": origen_2,
 							"destiny_2": destiny_2,
-							"departure_time_2": departure_time_2, 
+							"departure_time_2": departure_time_2,
 							'showContainerRoom': document.getElementById('room_check').checked,
-							'showContainerFood': document.getElementById('food_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,	
 						},
 					}).then(result => {
 						self.unblockUI(ev);
@@ -1901,17 +1910,19 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'rooms': num_rooms,
 							'include_room': include_room,
 							'include_food': true,
+							"breakfast": breakfast_dict,
+							"lunch": lunch_dict,
 							"dinner": dinner_dict,
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
-							"origen_2": origen_2, 
+							"origen_2": origen_2,
 							"destiny_2": destiny_2,
-							"departure_time_2": departure_time_2, 
+							"departure_time_2": departure_time_2,
 							'showContainerRoom': document.getElementById('room_check').checked,
-							'showContainerFood': document.getElementById('food_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,	
 						},
 					}).then(result => {
 						self.unblockUI(ev);
@@ -1955,17 +1966,18 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 							'include_room': include_room,
 							'include_food': true,
 							"breakfast": breakfast_dict,
+							"lunch": lunch_dict,
 							"dinner": dinner_dict,
 							"include_transport": add_transport,
 							"origen": origen,
 							"destiny": destiny,
 							"contact_number": contact_number,
 							"departure_time": departure_time,
-							"origen_2": origen_2, 
+							"origen_2": origen_2,
 							"destiny_2": destiny_2,
-							"departure_time_2": departure_time_2, 
+							"departure_time_2": departure_time_2,
 							'showContainerRoom': document.getElementById('room_check').checked,
-							'showContainerFood': document.getElementById('food_check').checked,
+							'showContainerFood': document.getElementById('food_check').checked,	
 						},
 					}).then(result => {
 						self.unblockUI(ev);
@@ -2053,17 +2065,20 @@ odoo.define('hotel_reservation.ReservationWebsite', function (require) {
 						'ninos': childrens,
 						'rooms': num_rooms,
 						'include_room': include_room,
-						'include_food': false,
+						'include_food': true,
+						"breakfast": breakfast_dict,
+						"lunch": lunch_dict,
+						"dinner": dinner_dict,
 						"include_transport": add_transport,
 						"origen": origen,
 						"destiny": destiny,
 						"contact_number": contact_number,
 						"departure_time": departure_time,
-						"origen_2": origen_2, 
+						"origen_2": origen_2,
 						"destiny_2": destiny_2,
-						"departure_time_2": departure_time_2, 
+						"departure_time_2": departure_time_2,
 						'showContainerRoom': document.getElementById('room_check').checked,
-						'showContainerFood': document.getElementById('food_check').checked,
+						'showContainerFood': document.getElementById('food_check').checked,	
 					},
 				}).then(result => {
 					if (result.error_validation) {
