@@ -279,7 +279,7 @@ class HotelRestaurantOrderList(models.Model):
     price_subtotal = fields.Float(
         compute="_compute_price_subtotal", string="Subtotal"
     )
-    month_year = fields.Char(string="Month and Year", compute="_compute_month_year", store=True)
+    month_year = fields.Char(string="Month and Year", compute="_compute_month_year", store=False)
     type_solicitation_display = fields.Char(
             string="Tipo de Solicitud (Texto)",
             compute="_compute_type_solicitation_display",
