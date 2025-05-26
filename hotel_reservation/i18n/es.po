@@ -59,41 +59,32 @@ msgid ""
 "                    </p>\n"
 "                </div>\n"
 "            "
-msgstr "<div style="margin: 0px; padding: 0px;">
-	    <p style="margin: 0px; padding: 0px; font-size: 13px;">
-		<p>Estimado/a <strong>${object.partner_id.name}</strong>,</p>
-		<p>Nos complace informarle que hemos recibido su solicitud de reserva. A continuación encontrará los detalles de su solicitud:</p>
-		<strong>Detalles de la solicitud:</strong>
-		<br/>
-		Número de reserva: <strong>${object.reservation_no}</strong><br/>
-		Fecha del pedido: <strong>${object.date_order.strftime("%d-%m-%Y %H:%M:%S")}</strong><br/>
-		Fecha prevista de llegada: <strong>${object.checkin.strftime("%d-%m-%Y")}</strong><br/>
-		Fecha prevista de salida: <strong>${object.checkout.strftime("%d-%m-%Y")}</strong><br/>
-		Huésped: <strong>${object.partner_id.name}</strong><br/>
-		Capacidad (Adultos): <strong>${object.adults}</strong><br/>
-		Capacidad (Niños): <strong>${object.children}</strong><br/>
-		<!-- Show Rooms -->
-		¿Se requieren habitaciones?: <strong>${'Yes' if object.warehouse_id else 'No'}</strong><br/>
-		<!-- Show Meals -->
-		¿Se requieren comidas?: <strong>${'Yes' if object.date_order else 'No'}</strong><br/>
-		<br/>
-		<p>Gracias por elegirnos. Si tiene alguna pregunta o necesita más información, no dude en contactarnos.</p>
-		<br/>
-		<strong>Atentamente,</strong>
-		<br/>
-		% if object.warehouse_id.partner_id.street:
-		    <strong>${object.warehouse_id.partner_id.street}</strong><br/>
-		% endif
-		% if object.warehouse_id.partner_id.city:
-		    <strong>${object.warehouse_id.partner_id.city}</strong>,<br/>
-		% endif
-		% if object.warehouse_id.partner_id.country_id.name:
-		    <strong>${object.warehouse_id.partner_id.country_id.name}</strong><br/>
-		% endif
-		% if object.warehouse_id.partner_id.website:
-		% endif
-	    </p>
-	</div>"
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"        <p>Estimado/a <strong>%(partner_name)s</strong>,</p>\n"
+"        <p>Nos complace informarle que hemos recibido su solicitud de reserva. A continuación encontrará los detalles de su solicitud:</p>\n"
+"        <strong>Detalles de la solicitud:</strong>\n"
+"        <br/>\n"
+"        Número de reserva: <strong>%(reservation_no)s</strong><br/>\n"
+"        Fecha del pedido: <strong>%(date_order)s</strong><br/>\n"
+"        Fecha prevista de llegada: <strong>%(checkin_date)s</strong><br/>\n"
+"        Fecha prevista de salida: <strong>%(checkout_date)s</strong><br/>\n"
+"        Huésped: <strong>%(partner_name)s</strong><br/>\n"
+"        Capacidad (Adultos): <strong>%(adults)s</strong><br/>\n"
+"        Capacidad (Niños): <strong>%(children)s</strong><br/>\n"
+"        ¿Se requieren habitaciones?: <strong>%(rooms_required)s</strong><br/>\n"
+"        ¿Se requieren comidas?: <strong>%(meals_required)s</strong><br/>\n"
+"        <br/>\n"
+"        <p>Gracias por elegirnos. Si tiene alguna pregunta o necesita más información, no dude en contactarnos.</p>\n"
+"        <br/>\n"
+"        <strong>Atentamente,</strong>\n"
+"        <br/>\n"
+"        %(address_street)s\n"
+"        %(address_city)s\n"
+"        %(address_country)s\n"
+"    </p>\n"
+"</div>"
 
 #. module: hotel_reservation
 #: model:mail.template,body_html:hotel_reservation.email_templates_hotel_reservation_cancellation
@@ -124,31 +115,24 @@ msgid ""
 "                    </p>\n"
 "                </div>\n"
 "            "
-msgstr "<div style="margin: 0px; padding: 0px;">
-	    <p style="margin: 0px; padding: 0px; font-size: 13px;">
-		<p>Estimado/a <strong>${object.partner_id.name}</strong>.</p>
-		<p>Lamentamos informarle que su solicitud de reserva ha sido cancelada.</p>
-		<strong>Detalles de la solicitud:</strong>
-		<br/>
-		Número de reserva: <strong>${object.reservation_no}</strong><br/>
-		<br/>
-		<p>Si tiene alguna pregunta o necesita más información sobre esta decisión, no dude en contactarnos.</p>
-		<br/>
-		<strong>Atentamente</strong>
-		<br/>
-		% if object.warehouse_id.partner_id.street:
-		    <strong>${object.warehouse_id.partner_id.street}</strong><br/>
-		% endif
-		% if object.warehous e_id.partner_id.city:
-		    <strong>${object.warehouse_id.partner_id.city}</strong>,<br/>
-		% endif
-		% if object.warehouse_id.partner_id.country_id.name:
-		    <strong>${object.warehouse_id.partner_id.country_id.name}</strong><br/>
-		% endif
-		% if object.warehouse_id.partner_id.website:
-		% endif
-	    </p>
-	</div>"
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
+"        <p>Estimado/a <strong>%(partner_name)s</strong>.</p>\n"
+"        <p>Lamentamos informarle que su solicitud de reserva ha sido cancelada.</p>\n"
+"        <strong>Detalles de la solicitud:</strong>\n"
+"        <br/>\n"
+"        Número de reserva: <strong>%(reservation_no)s</strong><br/>\n"
+"        <br/>\n"
+"        <p>Si tiene alguna pregunta o necesita más información sobre esta decisión, no dude en contactarnos.</p>\n"
+"        <br/>\n"
+"        <strong>Atentamente</strong>\n"
+"        <br/>\n"
+"        %(address_street)s\n"
+"        %(address_city)s\n"
+"        %(address_country)s\n"
+"    </p>\n"
+"</div>"
 
 #. module: hotel_reservation
 #: model:mail.template,body_html:hotel_reservation.email_templates_hotel_reservation
@@ -198,49 +182,7 @@ msgid ""
 "                    </p>\n"
 "                </div>\n"
 "            "
-msgstr "<div style="margin: 0px; padding: 0px;">
-	    <p style="margin: 0px; padding: 0px; font-size: 13px;">
-		<p>Hola <strong>${object.partner_id.name}</strong>,</p>
-		<p>Esto es para confirmar su reserva de una habitación en la 
-		    <strong>Posada</strong>.
-		    % if object.warehouse_id.partner_id.city:
-		    <strong>${object.warehouse_id.partner_id.city}</strong>,
-		    % endif
-		    % if object.warehouse_id.partner_id.country_id.name:
-		    <strong>${object.warehouse_id.partner_id.country_id.name}</strong>.
-		    % endif
-		    En nombre de la posada, nos gustaría expresar nuestra gratitud por elegir nuestros servicios.
-		    A continuación encontrará todos los detalles sobre la confirmación de la reserva en la fecha
-		    <strong>${object.date_order.strftime("%d-%m-%Y")}</strong>:
-		</p>
-		<strong>Detalles:</strong>
-		<br/>
-		Nombre del huésped:<strong>${object.partner_id.name}</strong><br/>
-		Fecha de llegada: 
-		<strong>${object.checkin.strftime("%d-%m-%Y")}</strong><br/>
-		Fecha de salida: 
-		<strong>${object.checkout.strftime("%d-%m-%Y")}</strong><br/>
-		Número de reserva: <strong>${object.reservation_no}</strong><br/>
-		<br/>
-		<p>Agradeceríamos que nos informara si hay algún cambio en su horario o programa.</p>
-		<br/>
-		<strong>Atentamente,</strong>
-		<br/>
-		<br/>
-		% if object.warehouse_id.partner_id.street:
-		<strong>${object.warehouse_id.partner_id.street}</strong><br/>
-		% endif
-		% if object.warehouse_id.partner_id.city:
-		<strong>${object.warehouse_id.partner_id.city}</strong>,<br/>
-		% endif
-		% if object.warehouse_id.partner_id.country_id.name:
-		<strong>${object.warehouse_id.partner_id.country_id.name}</strong>,<br/>
-		% endif
-		<br/>
-		% if object.warehouse_id.partner_id.website:
-		% endif
-	    </p>
-	</div>"
+
 
 #. module: hotel_reservation
 #: model:mail.template,body_html:hotel_reservation.mail_template_reservation_reminder_24hrs
@@ -2205,82 +2147,6 @@ msgstr ""
 #, python-format
 msgid "¿De qué institución nos visita?"
 msgstr ""
-
-#. module: hotel_reservation
-#: model:mail.template,body_html:hotel_reservation.email_templates_hotel_reservation_request
-msgid ""
-"<div style=\"margin: 0px; padding: 0px;\">\n"
-"                    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">\n"
-"                        <p>Dear <strong>${object.partner_id.name}</strong>,</p>\n"
-"                        <p>We are pleased to inform you that your reservation request has been received. Below you will find the details of your request:</p>\n"
-"                        <strong>Request Details:</strong>\n"
-"                        <br/>\n"
-"                        Reservation number: <strong>${object.reservation_no}</strong><br/>\n"
-"                        Order date: <strong>${object.date_order.strftime(\"%d-%m-%Y %H:%M:%S\")}</strong><br/>\n"
-"                        Expected check-in date: <strong>${object.checkin.strftime(\"%d-%m-%Y\")}</strong><br/>\n"
-"                        Expected check-out date: <strong>${object.checkout.strftime(\"%d-%m-%Y\")}</strong><br/>\n"
-"                        Guest: <strong>${object.partner_id.name}</strong><br/>\n"
-"                        Capacity (Adults): <strong>${object.adults}</strong><br/>\n"
-"                        Capacity (Children): <strong>${object.children}</strong><br/>\n"
-"                        <!-- Show Rooms -->\n"
-"                        Rooms required?: <strong>${'Yes' if object.warehouse_id else 'No'}</strong><br/>\n"
-"                        <!-- Show Meals -->\n"
-"                        Meals required?: <strong>${'Yes' if object.date_order else 'No'}</strong><br/>\n"
-"                        <br/>\n"
-"                        <p>Thank you for choosing us. If you have any questions or need more information, feel free to contact us.</p>\n"
-"                        <br/>\n"
-"                        <strong>Best regards,</strong>\n"
-"                        <br/>\n"
-"                        % if object.warehouse_id.partner_id.street:\n"
-"                            <strong>${object.warehouse_id.partner_id.street}</strong><br/>\n"
-"                        % endif\n"
-"                        % if object.warehouse_id.partner_id.city:\n"
-"                            <strong>${object.warehouse_id.partner_id.city}</strong>,<br/>\n"
-"                        % endif\n"
-"                        % if object.warehouse_id.partner_id.country_id.name:\n"
-"                            <strong>${object.warehouse_id.partner_id.country_id.name}</strong><br/>\n"
-"                        % endif\n"
-"                        % if object.warehouse_id.partner_id.website:\n"
-"                        % endif\n"
-"                    </p>\n"
-"                </div>\n"
-"            "
-msgstr "
-"<div style=\"margin: 0px; padding: 0px;\">"
-"    <p style=\"margin: 0px; padding: 0px; font-size: 13px;\">"
-"        <p>Estimado/a <strong>${object.partner_id.name}</strong>,</p>"
-"        <p>Nos complace informarle que hemos recibido su solicitud de reserva. A continuación encontrará los detalles de su solicitud:</p>"
-"        <strong>Detalles de la solicitud:</strong>"
-"        <br/>"
-"        Número de reserva: <strong>${object.reservation_no}</strong><br/>"
-"        Fecha del pedido: <strong>${object.date_order.strftime(\"%d-%m-%Y %H:%M:%S\")}</strong><br/>"
-"        Fecha prevista de llegada: <strong>${object.checkin.strftime(\"%d-%m-%Y\")}</strong><br/>"
-"        Fecha prevista de salida: <strong>${object.checkout.strftime(\"%d-%m-%Y\")}</strong><br/>"
-"        Huésped: <strong>${object.partner_id.name}</strong><br/>"
-"        Capacidad (Adultos): <strong>${object.adults}</strong><br/>"
-"        Capacidad (Niños): <strong>${object.children}</strong><br/>"
-"        <!-- Show Rooms -->"
-"        ¿Se requieren habitaciones?: <strong>${'Yes' if object.warehouse_id else 'No'}</strong><br/>"
-"        <!-- Show Meals -->"
-"        ¿Se requieren comidas?: <strong>${'Yes' if object.date_order else 'No'}</strong><br/>"
-"        <br/>"
-"        <p>Gracias por elegirnos. Si tiene alguna pregunta o necesita más información, no dude en contactarnos.</p>"
-"        <br/>"
-"        <strong>Atentamente,</strong>"
-"        <br/>"
-"        % if object.warehouse_id.partner_id.street:"
-"            <strong>${object.warehouse_id.partner_id.street}</strong><br/>"
-"        % endif"
-"        % if object.warehouse_id.partner_id.city:"
-"            <strong>${object.warehouse_id.partner_id.city}</strong>,<br/>"
-"        % endif"
-"        % if object.warehouse_id.partner_id.country_id.name:"
-"            <strong>${object.warehouse_id.partner_id.country_id.name}</strong><br/>"
-"        % endif"
-"        % if object.warehouse_id.partner_id.website:"
-"        % endif"
-"    </p>"
-"</div>"
 
 
 
