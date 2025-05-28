@@ -42,7 +42,6 @@ class HotelRoom(models.Model):
         string="Tipos de actividades",
         help="Tipos de actividades",
     )
-    _
     def unlink(self):
         """
         Overrides orm unlink method.
