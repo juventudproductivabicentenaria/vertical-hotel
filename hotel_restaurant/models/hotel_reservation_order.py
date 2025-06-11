@@ -239,7 +239,7 @@ class HotelRestaurantOrderList(models.Model):
     restaurant_order_id = fields.Many2one(
         "hotel.restaurant.order", "Restaurant Order"
     )
-    reservation_line = fields.Many2one("hotel_reservation.line", "linea de reserva")
+    # reservation_line = fields.Many2one("hotel_reservation.line", "linea de reserva")
 
     partner_id = fields.Many2one(
         "res.partner",
