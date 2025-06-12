@@ -12,7 +12,6 @@ class HotelReservationOrder(models.Model):
     _order = 'order_number desc'
 
     order_number = fields.Char("Order No", readonly=True)
-    
     reservation_id = fields.Many2one(
         "hotel.restaurant.reservation", "Reservation No"
     )
@@ -192,7 +191,7 @@ class HotelReservationOrder(models.Model):
             res_order.reservation_id.write({"state": "done"})
         self.write({"state": "done"})
         return True
-        
+
     @api.onchange('reservation_room_id')
     def _onchange_reservation_room_id(self):
         self.folio_id = False
@@ -216,7 +215,7 @@ class HotelReservationOrder(models.Model):
 class HotelRestaurantOrderList(models.Model):
     _name = "hotel.restaurant.order.list"
     _description = "Includes Hotel Restaurant Order"
-    _order = "date_order desc" 
+    _order = "date_order desc"
 
     @api.depends("item_qty", "item_rate")
     def _compute_price_subtotal(self):
@@ -240,18 +239,16 @@ class HotelRestaurantOrderList(models.Model):
     restaurant_order_id = fields.Many2one(
         "hotel.restaurant.order", "Restaurant Order"
     )
-    
-    reservation_line = fields.Many2one("hotel_reservation.line", "linea de reserva")
+    # reservation_line = fields.Many2one("hotel_reservation.line", "linea de reserva")
 
     partner_id = fields.Many2one(
         "res.partner",
         "Comensal",
         required=True
-    ) 
+    )
     reservation_order_id = fields.Many2one(
         "hotel.reservation.order", "Reservation Order"
     )
-    
     reservation_room_id = fields.Many2one(
         "hotel.reservation", "Reservacion",
     )
@@ -275,27 +272,21 @@ class HotelRestaurantOrderList(models.Model):
     )
 
     attended = fields.Boolean(string="Attended")
-
-    menucard_id = fields.Many2one("hotel.menucard", "Item Name",  
+    menucard_id = fields.Many2one("hotel.menucard", "Item Name",
         required=False)
-
     item_qty = fields.Integer("Qty", required=True, default=1)
     item_rate = fields.Float("Rate")
-
     price_subtotal = fields.Float(
         compute="_compute_price_subtotal", string="Subtotal"
     )
-    
-    month_year = fields.Char(string="Month and Year", compute="_compute_month_year", store=True)
-
+    month_year = fields.Char(string="Month and Year", compute="_compute_month_year", store=False)
     type_solicitation_display = fields.Char(
             string="Tipo de Solicitud (Texto)",
             compute="_compute_type_solicitation_display",
         )
-    
     day_and_month = fields.Char(
-        string="Day and Month", 
-        compute="_compute_day_and_month", 
+        string="Day and Month",
+        compute="_compute_day_and_month",
         store=False
     )
     partner_name = fields.Char(
@@ -303,6 +294,15 @@ class HotelRestaurantOrderList(models.Model):
         compute="_compute_partner_name",
         store=False
         )
+
+    #TODO: add a correct bussines method operations @asolorzano
+    @api.depends('date_order')
+    def _compute_month_year(self):
+        for record in self:
+            if record.date_order:
+                record.month_year = record.date_order.strftime("%B %Y")
+            else:
+                record.month_year = ""
 
     @api.depends('date_order')
     def _compute_day_and_month(self):
@@ -326,4 +326,3 @@ class HotelRestaurantOrderList(models.Model):
     # def onchange_reservation_order_id(self):
     #     if self.reservation_order_id and self.reservation_order_id.reservation_room_id:
     #         self.reservation_room_id = self.reservation_order_id.reservation_room_id
-    
